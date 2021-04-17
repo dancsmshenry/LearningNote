@@ -1,2 +1,2 @@
 # C++
-This is a repository which records the note in c++
+This is a repository which records some practices and notes in c++
