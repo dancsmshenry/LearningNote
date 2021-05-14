@@ -2,7 +2,7 @@
 
 using namespace std;
 
-//鐐圭被
+//点类
 class Point
 {
 public:
@@ -28,39 +28,39 @@ private:
     int m_Y;
 };
 
-//鍦嗙被
+//圆类
 class Circle
 {
 public:
-    //璁剧疆鍗婂緞
+    //设置半径
     void setR(int r)
     {
         m_R = r;
     }
 
-    //鑾峰彇鍗婂緞
+    //获取半径
     int getR()
     {
         return m_R;
     }
 
-    //璁剧疆鍦嗗績
+    //设置圆心
     void setCenter(Point p)
     {
         m_Center = p;
     }
 
-    //鑾峰彇鍦嗗績
+    //获取圆心
     Point getCenter()
     {
         return m_Center;
     }
 
 
-    //鍒╃敤鎴愬憳鍑芥暟鍒ゆ柇鐐瑰拰鍦嗙殑鍏崇郴
+    //利用成员函数判断点和圆的关系
 private:
-    int m_R;        //鍗婂緞
-    Point m_Center; //鍦嗗績
+    int m_R;        //半径
+    Point m_Center; //圆心
 };
 
 void isInCircle(Circle &c, Point &p)
@@ -70,15 +70,15 @@ void isInCircle(Circle &c, Point &p)
 
     if (distance == rDistance)
     {
-        cout << "鐐瑰湪鍦嗕笂" << endl;
+        cout << "点在圆上" << endl;
     }
     else if (distance < rDistance)
     {
-        cout << "鐐瑰湪鍦嗗唴" << endl;
+        cout << "点在圆内" << endl;
     }
     else
     {
-        cout << "鐐瑰湪鍦嗗" << endl;
+        cout << "点在圆外" << endl;
     }
 }
 
@@ -95,7 +95,7 @@ void test01()
     c1.setCenter(center);
     c1.setR(10);
 
-    //鍒╃敤鍏ㄥ眬鍑芥暟鍒ゆ柇鐐瑰拰鍦嗕箣闂寸殑鍏崇郴
+    //利用全局函数判断点和圆之间的关系
     isInCircle(c1, p1);
 }
 
