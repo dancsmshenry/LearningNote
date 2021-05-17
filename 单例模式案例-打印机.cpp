@@ -1,12 +1,11 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
 class Printer{
     private:
-        Printer();
-        Printer(const Printer& p);
+        Printer(){};
+        Printer(const Printer& p){};
     
     public:
         static Printer* getInstance(){
@@ -14,19 +13,25 @@ class Printer{
         }
 
         void printText(string str){
+            m_Count ++ ;
             cout << str << endl;
+            cout << "¥Ú”°ª˙ π”√¡À"<< m_Count << "¥Œ¡À" << endl;
         }
 
+        int m_Count = 0;
+
     private:
-        static Printer* singlePrinter;//ËøôÈáåÁöÑÈ°∫Â∫èÂøÖÈ°ªÊúâÂÖàÂêéÔºåÂõ†‰∏∫staticÊòØÁºñËØëÂô®ÊåâÈ°∫Â∫èÊâßË°å
+        static Printer* singlePrinter;//’‚¿ÔµƒÀ≥–Ú±ÿ–Î”–œ»∫Û£¨“ÚŒ™static «±‡“Î∆˜∞¥À≥–Ú÷¥––
 };
 
 Printer* Printer::singlePrinter = new Printer;
 
 void test01(){
-    //ÊãøÂà∞ÊâìÂç∞Êú∫
+    //ƒ√µΩ¥Ú”°ª˙
     Printer * printer = Printer::getInstance();
-    printer->printText("Á¶ªËÅåÊä•Âëä");
+    printer->printText("¿Î÷∞±®∏Ê");
+    printer->printText("»Î÷∞±®∏Ê");
+    printer->printText("º”–Ω…Í«Î");
 }
 
 int main(){
