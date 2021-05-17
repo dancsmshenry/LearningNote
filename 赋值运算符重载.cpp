@@ -24,7 +24,7 @@ class Person2{
         }
 
         ~Person2(){
-            if (this->name != NULL){
+            if (this->pName != NULL){
                 delete[] this->pName;
                 this->pName = NULL;
             }
