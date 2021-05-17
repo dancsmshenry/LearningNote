@@ -2,6 +2,11 @@
 
 using namespace std;
 
+//ÄÚÖÃÊı¾İÀàĞÍµÄÔËËã·ûÊÇ²»ÄÜ±»¸Ä±äµÄ
+//ÔËËã·ûÖØÔØ¿ÉÒÔÌá¹©¶à¸ö°æ±¾
+//º¯ÊıÃû operator+(){}
+//ÔÚ³ÉÔ±º¯Êı»òÕßÈ«Ô±º¯ÊıÀïÖØĞ´Ò»¸ö+ÔËËã·ûµÄº¯Êı
+
 class Person{
     public:
         Person(){}
@@ -11,7 +16,7 @@ class Person{
         }
         
         /*
-        //+å·è¿ç®—ç¬¦é‡è½½ æˆå‘˜å‡½æ•°
+        //+ºÅÔËËã·ûÖØÔØ ³ÉÔ±º¯Êı
         Person operator+(Person &p){
             Person tmp;
             tmp.m_A = this->m_A + p.m_A;
@@ -24,7 +29,7 @@ class Person{
         int m_B;
 };
 
-//åˆ©ç”¨å…¨å±€å‡½æ•° è¿›è¡Œ+å·è¿ç®—ç¬¦çš„é‡è½½
+//ÀûÓÃÈ«¾Öº¯Êı ½øĞĞ+ºÅÔËËã·ûµÄÖØÔØ
 Person operator+(Person &p1, Person &p2){
     Person tmp;
     tmp.m_A = p1.m_A + p2.m_A;
@@ -36,9 +41,9 @@ void test01(){
     Person p1(10, 10);
     Person p2(20, 20);
 
-    Person p3 = p1 + p2;//ä»p1.operator+(p2) åˆ° operator+(p1, p2);
+    Person p3 = p1 + p2;//´Óp1.operator+(p2) µ½ operator+(p1, p2);
 
-    cout << "p3çš„m_Aæ˜¯ï¼š" <<p3.m_A << "m_B:" << p3.m_B << endl;
+    cout << "p3µÄm_AÊÇ£º" <<p3.m_A  << " " << "m_B:" << p3.m_B << endl;
 }
 
 int main(){
