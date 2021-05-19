@@ -4,8 +4,8 @@ using namespace std;
 
 /**
  * public是公共的变量，是可以访问的
- * protected是保护变量，只能类内访问
- * private是私有变量，只能是类内访问，和protect的区别与继承有关
+ * protected是保护变量，只能类内访问，可以被继承
+ * private是私有变量，只能是类内访问，和protect的区别与继承有关（private不可被继承）
  **/ 
 
 class Base1{
