@@ -36,6 +36,12 @@ void test_02()
 
 int main()
 {
-    test_01();
-    test_02();
+    // test_01();
+    // test_02();
+
+    cout << B::id << " " << endl;
+
+    using namespace A;
+
+    cout << id << " " << endl;
 }
