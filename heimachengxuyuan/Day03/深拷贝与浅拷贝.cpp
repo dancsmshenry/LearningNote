@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstring>
+//#include <string>和#include <cstring>不一样的
 
 using namespace std;
 /**

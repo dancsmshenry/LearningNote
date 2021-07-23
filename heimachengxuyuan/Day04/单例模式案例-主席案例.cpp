@@ -36,11 +36,13 @@ class ChairMan{
         //而私有化以后不能访问得到这个数据，所以就要向外面提供接口
         static ChairMan *singleMan;
 
-        ChairMan (const ChairMan &cm){
-            //为了防止单例模式中唯一的对象被拷贝，这里将拷贝构造函数也私有化
-        }
+        
 
     public:
+        ChairMan (const ChairMan &cm){
+            //为了防止单例模式中唯一的对象被拷贝，这里将拷贝构造函数也私有化（最后私有化吧）
+        }
+
         //对外提供接口，来访问主席
         static ChairMan* getInstance(){
             return singleMan;

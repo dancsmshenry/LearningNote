@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+F:/Code/Cplusplus/heimachengxuyuan/Day05/qianghuaxunlian-shuzuleifengzhuang/MyArray.h
+iostream
+-
+
+F:/Code/Cplusplus/heimachengxuyuan/Day05/qianghuaxunlian-shuzuleifengzhuang/main.cpp
+iostream
+-
+MyArray.h
+F:/Code/Cplusplus/heimachengxuyuan/Day05/qianghuaxunlian-shuzuleifengzhuang/MyArray.h
+
