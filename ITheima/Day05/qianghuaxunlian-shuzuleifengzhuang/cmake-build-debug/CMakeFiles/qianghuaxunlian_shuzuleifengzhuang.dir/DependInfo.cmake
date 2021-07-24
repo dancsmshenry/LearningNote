@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "F:/Code/Cplusplus/heimachengxuyuan/Day05/qianghuaxunlian-shuzuleifengzhuang/MyArray.cpp" "F:/Code/Cplusplus/heimachengxuyuan/Day05/qianghuaxunlian-shuzuleifengzhuang/cmake-build-debug/CMakeFiles/qianghuaxunlian_shuzuleifengzhuang.dir/MyArray.cpp.obj"
-  "F:/Code/Cplusplus/heimachengxuyuan/Day05/qianghuaxunlian-shuzuleifengzhuang/main.cpp" "F:/Code/Cplusplus/heimachengxuyuan/Day05/qianghuaxunlian-shuzuleifengzhuang/cmake-build-debug/CMakeFiles/qianghuaxunlian_shuzuleifengzhuang.dir/main.cpp.obj"
+  "F:/Code/Cplusplus/ITheima/Day05/qianghuaxunlian-shuzuleifengzhuang/MyArray.cpp" "F:/Code/Cplusplus/ITheima/Day05/qianghuaxunlian-shuzuleifengzhuang/cmake-build-debug/CMakeFiles/qianghuaxunlian_shuzuleifengzhuang.dir/MyArray.cpp.obj"
+  "F:/Code/Cplusplus/ITheima/Day05/qianghuaxunlian-shuzuleifengzhuang/main.cpp" "F:/Code/Cplusplus/ITheima/Day05/qianghuaxunlian-shuzuleifengzhuang/cmake-build-debug/CMakeFiles/qianghuaxunlian_shuzuleifengzhuang.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

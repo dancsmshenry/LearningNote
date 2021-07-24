@@ -23,6 +23,7 @@ void test02(){
 
 //自定义数据类型，用const也会分配内存
 struct Person{
+    Person(){}//这里必须加上构造函数
     string m_Name;
     int m_Age;
 };

@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+F:/Code/Cplusplus/ITheima/Day01/const_test_in_c++/main.cpp
+iostream
+-
+
+F:/Code/Cplusplus/ITheima/Day01/const_test_in_c++/test.cpp
+
