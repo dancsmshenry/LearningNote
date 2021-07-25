@@ -23,14 +23,14 @@ class Person{
             this->m_Score = score;
         }
 
-        string m_Name;//ÈËÃû
-        int m_Score;//·ÖÊı£¬Æ½¾ù·Ö
+        string m_Name;//äººå
+        int m_Score;//åˆ†æ•°ï¼Œå¹³å‡åˆ†
 };
 
 void creatPerson(vector<Person> &v){
     string nameSeed = "ABCDE";
     for (int i = 0; i < 5; i++){
-        string name = "Ñ¡ÊÖ";
+        string name = "é€‰æ‰‹";
         name += nameSeed[i];
 
         int score = 0;
@@ -42,33 +42,33 @@ void creatPerson(vector<Person> &v){
 
 void setScore(vector<Person> &v){
     for (vector<Person>::iterator it = v.begin(); it != v.end(); ++it){
-        //¶ÔÎå¸öÈË½øĞĞ´ò·Ö
+        //å¯¹äº”ä¸ªäººè¿›è¡Œæ‰“åˆ†
         deque<int> d;
         for (int i = 0; i < 10; i ++){
             int score = rand() % 40 + 60;
             d.push_back(score);
         }
 
-        // //ÏÈ¿´Ò»ÏÂ´ò·Ö
+        // //å…ˆçœ‹ä¸€ä¸‹æ‰“åˆ†
         // for (deque<int>::iterator it = d.begin(); it != d.end(); it++){
         //     cout << *it << " ";
         // }
 
         // cout << endl;
 
-        //¶Ô³É¼¨½øĞĞÅÅĞò
+        //å¯¹æˆç»©è¿›è¡Œæ’åº
         sort(d.begin(), d.end());
 
-        //È¥µô×î¸ßÖµºÍ×îµÍÖµ
+        //å»æ‰æœ€é«˜å€¼å’Œæœ€ä½å€¼
         d.pop_back();
         d.pop_back();
 
-        int sum = 0;//×Ü·Ö
+        int sum = 0;//æ€»åˆ†
         for (deque<int>::iterator it = d.begin(); it != d.end(); it ++ ){
             sum += *it;
         }
 
-        int avg = sum /d.size();//Æ½¾ù·Ö
+        int avg = sum /d.size();//å¹³å‡åˆ†
 
         it->m_Score = avg;
     }
@@ -76,24 +76,24 @@ void setScore(vector<Person> &v){
 
 void showScore(vector<Person> &v){
     for (vector<Person>::iterator it = v.begin(); it != v.end(); it ++ ){
-        cout << "ĞÕÃûÎª£º" << it->m_Name << "  ×îÖÕÆ½¾ù·ÖÎª£º" << it->m_Score << endl;
+        cout << "å§“åä¸ºï¼š" << it->m_Name << "  æœ€ç»ˆå¹³å‡åˆ†ä¸ºï¼š" << it->m_Score << endl;
     }
 }
 
 int main(){
-    srand((unsigned)time(NULL));//ÉèÖÃËæ»úÊıÖÖ×Ó
+    srand((unsigned)time(NULL));//è®¾ç½®éšæœºæ•°ç§å­
 
-    vector<Person> v;//´´½¨ÈİÆ÷£¬´æ·ÅÑ¡ÊÖ  
+    vector<Person> v;//åˆ›å»ºå®¹å™¨ï¼Œå­˜æ”¾é€‰æ‰‹  
 
-    creatPerson(v);//´´½¨5ÃûÑ¡ÊÖ
+    creatPerson(v);//åˆ›å»º5åé€‰æ‰‹
 
-    //²âÊÔ
+    //æµ‹è¯•
     // for (vector<Person>::iterator it = v.begin(); it != v.end(); it ++){
-    //     cout << "ĞÕÃû£º" << (*it).m_Name << endl;
+    //     cout << "å§“åï¼š" << (*it).m_Name << endl;
     // }
     
-    setScore(v);//´ò·Ö
+    setScore(v);//æ‰“åˆ†
 
-    //Õ¹Ê¾Æ½¾ù·Ö
+    //å±•ç¤ºå¹³å‡åˆ†
     showScore(v);
 }
