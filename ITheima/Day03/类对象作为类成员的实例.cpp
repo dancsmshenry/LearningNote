@@ -5,16 +5,16 @@ using namespace std;
 class Phone{
     public:
         Phone(){
-            cout << "PhoneµÄ¹¹Ôìº¯Êý" << endl;
+            cout << "Phoneçš„æž„é€ å‡½æ•°" << endl;
         }
 
         Phone(string phoneName){
             name = phoneName;
-            cout << "PhoneµÄÓÐ²Î¹¹Ôìº¯Êý" << endl;
+            cout << "Phoneçš„æœ‰å‚æž„é€ å‡½æ•°" << endl;
         }
 
         ~Phone(){
-            cout << "PhoneµÄÎö¹¹º¯Êý" << endl;
+            cout << "Phoneçš„æžæž„å‡½æ•°" << endl;
         }
 
         string name;
@@ -23,16 +23,16 @@ class Phone{
 class Game{
     public:
         Game(){
-            cout << "GameµÄ¹¹Ôìº¯Êý" << endl;
+            cout << "Gameçš„æž„é€ å‡½æ•°" << endl;
         }
 
         Game(string gameName){
             name = gameName;
-            cout << "GameµÄÓÐ²Î¹¹Ôìº¯Êý" << endl;
+            cout << "Gameçš„æœ‰å‚æž„é€ å‡½æ•°" << endl;
         }
 
         ~Game(){
-            cout << "GameµÄÎö¹¹º¯Êý" << endl;
+            cout << "Gameçš„æžæž„å‡½æ•°" << endl;
         }
 
         string name;
@@ -41,30 +41,30 @@ class Game{
 class Person{
     public:
         Person(){
-            cout << "PersonµÄ¹¹Ôìº¯Êý" << endl;
+            cout << "Personçš„æž„é€ å‡½æ•°" << endl;
         }
 
         Person(string name, string phoneName, string gameName):m_Name(name), m_Phone(phoneName), m_Game(gameName){
-            cout << "PersonµÄÓÐ²Î¹¹Ôìº¯Êý" << endl;
+            cout << "Personçš„æœ‰å‚æž„é€ å‡½æ•°" << endl;
         }
 
         ~Person(){
-            cout << "PersonµÄÎö¹¹º¯Êý" << endl;
+            cout << "Personçš„æžæž„å‡½æ•°" << endl;
         }
 
         string m_Name;
-        Phone m_Phone;//ÀàµÄ¹¹ÔìË³ÐòÓëÕâÀïµÄÅÅÐòÓÐ¹Ø
+        Phone m_Phone;//ç±»çš„æž„é€ é¡ºåºä¸Žè¿™é‡Œçš„æŽ’åºæœ‰å…³
         Game m_Game;
         
 };
 
-//Àà¶ÔÏó×÷ÎªÀà³ÉÔ±Ê±ºò£¬¹¹ÔìË³ÐòÏÈ½«Àà¶ÔÏóÒ»Ò»¹¹Ôì£¬È»ºóÎö¹¹µÄË³ÐòÊÇÏà·´µÄ
+//ç±»å¯¹è±¡ä½œä¸ºç±»æˆå‘˜æ—¶å€™ï¼Œæž„é€ é¡ºåºå…ˆå°†ç±»å¯¹è±¡ä¸€ä¸€æž„é€ ï¼Œç„¶åŽæžæž„çš„é¡ºåºæ˜¯ç›¸åçš„
 void test01(){
     //Person p1;
     Person p2("henry", "huawei", "lol");
-    cout << "ÕâÀïµ÷ÓÃÀà¶ÔÏó£¬Êä³öp2.m_Game.name£º" << p2.m_Game.name << endl;
+    cout << "è¿™é‡Œè°ƒç”¨ç±»å¯¹è±¡ï¼Œè¾“å‡ºp2.m_Game.nameï¼š" << p2.m_Game.name << endl;
 }
 
 int main(){
-    test01();//ÏÈÓÐphone,ÔÙÓÐgame£¬ÔÙÓÐperson
+    test01();//å…ˆæœ‰phone,å†æœ‰gameï¼Œå†æœ‰person
 }
