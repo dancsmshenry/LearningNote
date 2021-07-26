@@ -25,8 +25,13 @@ public:
 
     //根据索引设置值
     void setData(int index, int val);
-
+    
+    //获取数组大小
     int getSize();
+
+    //[]运算符重载
+    //这里用引用主要是方便[]返回值作为左值
+    int& operator[](int index);
 
 private:
     int *pAddress;//指向真正存储数据的指针

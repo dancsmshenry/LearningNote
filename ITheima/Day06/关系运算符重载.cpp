@@ -31,21 +31,21 @@ class Person{
 };
 
 void test01(){
-    Person p1("小明", 10);
-    Person p2("小黑", 15);
+    Person p1("henry", 10);
+    Person p2("dancy", 15);
 
     if (p1 == p2){
-        cout << "p1等于p2"<< endl;
+        cout << "p1 == p2"<< endl;
     }
     else {
-        cout << "p1不等于p2" << endl;
+        cout << "p1 != p2" << endl;
     }
 
     if (p1 != p2){
-        cout << "p1不等于p2"<< endl;
+        cout << "p1 != p2"<< endl;
     }
     else {
-        cout << "p1等于p2" << endl;
+        cout << "p1 == p2" << endl;
     }
 }
 

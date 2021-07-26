@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+F:/Code/Cplusplus/ITheima/Day06/MyString/MyString.cpp
+MyString.h
+F:/Code/Cplusplus/ITheima/Day06/MyString/MyString.h
+
+F:/Code/Cplusplus/ITheima/Day06/MyString/MyString.h
+iostream
+-
+string
+-
+cstring
+-
+
+F:/Code/Cplusplus/ITheima/Day06/MyString/main.cpp
+iostream
+-
+MyString.h
+F:/Code/Cplusplus/ITheima/Day06/MyString/MyString.h
+

@@ -3,103 +3,71 @@
 using namespace std;
 
 /**
- * µ¥ÀýÄ£Ê½µÄºËÐÄ½á¹¹Ö»ÓÐÒ»¸ö±»³ÆÎªµ¥ÀýµÄÌØÊâÀà£¬
- * Í¨¹ýµ¥ÀýÄ£Ê½¿ÉÒÔ±£Ö¤ÏµÍ³ÖÐÓÐÒ»¸öÀàÖ»ÓÐÒ»¸öÊµÀý¶øÇÒ¸ÃÊµÀýÒ×ÓÚÍâ½ç·ÃÎÊ
- * ´Ó¶ø·½±ã¶ÔÊµÀý¸öÊýµÄ¿ØÖÆ²¢ÇÒ½ÚÔ¼ÏµÍ³×ÊÔ´£¨²Î¿¼ÈÎÎñ¹ÜÀíÆ÷£©
- **/
-
-
-//´´½¨Ö÷Ï¯Àà
-//ÐèÇó£ºµ¥ÀýÄ£Ê½£¬ÎªÁË´´½¨ÀàÖÐµÄ¶ÔÏó£¬²¢ÇÒ±£Ö¤Ö»ÓÐÒ»¸ö¶ÔÏóÊµÀý
-/**
- * ¶ÔÕâÒ»¹ý³ÌµÄ½âÊÍ£ºÒ»·½Ãæ£¬Ê×ÏÈÊÇÓÃstatic¾²Ì¬³õÊ¼»¯¶ÔÏó£¨ÒòÎªÓÃstatic¾Í¿ÉÒÔÔÚ±àÒëÆ÷³õÊ¼»¯±äÁ¿£©
- * ¶øÁíÒ»·½Ãæ£¬³õÊ¼»¯¶ÔÏóÊ±»áµ÷ÓÃ¹¹Ôìº¯Êý
- * µ«ÊÇµ¥ÀýÄ£Ê½ÊÇÖ»ÓÐÒ»¸ö¶ÔÏó£¬Èç¹û¹¹Ôìº¯ÊýÊÇÔÚpublic£¬°´ÕÕÕý³£µÄ×ö·¨¾Í»áÎÞÏÞµÄ´´½¨Õâ¸ö¶ÔÏó
- * ps£ºÕý³£¹¹Ôì¶ÔÏóÊ±µ÷ÓÃµÄ¹¹Ôìº¯Êý¶¼ÊÇµ÷ÓÃpublicÖÐµÄ
- * ËùÒÔ±ØÐë°Ñ¹¹Ôìº¯Êý·Åµ½privateÖÐ£¨·Åµ½ÕâÀïµÄ»°ÒòÎªÒÑ¾­ÓÐÁËÕâ¸öÀà£¬ËùÒÔ¾Í¿ÉÒÔµ÷ÓÃprivateÖÐµÄ¹¹Ôìº¯Êý£©ºÃÏñËµ´íÁË
+ * å•ä¾‹æ¨¡å¼çš„å®žçŽ°ï¼š
+ * åœ¨å•ä¾‹ç±»çš„å†…éƒ¨ï¼Œå®žçŽ°åªç”Ÿæˆä¸€ä¸ªå®žä¾‹ï¼ŒåŒæ—¶å®ƒæä¾›ä¸€ä¸ªé™æ€çš„getInstance()å·¥åŽ‚æ–¹æ³•
+ * è®©å®¢æˆ·å¯ä»¥è®¿é—®å®ƒçš„å”¯ä¸€å®žä¾‹
+ * ä¸ºäº†é˜²æ­¢å¤–éƒ¨å¯¹å…¶å®žä¾‹åŒ–ï¼Œå°†å…¶é»˜è®¤æž„é€ å‡½æ•°å’Œæ‹·è´æž„é€ å‡½æ•°è®¾è®¡ä¸ºç§æœ‰
+ * åœ¨å•ä¾‹ç±»å†…éƒ¨å®šä¹‰äº†ä¸€ä¸ªsinglemanç±»åž‹çš„é™æ€å¯¹è±¡ï¼Œä½œä¸ºå¤–éƒ¨å…±äº«çš„å”¯ä¸€å®žä¾‹
+ * 
+ * å•ä¾‹æ¨¡å¼çš„ä»‹ç»ï¼š
+ * å•ä¾‹æ¨¡å¼çš„æ ¸å¿ƒç»“æž„åªæœ‰ä¸€ä¸ªè¢«ç§°ä¸ºå•ä¾‹çš„ç‰¹æ®Šç±»ï¼Œ
+ * é€šè¿‡å•ä¾‹æ¨¡å¼å¯ä»¥ä¿è¯ç³»ç»Ÿä¸­æœ‰ä¸€ä¸ªç±»åªæœ‰ä¸€ä¸ªå®žä¾‹è€Œä¸”è¯¥å®žä¾‹æ˜“äºŽå¤–ç•Œè®¿é—®
+ * ä»Žè€Œæ–¹ä¾¿å¯¹å®žä¾‹ä¸ªæ•°çš„æŽ§åˆ¶å¹¶ä¸”èŠ‚çº¦ç³»ç»Ÿèµ„æºï¼ˆå‚è€ƒä»»åŠ¡ç®¡ç†å™¨ï¼‰
  **/ 
+
+
+//åˆ›å»ºä¸»å¸­ç±»
+//éœ€æ±‚ï¼šå•ä¾‹æ¨¡å¼ï¼Œä¸ºäº†åˆ›å»ºç±»ä¸­çš„å¯¹è±¡ï¼Œå¹¶ä¸”ä¿è¯åªæœ‰ä¸€ä¸ªå¯¹è±¡å®žä¾‹
 class ChairMan{
-    //¹¹Ôìº¯Êý²¢½«ÆäË½ÓÐ»¯£¬Èç¹û²»Ë½ÓÐ»¯£¬ÄÇ¾Í»áµ¼ÖÂ¿ÉÒÔ²»¶ÏÖØ¸´µÄ´´½¨Õâ¸ö¶ÔÏó£¬¾Í²»ÊÇµ¥ÀýÄ£Ê½ÁË
     private:
-        //ÕâÀï£ºÒòÎªÊÇµ¥ÀýÄ£Ê½£¬Ö»ÄÜ´´½¨Ò»¸öÀà¶ÔÏó£¬µ«Èç¹ûÒª½«¹¹Ôìº¯Êý·ÅÔÚpublicÖÐ£¬»áµ¼ÖÂËµ¿ÉÒÔ¹¹ÔìºÜ¶àµÄÀà¶ÔÏó
-        //ËùÒÔÊ×ÏÈ°Ñ¹¹Ôìº¯Êý·Åµ½privateÖÐ£¬²»±»´´½¨ÄÇÃ´¶àµÄÀà¶ÔÏó
-        //ÎÊÌâÓÖÀ´ÁË£ºË½ÓÐ»¯ÒÔºóÔõÃ´Éú³ÉÕâ¸öÀà¶ÔÏó°¡£¿£¿£¿
+        //1ã€å°†æž„é€ å‡½æ•°ç§æœ‰åŒ–
         ChairMan(){
-            cout << "´´½¨¹ú¼ÒÖ÷Ï¯" << endl;
+            cout << "Creat a single chairman" << endl;
         }
 
-        //ËùÒÔ¾ÍÔÚÕâÀï£¬»áÏÈÐ´Ò»¸östatic£¨Î¬»¤Ò»¸ö¾²Ì¬µÄÖ¸ÏòchairmanµÄÒ»¸öÖ¸Õë£©
-        //¶ø¾²Ì¬µÄÓÖÊÇÔÚ±àÒëÆÚ¾ÍÖ´ÐÐµÄ£¨ok£©
-        //×¢Òâ£¬ÕâÀïÊÇÔÚÀàÄÚÉùÃ÷£¬¼´ÒªÔÚÀàÍâ³õÊ¼»¯
-        //¶øÕâÀïÊÇ¾²Ì¬µÄ±äÁ¿£¬ÊÇ¿ÉÒÔÔÚÆäËûµØ·½·ÃÎÊµÃµ½µÄ£¬¾ÍÓÐ¿ÉÄÜ±»´Û¸ÄÎªNULL
-        //ËùÒÔÎªÁË±£Ö¤²»±»É¾¸Ä£¬¸ÄÎªprivate:
-        //¶øË½ÓÐ»¯ÒÔºó²»ÄÜ·ÃÎÊµÃµ½Õâ¸öÊý¾Ý£¬ËùÒÔ¾ÍÒªÏòÍâÃæÌá¹©½Ó¿Ú
+        //5ã€æ‹·è´æž„é€ ç§æœ‰åŒ–(é˜²æ­¢æ‹·è´å‡ºæ–°çš„å¯¹è±¡)
+        ChairMan(const ChairMan& cm){
+
+        }
+
+        //2ã€åˆ›å»ºä¸€ä¸ªæŒ‡å‘å¯¹è±¡çš„æŒ‡é’ˆï¼Œå¹¶è®¾ä¸ºé™æ€å˜é‡
+        //æ³¨æ„ï¼šè¿™é‡Œå¦‚æžœæ˜¯è®¾ä¸ºpublicçš„è¯ï¼Œåœ¨å¤–é¢å†™ä¸€ä¸ªChairMan::singleMan = NULL;,å¯¹è±¡å°±æ— äº†
+
+        //3ã€æ‰€ä»¥å°†è¯¥å®žä¾‹å¯¹è±¡è®¾ä¸ºç§æœ‰åŒ–
         static ChairMan *singleMan;
 
-        
-
     public:
-        ChairMan (const ChairMan &cm){
-            //ÎªÁË·ÀÖ¹µ¥ÀýÄ£Ê½ÖÐÎ¨Ò»µÄ¶ÔÏó±»¿½±´£¬ÕâÀï½«¿½±´¹¹Ôìº¯ÊýÒ²Ë½ÓÐ»¯£¨×îºóË½ÓÐ»¯°É£©
-        }
-
-        //¶ÔÍâÌá¹©½Ó¿Ú£¬À´·ÃÎÊÖ÷Ï¯
-        static ChairMan* getInstance(){
+        //4ã€å¯¹å¤–æä¾›è®¿é—®å•ä¾‹å¯¹è±¡çš„æŽ¥å£
+        //å¦‚æžœä¸æ˜¯staticï¼Œé‚£å¤–ç•Œè¿˜éœ€è¦é€šè¿‡å¯¹è±¡æ¥è®¿é—®ï¼Œä¸ç¬¦åˆé€»è¾‘ï¼›
+        //æ•…ä½¿ç”¨staticï¼Œç”¨ä½œç”¨åŸŸæ¥ä½¿ç”¨æŽ¥å£
+        static ChairMan *getInstance(){
             return singleMan;
         }
 };
 
-//ÕâÀï¾ÍÊÇÖ®Ç°µÄ¾²Ì¬Ö¸ÕëµÄ³õÊ¼»¯£¨È¥µôstatic£¬¼ÓÉÏ×÷ÓÃÓòChairMan£©
-//ÕâÀï¼ÓÉÏÁË×÷ÓÃÓò£¬ËùÒÔ»¹ÊÇÔÚÀàÄÚÀïÃæ×öµÄ²Ù×÷£¬¾Í¿ÉÒÔ·ÃÎÊprivateµÄChairMan
+//ç±»å¤–åˆå§‹åŒ–ï¼Œç±»å†…å£°æ˜Žï¼ˆæ³¨æ„ï¼Œè¿™é‡Œçš„åˆå§‹åŒ–è¿˜æ˜¯ç›¸å½“äºŽæ˜¯åœ¨ç±»å†…å®žçŽ°çš„ï¼Œæ‰€ä»¥newè¿˜æ˜¯ä¼šç”¨åˆ°æž„é€ å‡½æ•°ï¼‰
 ChairMan* ChairMan::singleMan = new ChairMan;
 
 void test01(){
-    /**
-     * ChairMan c1;
-     * ChairMan *c2 = new ChairMan;
-     * ChairMan *c3 = new ChairMan;
-     **/ 
-    
-    //ÕâÑù×öµÄºÃ´¦ÊÇ£¬·â×°µÄChairManÀàÖ»ÄÜÊÇsingleMan£¬±ðµÄ·½·¨ÎÞ·¨new³öÕâ¸öÀà
-    // ChairMan::singleMan;
+    ChairMan* cm1 = ChairMan::getInstance();
+    ChairMan* cm2 = ChairMan::getInstance();//è¿™ä¸¤è€…éƒ½æŒ‡çš„æ˜¯åŒä¸€ä¸ªå®žä¾‹å¯¹è±¡
 
-    //ChairMan c1;//ºÜÃ÷ÏÔÕâ¶Î´úÂëÊÇ´íÎóµÄ
-}
-
-void test02(){
-    // ChairMan *cm1 = ChairMan::singleMan;
-    // ChairMan *cm2 = ChairMan::singleMan;
-    // cout << (cm1 == cm2 ? "Yes" : "No");//Yes
-    //¼´¶þÕßÊÇÖ¸ÏòÍ¬Ò»¸öÀà¶ÔÏó£¬ÊÇ¹²ÏíÊý¾Ý
-}
-
-void test03(){
-    ChairMan* cm1 = ChairMan::getInstance();//ÕâÑù¾Í²»ÄÜÐÞ¸Ä¶ÔÏóµÄÖ¸ÕëÁË£¬²»ÄÜ¸ÄÎªnulllÁË
-    ChairMan* cm2 = ChairMan::getInstance();
-    cout << (cm1 == cm2 ? "Yes" : "No") << endl;//Yes,¼´Ö¸ÏòµÄÊÇÍ¬Ò»¸ö¶ÔÏó
-
-    ChairMan* cm3 = new ChairMan(* cm2);
-    cout << (cm3 == cm2 ? "Yes" : "No") << endl;//No£¬ÕâÀï±»¿½±´ÁËÒ»¸öÐÂµÄºÍsinglemanÒ»Ä£Ò»ÑùµÄ¶ÔÏó
-    //½â¾ö°ì·¨£º¿½±´º¯ÊýË½ÓÐ»¯
+    if (cm1 == cm2){
+        cout << "cm1 == cm2" << endl;
+    }
 }
 
 int main(){
-    cout << "µ÷ÓÃmainº¯Êý" << endl;
-    //test01();
-    /**
-     * ÕâÀïÊÇÏÈÊä³ö¡°´´½¨¹ú¼ÒÖ÷Ï¯¡±£¨ÒòÎªÕâÀïÊÇ¾²Ì¬´´½¨¶ÔÏó£¬ÊÇÔÚ±àÒëÆÚ¾ÍÖ´ÐÐµÄ£©
-     **/ 
-    //ChairMan p1;//ÕâÀï³öÏÖ±¨´í£¬ÒòÎªÆä¹¹Ôìº¯ÊýÎªË½ÓÐµÄ£¬ÎÞ·¨±»ÀàÍâµÄÓï¾ä·ÃÎÊ
-    //¼´Æ½³£µÄÀà¶ÔÏóµÄ¹¹½¨£¬ÊÇÓÉÀàÍâµÄÓï¾äµ÷ÓÃÀàÄÚµÄ¹¹Ôìº¯Êý£¬ËùÒÔÒ»°ãµÄ¹¹Ôìº¯Êý·ÅÔÚÀàµÄ¹«¹²²¿·Ö
-
-    //test02();
-    test03();
+    cout <<"int main()" << endl;//è¯æ˜Žè¯¥å®žä¾‹å¯¹è±¡åœ¨ç¼–è¯‘é˜¶æ®µå°±å·²ç»åˆ›å»ºäº†
+    test01();
 }
+
 /**
- * µ¥ÀýÄ£Ê½£º
- * Ä¿µÄ£ºÎªÁËÈÃÀàÖÐÖ»ÓÐÒ»¸öÊµÀý£¬ÊµÀý²»ÐèÒª×Ô¼ºÊÍ·Å
- * ½«Ä¬ÈÏ¹¹ÔìºÍ¿½±´¹¹Ôì¶¼Ë½ÓÐ»¯£¨Ä¬ÈÏ²»Ë½ÓÐ»¯»áµ¼ÖÂÄÜ¹»¹¹ÔìÎÞÏÞ¸ö¶ÔÏó£¬¿½±´²»Ë½ÓÐ»¯»áµ¼ÖÂ¿½±´³öÎÞÊý¸öÏàÍ¬µÄ¶ÔÏó£©
- * ÄÚ²¿Î¬»¤Ò»¸ö¶ÔÏóÖ¸Õë£¬²¢ÇÒÕâ¸ö¶ÔÏóÖ¸ÕëÒ²ÊÇÒªË½ÓÐ»¯µÄ£¨ÓÉÕâ¸öÖ¸ÕëÖ¸ÏòÎ¨Ò»µÄµ¥Àý¶ÔÏó£¬Ö¸ÕëË½ÓÐ»¯ÊÇ·ÀÖ¹ÀàÍâÐÞ¸ÄÖ¸Õë£©
- * ¶ÔÍâÌá¹©º¯Êý½Ó¿Ú·ÃÎÊÖ¸Õë£¨Ö¸Õë¶¼Ë½ÓÐ»¯ÁË£¬¿Ï¶¨ÒªÓÐÕÒµ½ËüµÄÈë¿ÚÂð£¬¼´¹«¿ªÈë¿Ú£©
- * ±£Ö¤ÀàÖÐÖ»ÄÜÊµÀý»¯Î¨Ò»Ò»¸ö¶ÔÏó
- **/
+ * æ€»ç»“ï¼š
+ * ç›®çš„ï¼šä¸ºäº†è®©ç±»ä¸­åªæœ‰ä¸€ä¸ªå®žä¾‹ï¼Œå®žä¾‹ä¸éœ€è¦è‡ªå·±é‡Šæ”¾
+ * å°†é»˜è®¤æž„é€ å’Œæ‹·è´æž„é€ éƒ½ç§æœ‰åŒ–ï¼ˆé»˜è®¤ä¸ç§æœ‰åŒ–ä¼šå¯¼è‡´èƒ½å¤Ÿæž„é€ æ— é™ä¸ªå¯¹è±¡ï¼Œæ‹·è´ä¸ç§æœ‰åŒ–ä¼šå¯¼è‡´æ‹·è´å‡ºæ— æ•°ä¸ªç›¸åŒçš„å¯¹è±¡ï¼‰
+ * å†…éƒ¨ç»´æŠ¤ä¸€ä¸ªå¯¹è±¡æŒ‡é’ˆï¼Œå¹¶ä¸”è¿™ä¸ªå¯¹è±¡æŒ‡é’ˆä¹Ÿæ˜¯è¦ç§æœ‰åŒ–çš„ï¼ˆç”±è¿™ä¸ªæŒ‡é’ˆæŒ‡å‘å”¯ä¸€çš„å•ä¾‹å¯¹è±¡ï¼ŒæŒ‡é’ˆç§æœ‰åŒ–æ˜¯é˜²æ­¢ç±»å¤–ä¿®æ”¹æŒ‡é’ˆï¼‰
+ * ç§æœ‰åŒ–å”¯ä¸€æŒ‡é’ˆ
+ * å¯¹å¤–æä¾›å‡½æ•°æŽ¥å£è®¿é—®æŒ‡é’ˆï¼ˆæŒ‡é’ˆéƒ½ç§æœ‰åŒ–äº†ï¼Œè‚¯å®šè¦æœ‰æ‰¾åˆ°å®ƒçš„å…¥å£å—ï¼Œå³å…¬å¼€å…¥å£ï¼‰
+ * ä¿è¯ç±»ä¸­åªèƒ½å®žä¾‹åŒ–å”¯ä¸€ä¸€ä¸ªå¯¹è±¡
+ **/ 

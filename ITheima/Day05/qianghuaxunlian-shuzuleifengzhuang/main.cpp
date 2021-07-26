@@ -16,6 +16,11 @@ void test01(){
         array1->push_Back(i);
     }
 
+    MyArray array12;
+    array12.push_Back(10);
+
+    cout << "array12[0] = " << array12[0] << endl;
+
     //获取数据测试
     for (int i = 0; i < 10; i ++ ){
         cout << array1->getData(i) << " ";
@@ -46,8 +51,8 @@ void test02(){
 
 int main() {
 //    std::cout << "Hello, World!" << std::endl;
-//    test01();
+    test01();
 
-    test02();
+//    test02();
     return 0;
 }

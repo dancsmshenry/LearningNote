@@ -15,23 +15,23 @@ class Printer{
         void printText(string str){
             m_Count ++ ;
             cout << str << endl;
-            cout << "´òÓ¡»úÊ¹ÓÃÁË"<< m_Count << "´ÎÁË" << endl;
+            cout << "Printer using in :"<< m_Count << endl;
         }
 
         int m_Count = 0;
 
     private:
-        static Printer* singlePrinter;//ÕâÀïµÄË³Ðò±ØÐëÓÐÏÈºó£¬ÒòÎªstaticÊÇ±àÒëÆ÷°´Ë³ÐòÖ´ÐÐ
+        static Printer* singlePrinter;
 };
 
 Printer* Printer::singlePrinter = new Printer;
 
 void test01(){
-    //ÄÃµ½´òÓ¡»ú
+    //æ‹¿åˆ°æ‰“å°æœº
     Printer * printer = Printer::getInstance();
-    printer->printText("ÀëÖ°±¨¸æ");
-    printer->printText("ÈëÖ°±¨¸æ");
-    printer->printText("¼ÓÐ½ÉêÇë");
+    printer->printText("lizhi baogao");
+    printer->printText("ruzhi baogao");
+    printer->printText("lizhi baogao");
 }
 
 int main(){

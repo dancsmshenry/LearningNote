@@ -57,3 +57,7 @@ void MyArray::setData(int index, int val) {
 int MyArray::getSize() {
     return m_Size;
 }
+
+int& MyArray::operator[] (int index){
+    return this->pAddress[index];
+}

@@ -5,80 +5,80 @@ using namespace std;
 // class News{
 //     public:
 //         void header(){
-//             cout << "¹«¹²Í·²¿" << endl;
+//             cout << "å…¬å…±å¤´éƒ¨" << endl;
 //         }
     
 //         void footer(){
-//             cout << "¹«¹²µ×²¿" << endl;
+//             cout << "å…¬å…±åº•éƒ¨" << endl;
 //         }
 
 //         void left(){
-//             cout << "×ó²àÁÐ±í" << endl;
+//             cout << "å·¦ä¾§åˆ—è¡¨" << endl;
 //         }
 
 //         void content(){
-//             cout << "ÐÂÎÅ²¥·Å" << endl;
+//             cout << "æ–°é—»æ’­æ”¾" << endl;
 //         }
 // };
 
 // class YuLe{
 //     public:
 //         void header(){
-//             cout << "¹«¹²Í·²¿" << endl;
+//             cout << "å…¬å…±å¤´éƒ¨" << endl;
 //         }
     
 //         void footer(){
-//             cout << "¹«¹²µ×²¿" << endl;
+//             cout << "å…¬å…±åº•éƒ¨" << endl;
 //         }
 
 //         void left(){
-//             cout << "×ó²àÁÐ±í" << endl;
+//             cout << "å·¦ä¾§åˆ—è¡¨" << endl;
 //         }
 
 //         void content(){
-//             cout << "°×°ÙºÏ.." << endl;
+//             cout << "ç™½ç™¾åˆ.." << endl;
 //         }
 // };
 
-//¼Ì³ÐÐ´·¨£¬³éÏóÒ»¸ö»ùÀàµÄÍøÕ¾ ÖØ¸´µÄ´úÂë¶¼Ð´µ½Õâ¸öÍøÒ³ÉÏ
+//ç»§æ‰¿å†™æ³•ï¼ŒæŠ½è±¡ä¸€ä¸ªåŸºç±»çš„ç½‘ç«™ é‡å¤çš„ä»£ç éƒ½å†™åˆ°è¿™ä¸ªç½‘é¡µä¸Š
 class BasePage{
     public:
         void header(){
-            cout << "¹«¹²Í·²¿" << endl;
+            cout << "å…¬å…±å¤´éƒ¨" << endl;
         }
     
         void footer(){
-            cout << "¹«¹²µ×²¿" << endl;
+            cout << "å…¬å…±åº•éƒ¨" << endl;
         }
 
         void left(){
-            cout << "×ó²àÁÐ±í" << endl;
+            cout << "å·¦ä¾§åˆ—è¡¨" << endl;
         }
 };
 
 
-//¼Ì³Ð¼õÉÙ´úÂëÄÚÈÝ
-//BasePage »ùÀà£¨¸¸Àà£© News ÅÉÉúÀà£¨×ÓÀà£©
-//ÅÉÉú³ÉÔ±°üº¬Á½²¿·Ö£ºÒ»ÀàÊÇ´Ó»ùÀà¼Ì³Ð¹ýÀ´µÄ£¬Ò»ÀàÊÇ×Ô¼ºÔö¼ÓµÄ³ÉÔ±
-//´Ó»ùÀà¼Ì³Ð¹ýÀ´µÄ±íÏÖÎª¹²ÐÔ£¬ÐÂÔöµÄ³ÉÔ±ÌåÏÖÎª¸öÐÔ
-class News :public BasePage{//¼Ì³Ð£¬NewsÀà¼Ì³ÐÓÚBasePageÀà
+//ç»§æ‰¿å‡å°‘ä»£ç å†…å®¹
+//BasePage åŸºç±»ï¼ˆçˆ¶ç±»ï¼‰ News æ´¾ç”Ÿç±»ï¼ˆå­ç±»ï¼‰
+//æ´¾ç”Ÿæˆå‘˜åŒ…å«ä¸¤éƒ¨åˆ†ï¼šä¸€ç±»æ˜¯ä»ŽåŸºç±»ç»§æ‰¿è¿‡æ¥çš„ï¼Œä¸€ç±»æ˜¯è‡ªå·±å¢žåŠ çš„æˆå‘˜
+//ä»ŽåŸºç±»ç»§æ‰¿è¿‡æ¥çš„è¡¨çŽ°ä¸ºå…±æ€§ï¼Œæ–°å¢žçš„æˆå‘˜ä½“çŽ°ä¸ºä¸ªæ€§
+class News :public BasePage{//ç»§æ‰¿ï¼ŒNewsç±»ç»§æ‰¿äºŽBasePageç±»
     public:
         void content(){
-            cout << "ÐÂÎÅ²¥·Å" << endl;
+            cout << "æ–°é—»æ’­æ”¾" << endl;
         }
 };
 
 class YuLe :public BasePage{
     public:
         void content(){
-            cout << "°×°ÙºÏ.." << endl;
+            cout << "ç™½ç™¾åˆ.." << endl;
         }
 };
 
 class Game :public BasePage{
     public:
         void content(){
-            cout << "KPLÖ±²¥" << endl;
+            cout << "KPLç›´æ’­" << endl;
         }
 };
 
@@ -89,7 +89,7 @@ void test01(){
     news.left();
     news.content();
 
-    //ÓéÀÖÒ³
+    //å¨±ä¹é¡µ
     YuLe yule;
     yule.header();
     yule.footer();
