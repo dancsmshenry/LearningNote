@@ -1,0 +1,3 @@
+D:\CLion\bin\cmake\win\bin\cmake.exe -E rm -f CMakeFiles\the_game_of_polymorphism.dir/objects.a
+D:\Cpp\LLVM\bin\ar.exe cr CMakeFiles\the_game_of_polymorphism.dir/objects.a @CMakeFiles\the_game_of_polymorphism.dir\objects1.rsp
+D:\Cpp\LLVM\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\the_game_of_polymorphism.dir/objects.a -Wl,--no-whole-archive -o the_game_of_polymorphism.exe -Wl,--out-implib,libthe_game_of_polymorphism.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\the_game_of_polymorphism.dir\linklibs.rsp

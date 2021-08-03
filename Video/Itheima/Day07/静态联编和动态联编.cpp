@@ -2,87 +2,83 @@
 
 using namespace std;
 
+/**
+ * å¤šæ€åˆ†ç±»ï¼š
+ * é™æ€å¤šæ€ å‡½æ•°é‡è½½
+ * åŠ¨æ€å¤šæ€ è™šå‡½æ•° ç»§æ‰¿å…³ç³» 
+ * 
+ * é™æ€è”ç¼–ï¼šåœ°å€æ—©ç»‘å®š ç¼–è¯‘é˜¶æ®µç»‘å®šå¥½åœ°å€
+ * åŠ¨æ€è”ç¼–ï¼šåœ°å€æ™šç»‘å®š è¿è¡Œæ—¶å€™ç»‘å®šå¥½åœ°å€
+ **/ 
 class Animal{
     public:
-        virtual void doSpeak(){//¸¸ÀàÐèÒªÐ´virtual
-            cout << "¶¯ÎïÔÚËµ»°" << endl;
+        virtual void doSpeak(){
+            cout << "Animal::doSpeak()" << endl;
         }
 
         virtual void doEat(){
-            cout << "¶¯ÎïÔÚ³Ô¶«Î÷" << endl;
+            cout << "Animal::doEat()" << endl;
         }
 };
 
-class Cat :public Animal {//×ÓÀà¿ÉÒÔ²»Ð´
+class Cat :public Animal {
     public:
-        void doSpeak(){
-            cout << "Ð¡Ã¨ÔÚËµ»°" << endl;
+        virtual void doSpeak(){
+            cout << "Cat::doSpeak()" << endl;
         }
 
-        void doEat(){
-            cout << "Ð¡Ã¨ÔÚ³Ô¶«Î÷" << endl;
+        virtual void doEat(){
+            cout << "Cat::doEat()" << endl;
         }
 };
 
 /**
- * µ÷ÓÃdoSpeak,speakº¯ÊýµÄµØÖ·Ôç°ó¶¨ºÃÁË£¬Ôç°ó¶¨£¬¾²Ì¬Áª±à£¬±àÒë½×¶Î¾ÍÈ·¶¨ºÃÁËµØÖ·
- * Èç¹ûÏëÒªµ÷ÓÃÃ¨µÄspeak£¬²»ÄÜÌáÇ°°ó¶¨ºÃº¯ÊýµÄµØÖ·£¬ËùÒÔÐèÒªÔÚÔËÐÐÊ±ºòÔÙÈ¥È·¶¨º¯ÊýµØÖ·
- * ¶¯Ì¬Áª±à£¬Ð´·¨ÊÇ ½«animalµÄdospeakÉùÃ÷ÎªÐéº¯Êý£¬·¢ÉúÁË¶àÌ¬
- * ¶àÌ¬µÄ¶¨Òå£º¸¸ÀàµÄÒýÓÃ»òÕßÖ¸Õë Ö´ÐÐ ×ÓÀà¶ÔÏó
- * Ëµ°×ÁË£¬¾ÍÊÇÈÃ´úÂëÔÚ¾ßÌåÔËÐÐµÄÊ±ºòÈ¥ÅÐ¶Ïµ÷ÓÃÄÄ¸öº¯Êý
- * ¾²Ì¬¶àÌ¬ º¯ÊýÖØÔØ
- * ¶¯Ì¬¶àÌ¬ Ðéº¯Êý ¼Ì³Ð¹ØÏµ 
- * ¾²Ì¬Áª±à£ºµØÖ·Ôç°ó¶¨ ±àÒë½×¶Î°ó¶¨ºÃµØÖ·
- * ¶¯Ì¬Áª±à£ºµØÖ·Íí°ó¶¨ ÔËÐÐÊ±ºò°ó¶¨ºÃµØÖ·
+ * è°ƒç”¨doSpeak,dospeakå‡½æ•°çš„åœ°å€æ—©ç»‘å®šå¥½äº†ï¼Œæ—©ç»‘å®šï¼Œé™æ€è”ç¼–ï¼Œç¼–è¯‘é˜¶æ®µå°±ç¡®å®šå¥½äº†åœ°å€
+ * å¦‚æžœæƒ³è¦è°ƒç”¨çŒ«çš„speakï¼Œä¸èƒ½æå‰ç»‘å®šå¥½å‡½æ•°çš„åœ°å€ï¼Œæ‰€ä»¥éœ€è¦åœ¨è¿è¡Œæ—¶å€™å†åŽ»ç¡®å®šå‡½æ•°åœ°å€
+ * åŠ¨æ€è”ç¼–ï¼Œå†™æ³•æ˜¯å°†animalçš„dospeakå£°æ˜Žä¸ºè™šå‡½æ•°ï¼Œåœ¨çˆ¶ç±»ä¸Šå£°æ˜Žè™šå‡½æ•°ï¼Œå‘ç”Ÿäº†å¤šæ€
+ * 
+ * å¤šæ€çš„å®šä¹‰ï¼šçˆ¶ç±»çš„å¼•ç”¨æˆ–è€…æŒ‡é’ˆ æŒ‡å‘ å­ç±»å¯¹è±¡
+ * è¯´ç™½äº†ï¼Œå°±æ˜¯è®©ä»£ç åœ¨å…·ä½“è¿è¡Œçš„æ—¶å€™åŽ»åˆ¤æ–­è°ƒç”¨å“ªä¸ªå‡½æ•°
  **/ 
-void Speak(Animal &animal){
-    //±àÒë½×¶ÎÒÑ¾­È·¶¨ÁËº¯ÊýµÄÄÚÈÝÁË
+void Speak(Animal &animal){//Animal& animal = cat;
     animal.doSpeak();
 }
 
+//å¦‚æžœå‘ç”Ÿäº†ç»§æ‰¿çš„å…³ç³»ï¼Œç¼–è¯‘å™¨å…è®¸è¿›è¡Œç±»åž‹çš„è½¬æ¢
 void test01(){
     Cat cat1;
-    Speak(cat1);//Èç¹ûµ÷ÓÃµÄº¯ÊýÀïÃæÊÇanimalµÄdoSpeak£¬ÄÇ¾Íµ÷ÓÃµÄÊÇanimalµÄdoSpeak
+
+    //å¦‚æžœè°ƒç”¨çš„å‡½æ•°é‡Œé¢æ˜¯animalçš„doSpeakï¼Œé‚£å°±è°ƒç”¨çš„æ˜¯animalçš„doSpeak
+    Speak(cat1);
 }
 
 void test02(){
-    cout << sizeof(Animal) << endl;//ÍÚ¿Ó£¬ÎÒµÄ±àÒëÆ÷Êä³öµÄÊ±8£¬µ«ÊÇÀÏÊ¦¸øµÄÊ±4
-}
+    // cout << sizeof(Animal) << endl;
 
-void test03(){
-    //¸¸ÀàÖ¸ÕëÖ¸Ïò×ÓÀà¶ÔÏó£¬¶àÌ¬
+    //çˆ¶ç±»æŒ‡é’ˆæŒ‡å‘å­ç±»å¯¹è±¡ï¼Œå¤šæ€
     Animal *animal = new Cat;
 
-    animal->doSpeak();//ÊµÀýµÄ¶ÔÏó»¹ÊÇcat£¬ËùÒÔ×îÖÕ»¹ÊÇÊä³öÐ¡Ã¨ÔÚËµ»°
-    //ÍÚ¿Ó£¬ÕâÀïÒªÇóÖ¤animalÊÇÈçºÎµ÷ÓÃµÄ
+    animal->doSpeak();
+    //*(int*)*(int*)animal//å‡½æ•°åœ°å€
+    //((void(*)()) (*(int*)*(int*)animal))();
 }
 
 int main(){
-    //test01();
-    //test02();
-    test03();
+    // test01();
+
+    test02();
 }
-/**
- * ¶àÌ¬Ô­ÀíµÄ½âÎö£º
- * µ±¸¸ÀàµÄÄ³¸öº¯Êý±äÎªÐéº¯Êý£¨ÔÚÇ°ÃæÓÃvirtualÀ´ÐÞÊÎµÄ£©ÁËÒÔºó£º
- * ÔÚ¸¸ÀàµÄ½á¹¹ÖÐ¾Í»áÓÐÓÐÒ»¸öÐéº¯ÊýÖ¸Õë£¨virtual function pointer ¼´vfptr£©
- * ÔÚÆäÄÚ²¿Ö¸ÏòÕâ¸öº¯Êý
- * ¶øµ±ÓÐ×ÓÀà¼Ì³ÐÁË¸Ã¸¸ÀàµÄÊ±ºò£¬ÔÚÆä×ÓÀàÒ²»áÓÐÒ»¸öÐéº¯Êý±í£¬
- * //¿ÆÆÕÖØÐ´µÄ¸ÅÄî£º×ÓÀàÐ´¸¸ÀàµÄÍ¬Ãûº¯Êý£¬ÇÒ·µ»ØÖµ£¬²ÎÊý¸öÊý£¬ÀàÐÍ£¬Ë³Ðò¶¼ÏàÍ¬//
- * //¶ÔÏó´´½¨µÄÊ±ºò£¬µ÷ÓÃ¹¹Ôìº¯Êý£¬½«ËùÓÐµÄÐéº¯Êý±íÖ¸Õë¶¼Ö¸Ïò×Ô¼ºµÄÐéº¯Êý±í//
- * Õâ¸ö×ÓÀàµÄÐéº¯ÊýÖ¸Õë¾Í»áÖ¸ÏòÕâ¸öÖØÐ´µÄº¯Êý£¬¶ø²»ÊÇ¸¸ÀàµÄÍ¬ÃûµÄº¯Êý
- * ps:ÓÐÖØÐ´µÄÍ¬Ãûº¯Êý¾ÍÊÇÕâ¸öº¯Êý£¬Ã»ÓÐµÄ»°¾ÍÖ±½Ó¼Ì³Ð¸¸ÀàµÄÍ¬Ãûº¯Êý
- **/
 
 /**
- * ¶àÌ¬Ô­ÀíµÄ½âÎö£º
- * µ±¸¸ÀàÖÐÓÐÁËÐéº¯Êýºó£¬ÄÚ²¿½á¹¹¾Í·¢ÉúÁË¸Ä±ä
- * ÄÚ²¿¶àÁËvfptr
- *  virtual function pointer Ðéº¯Êý±íÖ¸Õë
- *  Ö¸ÏòvftableÐéº¯Êý±í
- * ¸¸Àà½á¹¹ÖÐµÄvfptr &Animal::doSpeak
- * ×ÓÀàÖÐ ½øÐÐ¼Ì³Ð »á¼Ì³Ð vfptr vftable
- * ¹¹Ôìº¯ÊýÖÐ »á½«Ðéº¯Êý±íÖ¸Õë Ö¸Ïò×Ô¼ºµÄÐéº¯Êý±íÖÐ
- * Èç¹û·¢ÉúÁËÖØÐ´ »áÌæ»»µôÐéº¯Êý±íÖÐÔ­ÓÐµÄdospeak£¬¸ÄÎª&Cat::speak
- * ÉîÈëÄÚ²¿¿´¿´ÊÇÈçºÎµ÷ÓÃµÄ 
+ * å¤šæ€åŽŸç†çš„è§£æžï¼š
+ * å½“çˆ¶ç±»çš„æŸä¸ªå‡½æ•°å˜ä¸ºè™šå‡½æ•°ï¼ˆåœ¨å‰é¢ç”¨virtualæ¥ä¿®é¥°çš„ï¼‰ä»¥åŽï¼š
+ * åœ¨çˆ¶ç±»çš„ç»“æž„ä¸­å°±ä¼šæœ‰ä¸€ä¸ªè™šå‡½æ•°æŒ‡é’ˆï¼ˆvirtual function pointer å³vfptrï¼‰ï¼Œåœ¨å…¶å†…éƒ¨æŒ‡å‘è™šå‡½æ•°è¡¨
+ * è€Œå½“æœ‰å­ç±»ç»§æ‰¿äº†è¯¥çˆ¶ç±»çš„æ—¶å€™ï¼Œåœ¨å…¶å­ç±»ä¹Ÿä¼šæœ‰ä¸€ä¸ªè™šå‡½æ•°è¡¨ï¼Œ
+ * 
+ * é‡å†™ï¼šå­ç±»å†™çˆ¶ç±»çš„åŒåå‡½æ•°ï¼Œä¸”è¿”å›žå€¼ï¼Œå‚æ•°ä¸ªæ•°ï¼Œç±»åž‹ï¼Œé¡ºåºéƒ½ç›¸åŒ
+ * å¯¹è±¡åˆ›å»ºçš„æ—¶å€™ï¼Œè°ƒç”¨æž„é€ å‡½æ•°ï¼Œå°†æ‰€æœ‰çš„vfptréƒ½æŒ‡å‘è‡ªå·±çš„vftable
+ * è€Œè¿™ä¸ªæ“ä½œæˆ‘ä»¬æ˜¯çœ‹ä¸åˆ°çš„
+ * 
+ * å¦‚æžœå­ç±»åˆé‡å†™çˆ¶ç±»çš„åŒåå‡½æ•°ï¼Œå°±æŒ‡å‘è¿™ä¸ªé‡å†™çš„å‡½æ•°
+ * è¿™ä¸ªå­ç±»çš„è™šå‡½æ•°æŒ‡é’ˆå°±ä¼šæŒ‡å‘è¿™ä¸ªé‡å†™çš„å‡½æ•°ï¼Œè€Œä¸æ˜¯çˆ¶ç±»çš„åŒåçš„å‡½æ•°
  **/ 
