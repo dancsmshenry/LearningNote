@@ -2,16 +2,16 @@
 
 using namespace std;
 
-//µ«ÊÇÈç¹ûÊÇÖ»ÈÃ±àÒëÆ÷¿´µ½µÄ»°£¬ÄÇÒ²ÒªÈÃ±àÒëÆ÷¿´µ½PersonµÄÉùÃ÷£¨·ñÔòÏÂÃæµÄÓï¾ä¾Í»á±¨´í£©
+//è€Œä¸‹é¢çš„Personç¼–è¯‘å™¨åˆä¸çŸ¥é“æ˜¯ä»€ä¹ˆï¼Œæ‰€ä»¥ä¹Ÿè¦åœ¨ç±»å¤–å£°æ˜ç±»
 template<class T1, class T2> class Person;
-//Èç¹ûÖ±½ÓÊÇÔÚÀàÀïÃæ½øĞĞÉùÃ÷µÄ»°£¬»áÔì³É±àÒëÆ÷ÎŞ·¨¿´µ½Õâ¸öÉùÃ÷£¨ÔÚÀàÄÚÈ´ÊÇ¿´²»µ½°¡£©
-//ËùÒÔÒªÔÚÀàÍâÉùÃ÷ÈÃ±àÒëÆ÷¿´µ½
+
+//å› ä¸ºåŸæ¥çš„å‹å…ƒå‡½æ•°æ˜¯åœ¨ç±»å†…å£°æ˜çš„ï¼Œç¼–è¯‘å™¨æ˜¯çœ‹ä¸åˆ°çš„ï¼Œæ‰€ä»¥è¦è®©ç¼–è¯‘å™¨çœ‹åˆ°ï¼Œè¦åœ¨ç±»å¤–å†å£°æ˜
 template<class T1, class T2> void PrintPerson(Person<T1, T2> &p);
 
 template<class T1, class T2>
 class Person{
-    //ÓÑÔªº¯ÊıÀàÄÚÊµÏÖ(ÓÑÔªº¯Êı¿ÉÒÔ·ÃÎÊµÃµ½ÀàµÄË½ÓĞÊôĞÔ)
-    friend void PrintPerson<>(Person<T1, T2> &p);//×¢ÒâÕâÀïÓĞÒ»¸ö<>
+    //åˆ©ç”¨ç©ºå‡½æ•°åˆ—è¡¨ å‘Šè¯‰ç¼–è¯‘å™¨ æ¨¡æ¿å‡½æ•°çš„å£°æ˜
+    friend void PrintPerson<>(Person<T1, T2> &p);//æ³¨æ„è¿™é‡Œæœ‰ä¸€ä¸ª<>
 
     public:
         Person(T1 name, T2 age){
@@ -24,10 +24,11 @@ class Person{
         T2 m_Age;
 };
 
-//ÀàÍâÊµÏÖ
+//ç±»å¤–å®ç°
 template<class T1, class T2>
 void PrintPerson(Person<T1, T2> &p){
-    cout << "ĞÕÃû£º" << p.m_Name << " ÄêÁä£º" << p.m_Age << endl; 
+    cout << "Name ï¼š" << p.m_Name << endl;
+    cout << "Age ï¼š" << p.m_Age << endl; 
 }
 
 void test01(){
@@ -38,7 +39,3 @@ void test01(){
 int main(){
     test01();
 }
-/**
- * ÓÑÔªº¯ÊıÀàÄÚÊµÏÖ
- * friend void printPerson(Person<T1, T2> &p)
- **/ 

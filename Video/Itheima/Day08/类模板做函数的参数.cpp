@@ -11,14 +11,15 @@ class Person{
         }
 
         void show(){
-            cout << "ĞÕÃûÊÇ£º" << this->m_Name << " ÄêÁäÊÇ£º" << this->m_Age << endl;
+            cout << "Name: " << this->m_Name << endl;
+            cout << "Age: " << this->m_Age << endl;
         }
 
         NameType m_Name;
         AgeType m_Age;
 };
 
-//1¡¢Ö¸¶¨´«ÈëÀàĞÍ
+//1ã€æŒ‡å®šä¼ å…¥ç±»å‹
 void doWork(Person<string, int> &p){
     p.show();
 }
@@ -28,10 +29,13 @@ void test01(){
     doWork(p1);
 }
 
-//2¡¢²ÎÊıÄ£°å»¯
+
+//2ã€å‚æ•°æ¨¡æ¿åŒ–
 template<class T1, class T2>
 void doWork2(Person<T1, T2> &p){
     p.show();
+
+    //å¦‚ä½•æŸ¥çœ‹ç±»å‹
     cout << typeid(T1).name() << endl;
     cout << typeid(T2).name() << endl;
 }
@@ -41,12 +45,13 @@ void test02(){
     doWork2(p2);
 }
 
-//ÕûÌåÀàĞÍ»¯
-//Ïàµ±ÓÚÊÇ°ÑÕû¸öPersonÀàµ±×÷ÁËÒ»¸ö¶ÔÏóÄ£°å·ÅÈë
+
+//æ•´ä¸ªç±»å‹åŒ–
 template<class T>
 void doWork3(T &p){
-    p.show();
-    cout << typeid(T).name() << endl;//²é¿´ÀàĞÍ
+    // p.show();
+
+    cout << typeid(T).name() << endl;
 }
 
 void test03(){
@@ -56,6 +61,15 @@ void test03(){
 
 int main(){
     // test01();
-    test02();
-    // test03();
+
+    // test02();
+    
+    test03();
 }
+
+/**
+ * ç±»æ¨¡æ¿åšå‡½æ•°çš„å‚æ•°ç±»å‹çš„ä¸‰ç§æ–¹æ³•
+ * 1ã€æ˜¾ç¤ºæŒ‡å®šç±»å‹ï¼ˆæŒ‡å®šç±»å‹ï¼‰
+ * 2ã€å‚æ•°æ¨¡æ¿åŒ–ï¼ˆå¯¹å¯¹è±¡çš„å‚æ•°æ¨¡æ¿åŒ–ï¼‰
+ * 3ã€æ•´ä½“æ¨¡æ¿åŒ–ï¼ˆå°†ä¼ å…¥çš„å¯¹è±¡ä½œä¸ºæ¨¡æ¿ï¼‰
+ **/ 

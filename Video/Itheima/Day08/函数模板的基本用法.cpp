@@ -50,6 +50,20 @@ void test02() {
     cout << "b = " << b << endl;
 }
 
+template<typename T>
+void mySwap2(){
+}
+
+void test03(){
+    int a = 3;
+    char b = 'a';
+    // mySwap(a, b);//这里模板就无法推导出正确的那个类型了，会报错
+
+    //模板必须要推导出类才能使用
+    // mySwap2();//会报错，因为没有推导出类型
+    mySwap2<int>();//有类型传入就ok
+}
+
 int main(){
     // test01();
     test02();

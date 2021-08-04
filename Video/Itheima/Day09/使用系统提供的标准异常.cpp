@@ -1,5 +1,5 @@
 #include <iostream>
-#include <stdexcept>//±ØÒªµÄÍ·ÎÄ¼ş
+#include <stdexcept>//å¿…è¦çš„å¤´æ–‡ä»¶
 #include <string>
 
 using namespace std;
@@ -10,10 +10,10 @@ class Person{
             this->m_Name = name;
 
             if (age < 0 || age > 200){
-                throw out_of_range("ÄêÁäÔ½½çÁË£¡");
+                throw out_of_range("å¹´é¾„è¶Šç•Œäº†ï¼");
             }
 
-            throw length_error("³¤¶ÈÔ½½ç£¡");
+            throw length_error("é•¿åº¦è¶Šç•Œï¼");
         }
 
         string m_Name;
@@ -22,10 +22,10 @@ class Person{
 
 void test01(){
     try{
-        Person("ÕÅÈı", 100);
+        Person("å¼ ä¸‰", 100);
     }
     catch(out_of_range &e){
-        cout << "Error: " << e.what() << endl;//whatÊä³öµÄÊÇÅ×³öÒì³£Ê±¸ø³öµÄ½âÊÍ
+        cout << "Error: " << e.what() << endl;//whatè¾“å‡ºçš„æ˜¯æŠ›å‡ºå¼‚å¸¸æ—¶ç»™å‡ºçš„è§£é‡Š
     }
     catch(length_error &e){
         cout << "Error: " << e.what() << endl;

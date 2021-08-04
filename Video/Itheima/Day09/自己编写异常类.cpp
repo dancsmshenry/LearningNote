@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class MyOutOfRangeException : public exception {//ÕâÊÇÏµÍ³Ìá¹©µÄÒì³£Àà£¬¿ÉÒÔÖ±½Ó¼Ì³Ð
+class MyOutOfRangeException : public exception {//è¿™æ˜¯ç³»ç»Ÿæä¾›çš„å¼‚å¸¸ç±»ï¼Œå¯ä»¥ç›´æŽ¥ç»§æ‰¿
     public:
         MyOutOfRangeException(string errorfile){
             this->m_ErrorInfo = errorfile;
@@ -11,9 +11,9 @@ class MyOutOfRangeException : public exception {//ÕâÊÇÏµÍ³Ìá¹©µÄÒì³£Àà£¬¿ÉÒÔÖ±½Ó
 
         virtual ~MyOutOfRangeException(){};
 
-        //ÕâÀï±ØÐë¼ÓÉÏºóÃæµÄÒ»´®
+        //è¿™é‡Œå¿…é¡»åŠ ä¸ŠåŽé¢çš„ä¸€ä¸²
         virtual const char* what() const _GLIBCXX_TXN_SAFE_DYN _GLIBCXX_NOTHROW{
-            //·µ»Ø´íÎóÐÅÏ¢,ÕâÀïÒªstring×ªchar
+            //è¿”å›žé”™è¯¯ä¿¡æ¯,è¿™é‡Œè¦stringè½¬char
             return this->m_ErrorInfo.c_str();
         };
 
@@ -26,7 +26,7 @@ class Person{
             this->m_Name = name;
 
             if (age < 0 || age > 200){
-                throw MyOutOfRangeException(string("ÄêÁäÔ½½çÁË"));
+                throw MyOutOfRangeException(string("å¹´é¾„è¶Šç•Œäº†"));
             }            
         }
 
@@ -36,7 +36,7 @@ class Person{
 
 void test01(){
     try{
-        Person("ÕÅÈý", 300);
+        Person("å¼ ä¸‰", 300);
     }
     catch(MyOutOfRangeException &e){
         cout << "Error:" << e.what() << endl;
@@ -48,8 +48,8 @@ int main(){
     test01();
 }
 /**
- * ×Ô¼º¹¹½¨Òì³£Àà£¬ÐèÒª¼Ì³Ðexception
- * ÐèÒªÖØÐ´ÐéÎö¹¹ºÍwhat()
- * ÄÚ²¿Î¬»¤´íÎóÐÅÏ¢£¬×Ö·û´®
- * ×îºÃÔÚ¹¹ÔìµÄÊ±ºò´«Èë´íÎóÐÅÏ¢ºÍ×Ö·û´®£¬what·µ»Ø´íÎóÔ­Òò
+ * è‡ªå·±æž„å»ºå¼‚å¸¸ç±»ï¼Œéœ€è¦ç»§æ‰¿exception
+ * éœ€è¦é‡å†™è™šæžæž„å’Œwhat()
+ * å†…éƒ¨ç»´æŠ¤é”™è¯¯ä¿¡æ¯ï¼Œå­—ç¬¦ä¸²
+ * æœ€å¥½åœ¨æž„é€ çš„æ—¶å€™ä¼ å…¥é”™è¯¯ä¿¡æ¯å’Œå­—ç¬¦ä¸²ï¼Œwhatè¿”å›žé”™è¯¯åŽŸå› 
  **/ 

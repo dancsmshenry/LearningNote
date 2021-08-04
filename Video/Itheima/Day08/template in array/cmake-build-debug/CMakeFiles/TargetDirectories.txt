@@ -1,0 +1,3 @@
+F:/Code/Cplusplus/Video/Itheima/Day08/template in array/cmake-build-debug/CMakeFiles/template_in_array.dir
+F:/Code/Cplusplus/Video/Itheima/Day08/template in array/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/Code/Cplusplus/Video/Itheima/Day08/template in array/cmake-build-debug/CMakeFiles/rebuild_cache.dir

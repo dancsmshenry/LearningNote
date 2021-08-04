@@ -1,3 +1,0 @@
-F:/Code/Cplusplus/ITheima/Day05/class_template/cmake-build-debug/CMakeFiles/class_template.dir
-F:/Code/Cplusplus/ITheima/Day05/class_template/cmake-build-debug/CMakeFiles/edit_cache.dir
-F:/Code/Cplusplus/ITheima/Day05/class_template/cmake-build-debug/CMakeFiles/rebuild_cache.dir

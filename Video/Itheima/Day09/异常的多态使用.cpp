@@ -2,8 +2,8 @@
 
 using namespace std;
 
-//Òì³£»ùÀà
-//ÏµÍ³ÄÚµÄºÜ¶àÒì³£¾ÍÊÇÓÃ¶àÌ¬À´Ğ´µÄ
+//å¼‚å¸¸åŸºç±»
+//ç³»ç»Ÿå†…çš„å¾ˆå¤šå¼‚å¸¸å°±æ˜¯ç”¨å¤šæ€æ¥å†™çš„
 class BassException{
     public:
         virtual void printError(){
@@ -14,14 +14,14 @@ class BassException{
 class NullPointerException : public BassException{
     public:
         virtual void printError(){
-            cout << "¿ÕÖ¸ÕëÒì³£" << endl;
+            cout << "ç©ºæŒ‡é’ˆå¼‚å¸¸" << endl;
         }
 };
 
 class OutOfRangeException : public BassException{
     public:
         virtual void printError(){
-            cout << "Ô½½çÒì³£" << endl;
+            cout << "è¶Šç•Œå¼‚å¸¸" << endl;
         }
 };
 
@@ -44,4 +44,4 @@ int main(){
     test01();
 }
 
-//ÀûÓÃÒì³£À´ÊµÏÖ printErrorÍ¬Ò»½Ó¿Úµ÷ÓÃ£¬À´Å×³ö²»Í¬µÄ´íÎó¶ÔÏó
+//åˆ©ç”¨å¼‚å¸¸æ¥å®ç° printErroråŒä¸€æ¥å£è°ƒç”¨ï¼Œæ¥æŠ›å‡ºä¸åŒçš„é”™è¯¯å¯¹è±¡

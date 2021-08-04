@@ -22,11 +22,13 @@ bool myCompare(T &a, T &b){
     return false;
 }
 
-//Í¨¹ý¾ßÌå»¯×Ô¶¨ÒåÊý¾ÝÀàÐÍ£¬½â¾öÉÏÊöÎÊÌâ
-//¾Í¿ÉÒÔ²»ÓÃÖØÔØÁË
-//Èç¹û¾ßÌå»¯ÄÜ¹»ÓÅÏÈÆ¥Åä£¬ÄÇÃ´¾ÍÑ¡Ôñ¾ßÌå»¯
-//Óï·¨£ºtemplate<> ·µ»ØÖµÀàÐÍ º¯ÊýÃû<¾ßÌåÀàÐÍ>(²ÎÊý)
-//²ÎÊýÃûºÍÀàÐÍºÍº¯ÊýÃû¶¼²»ÄÜÐÞ¸Ä
+/**
+ * é€šè¿‡å…·ä½“åŒ–è‡ªå®šä¹‰æ•°æ®ç±»åž‹ï¼Œè§£å†³ä¸Šè¿°é—®é¢˜
+ * å°±å¯ä»¥ä¸ç”¨é‡è½½==
+ * å¦‚æžœå…·ä½“åŒ–èƒ½å¤Ÿä¼˜å…ˆåŒ¹é…ï¼Œé‚£ä¹ˆå°±é€‰æ‹©å…·ä½“åŒ–
+ * è¯­æ³•ï¼štemplate<> è¿”å›žå€¼ç±»åž‹ å‡½æ•°å<å…·ä½“ç±»åž‹>(å‚æ•°)
+ * å‚æ•°åå’Œç±»åž‹å’Œå‡½æ•°åéƒ½ä¸èƒ½ä¿®æ”¹
+**/
 template<> bool myCompare<Person>(Person& a, Person& b){
     if (a.m_Age == b.m_Age && a.m_Name == b.m_Name){
         return true;
