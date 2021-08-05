@@ -14,14 +14,14 @@ class BassException{
 class NullPointerException : public BassException{
     public:
         virtual void printError(){
-            cout << "空指针异常" << endl;
+            cout << "NullPointerException::printError()" << endl;
         }
 };
 
 class OutOfRangeException : public BassException{
     public:
         virtual void printError(){
-            cout << "越界异常" << endl;
+            cout << "OutOfRangeException::printError()" << endl;
         }
 };
 
@@ -44,4 +44,7 @@ int main(){
     test01();
 }
 
-//利用异常来实现 printError同一接口调用，来抛出不同的错误对象
+/**
+ * 利用异常来实现 printError同一接口调用，来抛出不同的错误对象
+ * 抛出不同的错误对象，提示不同错误
+ **/ 

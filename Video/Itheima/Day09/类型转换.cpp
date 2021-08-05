@@ -31,12 +31,21 @@ void test02(){
     //Other *other = static_cast<Other*>(base);
 }
 
+/**
+ * 静态转换：
+ * 父与子类型转换
+ * 可以进行基础数据类型转换
+ * 没有父子关系的自定义类型不能互相转换
+ **/ 
+
+
+
 void test03(){
     //基础类型不可以动态转换，因为动态转换中不可以出现精度的丢失
     //即失去精度或者不安全的都不可以转换
     char c = 'a';
 
-    //double b = dynamic_cast<double>(c);
+    // double b = dynamic_cast<double>(c);
 }
 
 //动态转换
@@ -56,13 +65,24 @@ void test04(){
     Base2 *base2 = dynamic_cast<Base2*>(child);
 
     //Base2转child2 *不安全
-    //Child2 * child2 = dynamic_cast<Child2*>(base);//没有多态的时候就会报错
+    // Child2 * child2 = dynamic_cast<Child2*>(base);
+    //没有多态的时候就会报错
+    //dymatic_cast 如果发生了多态，那么可以让基类转为派生类，向下转换
 
     //发生了多态的情况
     Base2 *base3 = new Child2;//想一下多态的定义
     Child2 *child3 = dynamic_cast<Child2*>(base3);
 }
-//dymatic_cast 如果发生了多态，那么可以让基类转为派生类，向下转换
+
+/**
+ * 动态转换
+ * 不可以转换基础数据类型
+ * 父子之间可以转换
+ * 父转子 不可以
+ * 子转父 可以
+ * 发生了多态（虚函数） 都可以
+ **/ 
+
 
 
 //常量转换
@@ -81,8 +101,8 @@ void test05(){
 
     int c = 10;
     int & c1 = c;
-    //const int &newc1 = static_cast<const int&>(c1);//ok的
-    const int &newc1 = const_cast<const int&>(c1);//可以的
+    const int &newc1 = static_cast<const int&>(c1);
+    const int &newc2 = const_cast<const int&>(c1);//可以的
 }
 
 //重新解释转换（reinterpet_cast）
@@ -96,17 +116,11 @@ void test06(){
 }
 
 int main(){
-    test01();
+    // test01();
+
+    // test02();
+
+    // test04();
+
+    // test05();
 }
-/**
- * 静态转换：
- * 父与子类之间可以转换
- * 没有父子关系的自定义类不可转换
- * 
- * 动态转换：
- * 不可以转换基础数据类型
- * 父子之间可以转换
- * 父转子 不可以
- * 子转父 可以
- * 发生多态 都可以
- **/ 

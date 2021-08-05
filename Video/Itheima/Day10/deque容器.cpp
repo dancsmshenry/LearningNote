@@ -10,22 +10,22 @@
 
 #include <iostream>
 #include <deque>
-#include <algorithm>//ÅÅĞòËã·¨µÄÍ·ÎÄ¼ş
+#include <algorithm>//æ’åºç®—æ³•çš„å¤´æ–‡ä»¶
 
 using namespace std;
 
 void PrintQueue(const deque<int> &d){
-    //iteratorÆÕÍ¨µü´úÆ÷£¬reverse_itertorÄæĞòµü´úÆ÷£¬const_itertorÖ»¶Áµü´úÆ÷
-    //ÕâÀïÓÃÁËconst dequeËùÒÔÏÂÃæµÄµü´úÆ÷¾ÍÒªÓÃconst_iterator
+    //iteratoræ™®é€šè¿­ä»£å™¨ï¼Œreverse_itertoré€†åºè¿­ä»£å™¨ï¼Œconst_itertoråªè¯»è¿­ä»£å™¨
+    //è¿™é‡Œç”¨äº†const dequeæ‰€ä»¥ä¸‹é¢çš„è¿­ä»£å™¨å°±è¦ç”¨const_iterator
     for (deque<int>::const_iterator it = d.begin(); it != d.end(); ++it){
         cout << *it << ' ';
     }
 }
 
 void test01(){
-    //dequeµÄ¹¹Ôì
-    deque<int> deque_01;//Ä¬ÈÏ¹¹Ôì·½Ê½
-    deque<int> deque_02(10, 5);//10¸ö5Å×ÈëdequeÖĞ
+    //dequeçš„æ„é€ 
+    deque<int> deque_01;//é»˜è®¤æ„é€ æ–¹å¼
+    deque<int> deque_02(10, 5);//10ä¸ª5æŠ›å…¥dequeä¸­
 
     // for (int i = 0; i < deque_02.size(); ++i){
     //     cout << deque_02[i] << " ";
@@ -38,64 +38,64 @@ void test01(){
 
     // PrintQueue(deque_01);
 
-    deque<int> deque_03(deque_01.begin(), deque_01.end());//½«[begin,end)Çø¼äµÄÔªËØ¿½±´¸ø±¾Éí
+    deque<int> deque_03(deque_01.begin(), deque_01.end());//å°†[begin,end)åŒºé—´çš„å…ƒç´ æ‹·è´ç»™æœ¬èº«
     deque_03.push_back(50);
-    //½»»»
+    //äº¤æ¢
     deque_03.swap(deque_02);
     // PrintQueue(deque_02);
 
-    int n = deque_03.size();//·µ»Ø¶ÓÁĞµÄ´óĞ¡
-    bool flag = deque_03.empty();//ÅĞ¶Ï¶ÓÁĞÊÇ·ñÎª¿Õ
+    int n = deque_03.size();//è¿”å›é˜Ÿåˆ—çš„å¤§å°
+    bool flag = deque_03.empty();//åˆ¤æ–­é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
 
     deque<int> deque_04(10, 5);
-    deque_04.resize(11);//ÖØĞÂ¶¨ÒåÈİÆ÷µÄ³¤¶È£¬ÈôÈİÆ÷±ä³¤£¬ÔòÒÔÄ¬ÈÏÖµÌî³äĞÂµÄÎ»ÖÃ£¬·ñÔò¾ÍÉ¾³ı¶àÓàµÄÔªËØ
-    deque_04.resize(12, 100);//ÕâÀïºóÃæµÄ²ÎÊıÊÇÖ¸ÓÃÕâ¸öÊıÀ´Ìî³äĞÂµÄÎ»ÖÃ£¬ÉÙµÄ»°¾Í²»¹ÜÁË
+    deque_04.resize(11);//é‡æ–°å®šä¹‰å®¹å™¨çš„é•¿åº¦ï¼Œè‹¥å®¹å™¨å˜é•¿ï¼Œåˆ™ä»¥é»˜è®¤å€¼å¡«å……æ–°çš„ä½ç½®ï¼Œå¦åˆ™å°±åˆ é™¤å¤šä½™çš„å…ƒç´ 
+    deque_04.resize(12, 100);//è¿™é‡Œåé¢çš„å‚æ•°æ˜¯æŒ‡ç”¨è¿™ä¸ªæ•°æ¥å¡«å……æ–°çš„ä½ç½®ï¼Œå°‘çš„è¯å°±ä¸ç®¡äº†
     // PrintQueue(deque_04);
 
     if(deque_04.empty()){
-        cout << "¶ÓÁĞÎª¿Õ" << endl;
+        cout << "é˜Ÿåˆ—ä¸ºç©º" << endl;
     }else{
-        cout << "¶ÓÁĞ²»Îª¿Õ" << endl;
+        cout << "é˜Ÿåˆ—ä¸ä¸ºç©º" << endl;
     }
 }
 
 void test02(){
     deque<int> deque_01;
 
-    //ÔÚÈİÆ÷Î²²¿²åÈëÔªËØ
+    //åœ¨å®¹å™¨å°¾éƒ¨æ’å…¥å…ƒç´ 
     deque_01.push_back(1);
 
-    //ÔÚÈİÆ÷Ê×²¿²åÈëÔªËØ
+    //åœ¨å®¹å™¨é¦–éƒ¨æ’å…¥å…ƒç´ 
     deque_01.push_front(0);
 
-    //É¾³ıÈİÆ÷µÄ×îºóÒ»¸öÔªËØ
+    //åˆ é™¤å®¹å™¨çš„æœ€åä¸€ä¸ªå…ƒç´ 
     deque_01.pop_back();
 
-    //É¾³ıÈİÆ÷µÄ×îÇ°ÃæµÄÒ»¸öÔªËØ
+    //åˆ é™¤å®¹å™¨çš„æœ€å‰é¢çš„ä¸€ä¸ªå…ƒç´ 
     deque_01.pop_front();
 
-    //·µ»ØµÚÒ»¸öÊı¾İ
+    //è¿”å›ç¬¬ä¸€ä¸ªæ•°æ®
     int a1 = deque_01.front();
 
-    //·µ»Ø×îºóÒ»¸öÊı¾İ
+    //è¿”å›æœ€åä¸€ä¸ªæ•°æ®
     int a2 = deque_01.back();
 
-    //·µ»ØË÷ÒıµÄÊı¾İ£¬Èç¹ûÔ½½çÁË¾ÍÅ×³öÒì³£
+    //è¿”å›ç´¢å¼•çš„æ•°æ®ï¼Œå¦‚æœè¶Šç•Œäº†å°±æŠ›å‡ºå¼‚å¸¸
     int a3 = deque_01.at(0);
 
-    //·µ»ØË÷ÒıµÄÊı¾İ£¬Ô½½çÁË¾Í±¨´í
+    //è¿”å›ç´¢å¼•çš„æ•°æ®ï¼Œè¶Šç•Œäº†å°±æŠ¥é”™
     int a4 = deque_01[0];
 
-    //É¾³ı¶ÓÁĞÖĞËùÓĞµÄÊı¾İ
+    //åˆ é™¤é˜Ÿåˆ—ä¸­æ‰€æœ‰çš„æ•°æ®
     deque_01.clear();
 }
 
 void test03(){
     deque<int> d(10, 10);
-    //É¾³ıµ±Ç°Î»ÖÃµÄÊı¾İ
+    //åˆ é™¤å½“å‰ä½ç½®çš„æ•°æ®
     //d.erase(d.begin());
     
-    //É¾³ıd.begin(), d.begin() + 2Ö®¼äµÄÊı¾İ
+    //åˆ é™¤d.begin(), d.begin() + 2ä¹‹é—´çš„æ•°æ®
     d.erase(d.begin(), d.begin() + 2);
 
     for (int i = 0; i < d.size(); ++ i){
@@ -105,15 +105,15 @@ void test03(){
 
 void test04(){
     deque<int> d1(10, 2);
-    //ÔÚpos¼´d1.begin()µÄÎ»ÖÃÌí¼ÓÊı×Ö3
+    //åœ¨poså³d1.begin()çš„ä½ç½®æ·»åŠ æ•°å­—3
     d1.insert(d1.begin(), 3);
 
     deque<int> d2(10, 2);
-    //ÔÚpos¼´d1.begin()µÄÎ»ÖÃÌí¼Ó2¸öÊı×Ö3
+    //åœ¨poså³d1.begin()çš„ä½ç½®æ·»åŠ 2ä¸ªæ•°å­—3
     d2.insert(d2.begin(), 2, 3);
 
     deque<int> d3(1, 10);
-    //´Ópos¼´d3.begin()¿ªÊ¼°Ñ¶ÓÁĞd2µÄÈ«²¿¶¼Ìí¼Ó½øÀ´
+    //ä»poså³d3.begin()å¼€å§‹æŠŠé˜Ÿåˆ—d2çš„å…¨éƒ¨éƒ½æ·»åŠ è¿›æ¥
     d3.insert(d3.begin(),d2.begin(),d2.end());
 
     for (int i = 0; i < d2.size(); ++ i){
@@ -125,7 +125,7 @@ bool compare(int t1, int t2) {
     return t1 > t2;
 }
 
-//ÅÅĞò
+//æ’åº
 void test05(){
     deque<int> d1;
     
@@ -135,10 +135,10 @@ void test05(){
     d1.push_back(110);
     d1.push_back(10);
 
-    //ÅÅĞò,Ä¬ÈÏÊÇ´ÓĞ¡µ½´óµÄ
+    //æ’åº,é»˜è®¤æ˜¯ä»å°åˆ°å¤§çš„
     sort(d1.begin(), d1.end());
 
-    //ÅÅĞò£¬´Ó´óµ½Ğ¡
+    //æ’åºï¼Œä»å¤§åˆ°å°
     sort(d1.begin(), d1.end(), compare);
     PrintQueue(d1);
 }
@@ -151,7 +151,7 @@ int main(){
     test05();
 }
 /**
- * Ë«¶ËÊı×é Ã»ÓĞÈİÁ¿£¨¶¯Ì¬·ÖÅäÄÚ´æ£¬·Ö¶ÎÁ¬Ğø¿Õ¼ä×é³É£©
- * ÔÊĞíÓÃ³£ÊıÏîµÄÊ±¼ä¶ÔÍ·²¿ÔªËØ½øĞĞ²åÈëºÍÉ¾³ı
- * ÒòÎªdequeµÄitertorºÍvector²»ÊÇÒ»¸öÁ¿¼¶µÄ£¬ËùÒÔ×îºÃÓÃvector
+ * åŒç«¯æ•°ç»„ æ²¡æœ‰å®¹é‡ï¼ˆåŠ¨æ€åˆ†é…å†…å­˜ï¼Œåˆ†æ®µè¿ç»­ç©ºé—´ç»„æˆï¼‰
+ * å…è®¸ç”¨å¸¸æ•°é¡¹çš„æ—¶é—´å¯¹å¤´éƒ¨å…ƒç´ è¿›è¡Œæ’å…¥å’Œåˆ é™¤
+ * å› ä¸ºdequeçš„itertorå’Œvectorä¸æ˜¯ä¸€ä¸ªé‡çº§çš„ï¼Œæ‰€ä»¥æœ€å¥½ç”¨vector
  **/ 

@@ -10,19 +10,19 @@ class Person{
             this->m_Name = name;
 
             if (age < 0 || age > 200){
-                throw out_of_range("年龄越界了！");
+                throw out_of_range("out of range！");
             }
 
-            throw length_error("长度越界！");
+            throw length_error("out of length！");
         }
 
         string m_Name;
         int m_Age;
 };
 
-void test01(){
+void test01(){  
     try{
-        Person("张三", 100);
+        Person("zhangsan", 100);
     }
     catch(out_of_range &e){
         cout << "Error: " << e.what() << endl;//what输出的是抛出异常时给出的解释

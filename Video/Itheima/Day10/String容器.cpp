@@ -1,51 +1,51 @@
 #include <iostream>
-#include <string>//×Ö·û´®µÄÍ·ÎÄ¼ş
-#include <stdexcept>//Òì³£µÄÍ·ÎÄ¼ş
+#include <string>//å­—ç¬¦ä¸²çš„å¤´æ–‡ä»¶
+#include <stdexcept>//å¼‚å¸¸çš„å¤´æ–‡ä»¶
 
 using namespace std;
 
 /**
- * char*ÊÇÒ»¸öÖ¸Õë£¬¶østringÊÇÒ»¸öÀà£¬·â×°ÁËchar*£¬¹ÜÀíÕâ¸ö×Ö·û´®
+ * char*æ˜¯ä¸€ä¸ªæŒ‡é’ˆï¼Œè€Œstringæ˜¯ä¸€ä¸ªç±»ï¼Œå°è£…äº†char*ï¼Œç®¡ç†è¿™ä¸ªå­—ç¬¦ä¸²
  **/ 
 
-//×Ö·û´®µÄ¹¹Ôì
+//å­—ç¬¦ä¸²çš„æ„é€ 
 void test01(){
-    //Ä¬ÈÏ¹¹Ôì£¨ÒÔ¶ÔÏó¹¹Ôì£¨Àà£©µÄË¼ÏëÀ´Àí½âstringµÄ¹¹Ôì£©
+    //é»˜è®¤æ„é€ ï¼ˆä»¥å¯¹è±¡æ„é€ ï¼ˆç±»ï¼‰çš„æ€æƒ³æ¥ç†è§£stringçš„æ„é€ ï¼‰
     string str;
     
-    //Ê¹ÓÃÒ»¸östring¶ÔÏó³õÊ¼»¯ÁíÒ»¸östirng¶ÔÏó£¬¿½±´¹¹Ôì
+    //ä½¿ç”¨ä¸€ä¸ªstringå¯¹è±¡åˆå§‹åŒ–å¦ä¸€ä¸ªstirngå¯¹è±¡ï¼Œæ‹·è´æ„é€ 
     string str1(str);
 
-    //Ê¹ÓÃÒÑÖª×Ö·û´®³õÊ¼»¯¶ÔÏó£¬ÒòÎªÊÇ¿½±´¹¹Ôì
+    //ä½¿ç”¨å·²çŸ¥å­—ç¬¦ä¸²åˆå§‹åŒ–å¯¹è±¡ï¼Œå› ä¸ºæ˜¯æ‹·è´æ„é€ 
     string str2 = str;
     string str3 = "abc";
     
-    //Ê¹ÓÃn¸ö×Ö·û´®c³õÊ¼»¯¶ÔÏó
+    //ä½¿ç”¨nä¸ªå­—ç¬¦ä¸²cåˆå§‹åŒ–å¯¹è±¡
     string str4(10, 'n');
     
     cout << str3 << endl;
     cout << str4 << endl;
 
-    //»ù±¾¸³Öµ
+    //åŸºæœ¬èµ‹å€¼
     str = "Hello";
     str1 = str3;
 
-    //string& assign(const char *s, int n);£¬°Ñ×Ö·û´®sµÄÇ°n¸ö×Ö·û¸³¸øµ±Ç°µÄ×Ö·û´®
+    //string& assign(const char *s, int n);ï¼ŒæŠŠå­—ç¬¦ä¸²sçš„å‰nä¸ªå­—ç¬¦èµ‹ç»™å½“å‰çš„å­—ç¬¦ä¸²
     str2.assign("abcdef", 3);
     cout << str2 << endl;
 
-    //string& assign(const string &s, int start, int n);£¬½«s´Óstart¿ªÊ¼n¸ö×Ö·û¸³Öµ¸ø×Ö·û´®
+    //string& assign(const string &s, int start, int n);ï¼Œå°†sä»startå¼€å§‹nä¸ªå­—ç¬¦èµ‹å€¼ç»™å­—ç¬¦ä¸²
     string str6;
     str6.assign("abcdefg", 1, 3);//bcd
     cout << str6 << endl;
 
-    //string& assign(int n, char c);£¬½«n¸ö×Ö·ûc¸³¸øµ±Ç°×Ö·û´®
+    //string& assign(int n, char c);ï¼Œå°†nä¸ªå­—ç¬¦cèµ‹ç»™å½“å‰å­—ç¬¦ä¸²
     string str7;
     str7.assign(10, 'a');
     cout << str7 << endl;
 
-    //string& assign(const string &s);£¬°Ñ×Ö·û´®s¸³¸øµ±Ç°×Ö·û´®
-    //string& assign(const char *s);£¬°Ñ×Ö·ûs¸³¸øµ±Ç°×Ö·û´®
+    //string& assign(const string &s);ï¼ŒæŠŠå­—ç¬¦ä¸²sèµ‹ç»™å½“å‰å­—ç¬¦ä¸²
+    //string& assign(const char *s);ï¼ŒæŠŠå­—ç¬¦sèµ‹ç»™å½“å‰å­—ç¬¦ä¸²
     string str8;
     str8.assign(str7);
     cout << str8 << endl;
@@ -53,9 +53,9 @@ void test01(){
 
 
 /**
- * string·ÃÎÊ×Ö·û²Ù×÷
- * char& operator[](int n){};//Í¨¹ı[]À´»ñÈ¡×Ö·û
- * char& at(int n)//Í¨¹ıat·½·¨»ñÈ¡×Ö·û
+ * stringè®¿é—®å­—ç¬¦æ“ä½œ
+ * char& operator[](int n){};//é€šè¿‡[]æ¥è·å–å­—ç¬¦
+ * char& at(int n)//é€šè¿‡atæ–¹æ³•è·å–å­—ç¬¦
  **/ 
 void test02(){
     string s = "Hello world!";
@@ -64,8 +64,8 @@ void test02(){
         // cout << s[i] << endl;
         // cout << s.at(i) << endl;
         /**
-         * []·ÃÎÊµ½Ô½½çµÄµØ·½»áÖ±½Ó¹Òµô
-         * at·ÃÎÊµ½Ô½½çµÄµØ·½»áÅ×³öÒì³£
+         * []è®¿é—®åˆ°è¶Šç•Œçš„åœ°æ–¹ä¼šç›´æ¥æŒ‚æ‰
+         * atè®¿é—®åˆ°è¶Šç•Œçš„åœ°æ–¹ä¼šæŠ›å‡ºå¼‚å¸¸
          **/ 
     }
 
@@ -73,16 +73,16 @@ void test02(){
         //cout << s[1000] << endl;
         cout << s.at(1000) << endl;
     }catch(out_of_range &e){
-        cout << e.what() << endl;//Ê¹ÓÃ±ê×¼¿âºÍÒì³£¿âÀ´Å×³öÒì³£
+        cout << e.what() << endl;//ä½¿ç”¨æ ‡å‡†åº“å’Œå¼‚å¸¸åº“æ¥æŠ›å‡ºå¼‚å¸¸
         cout << "throw exception" << endl;
     }catch(...){
         cout << "catch other exception" << endl;
     }
 }
 
-//stringµÄÆ´½Ó¡¢²éÕÒºÍÌæ»»
+//stringçš„æ‹¼æ¥ã€æŸ¥æ‰¾å’Œæ›¿æ¢
 void test03(){
-    //Æ´½Ó
+    //æ‹¼æ¥
     string s1 = "I";
     string s2 = " love you!";
 
@@ -94,8 +94,8 @@ void test03(){
 
     //string+char
     const char *a = "!!!";
-    //×¢Òâ£ºÕâÀïµÄ"!!!"ÊÇÖ¸const char£¬ÊÇÒ»¸ö³£Á¿£¬ÏÖÔÚÈç¹ûÈÃÒ»¸öcharÖ¸ÕëÖ¸Ïòconst char£¬±àÒëÆ÷¾Í»á±¨´íÓÅ»¯
-    //ËùÒÔ£¬¾ÍÒª¸ÄÎªconst
+    //æ³¨æ„ï¼šè¿™é‡Œçš„"!!!"æ˜¯æŒ‡const charï¼Œæ˜¯ä¸€ä¸ªå¸¸é‡ï¼Œç°åœ¨å¦‚æœè®©ä¸€ä¸ªcharæŒ‡é’ˆæŒ‡å‘const charï¼Œç¼–è¯‘å™¨å°±ä¼šæŠ¥é”™ä¼˜åŒ–
+    //æ‰€ä»¥ï¼Œå°±è¦æ”¹ä¸ºconst
     s1 += a;
 
     s1.append("!!!!");
@@ -103,44 +103,44 @@ void test03(){
     cout << s1 << endl;
 
 
-    //²éÕÒ
+    //æŸ¥æ‰¾
     
-    //Èç¹ûÕÒ²»µ½µÄ»°¾Í·µ»Ø-1
-    //int find(const string& s, int pos = 0) const;//²éÕÒstrµÚÒ»´Î³öÏÖµÄÎ»ÖÃ£¬´Ópos¿ªÊ¼²éÕÒ
-    //int find(const char* s, int pos = 0) const;//²éÕÒsµÚÒ»´Î³öÏÖµÄÎ»ÖÃ£¬´Ópos¿ªÊ¼²éÕÒ
-    //int find(char c, int pos = 0) const;//²éÕÒcµÚÒ»´Î³öÏÖµÄÎ»ÖÃ£¬´Ópos¿ªÊ¼²éÕÒ
-    //int find(const char* s, int pos = 0, int n) const;//´ÓposÎ»ÖÃ²éÕÒsµÄÇ°n¸ö×Ö·ûµÚÒ»´ÎÎ»ÖÃ
+    //å¦‚æœæ‰¾ä¸åˆ°çš„è¯å°±è¿”å›-1
+    //int find(const string& s, int pos = 0) const;//æŸ¥æ‰¾strç¬¬ä¸€æ¬¡å‡ºç°çš„ä½ç½®ï¼Œä»poså¼€å§‹æŸ¥æ‰¾
+    //int find(const char* s, int pos = 0) const;//æŸ¥æ‰¾sç¬¬ä¸€æ¬¡å‡ºç°çš„ä½ç½®ï¼Œä»poså¼€å§‹æŸ¥æ‰¾
+    //int find(char c, int pos = 0) const;//æŸ¥æ‰¾cç¬¬ä¸€æ¬¡å‡ºç°çš„ä½ç½®ï¼Œä»poså¼€å§‹æŸ¥æ‰¾
+    //int find(const char* s, int pos = 0, int n) const;//ä»posä½ç½®æŸ¥æ‰¾sçš„å‰nä¸ªå­—ç¬¦ç¬¬ä¸€æ¬¡ä½ç½®
 
-    //rfindÊÇ´ÓºóÍùÇ°ÕÒµÄ
-    //int rfind(const stirng& str, int pos = npos) const;//²éÕÒstr×îºóÒ»´Î³öÏÖµÄÎ»ÖÃ£¬´Ópos¿ªÊ¼²éÕÒ
-    //int rfind(const char* s, int pos = npos) const;//²éÕÒs×îºóÒ»´Î³öÏÖµÄÎ»ÖÃ£¬´Ópos¿ªÊ¼²éÕÒ
-    //int rfind(const stirng& str, int pos, int n) const;//´Ópos²éÕÒsµÄÇ°n¸ö×Ö·û×îºóÒ»´ÎÎ»ÖÃ
-    //int rfind(const char c, int pos = 0) const;//²éÕÒ×Ö·ûc×îºóÒ»´Î³öÏÖµÄÎ»ÖÃ
+    //rfindæ˜¯ä»åå¾€å‰æ‰¾çš„
+    //int rfind(const stirng& str, int pos = npos) const;//æŸ¥æ‰¾stræœ€åä¸€æ¬¡å‡ºç°çš„ä½ç½®ï¼Œä»poså¼€å§‹æŸ¥æ‰¾
+    //int rfind(const char* s, int pos = npos) const;//æŸ¥æ‰¾sæœ€åä¸€æ¬¡å‡ºç°çš„ä½ç½®ï¼Œä»poså¼€å§‹æŸ¥æ‰¾
+    //int rfind(const stirng& str, int pos, int n) const;//ä»posæŸ¥æ‰¾sçš„å‰nä¸ªå­—ç¬¦æœ€åä¸€æ¬¡ä½ç½®
+    //int rfind(const char c, int pos = 0) const;//æŸ¥æ‰¾å­—ç¬¦cæœ€åä¸€æ¬¡å‡ºç°çš„ä½ç½®
 
 
     string s11 = "abcdef";
     int pos = s11.find("dc");
     cout << pos << endl;
 
-    //Ìæ»»
-    //string& replace(int pos, int n, const string& str);//Ìæ»»´Ópos¿ªÊ¼n¸ö×Ö·ûÎª×Ö·û´®str
-    //string& replace(int pos, int n, const char* str);//Ìæ»»´Ópos¿ªÊ¼µÄn¸ö×Ö·ûÎª×Ö·ûstr
+    //æ›¿æ¢
+    //string& replace(int pos, int n, const string& str);//æ›¿æ¢ä»poså¼€å§‹nä¸ªå­—ç¬¦ä¸ºå­—ç¬¦ä¸²str
+    //string& replace(int pos, int n, const char* str);//æ›¿æ¢ä»poså¼€å§‹çš„nä¸ªå­—ç¬¦ä¸ºå­—ç¬¦str
 
     string s111 = "hello";
     s111.replace(1, 3, "1111111");
-    //Àí½â±¾ÖÊ£ºÊÇ°Ñs111µÄÈı¸ö×Ö·û»»Î»ÎÒÏëÒª»»³ÉµÄ×Ö·û
+    //ç†è§£æœ¬è´¨ï¼šæ˜¯æŠŠs111çš„ä¸‰ä¸ªå­—ç¬¦æ¢ä½æˆ‘æƒ³è¦æ¢æˆçš„å­—ç¬¦
     cout << s111 << endl;
 }
 
-//stringµÄ±È½Ï²Ù×÷
+//stringçš„æ¯”è¾ƒæ“ä½œ
 void test04(){
-    //int compare(const string& s) const;//Óë×Ö·û´®s½øĞĞ±È½Ï
-    //int compare(const char* s) const;//Óë×Ö·û´®s½øĞĞ±È½Ï
+    //int compare(const string& s) const;//ä¸å­—ç¬¦ä¸²sè¿›è¡Œæ¯”è¾ƒ
+    //int compare(const char* s) const;//ä¸å­—ç¬¦ä¸²sè¿›è¡Œæ¯”è¾ƒ
     /**
-     * compareº¯ÊıÔÚ>Ê±·µ»Ø1£¬<Ê±·µ»Ø-1£¬==Ê±·µ»Ø0
-     * ±È½ÏÇø·Ö´óĞ¡Ğ´£¬±È½ÏÊ±²Î¿¼×ÖµäË³Ğò£¬ÅÅÔ½Ç°ÃæµÄÔ½Ğ¡
-     * ´óĞ´µÄAĞ¡ÓÚĞ¡Ğ´µÄa
-     * ±È´óĞ¡Óë³¤¶ÈÃ»ÓĞ¹ØÏµ£¬¾ÍÊÇµ¥´¿µÄ±È½Ï×ÖÄ¸µÄ×ÖµäĞò
+     * compareå‡½æ•°åœ¨>æ—¶è¿”å›1ï¼Œ<æ—¶è¿”å›-1ï¼Œ==æ—¶è¿”å›0
+     * æ¯”è¾ƒåŒºåˆ†å¤§å°å†™ï¼Œæ¯”è¾ƒæ—¶å‚è€ƒå­—å…¸é¡ºåºï¼Œæ’è¶Šå‰é¢çš„è¶Šå°
+     * å¤§å†™çš„Aå°äºå°å†™çš„a
+     * æ¯”å¤§å°ä¸é•¿åº¦æ²¡æœ‰å…³ç³»ï¼Œå°±æ˜¯å•çº¯çš„æ¯”è¾ƒå­—æ¯çš„å­—å…¸åº
      **/ 
 
     string s1 = "hell";
@@ -155,15 +155,15 @@ void test04(){
     }
 }
 
-//string×Ó´®
-//string substr(int pos = 0, int n = npos) const;//·µ»ØÓÉpos¿ªÊ¼µÄn¸ö×Ö·û×é³ÉµÄ×Ö·û´®
+//stringå­ä¸²
+//string substr(int pos = 0, int n = npos) const;//è¿”å›ç”±poså¼€å§‹çš„nä¸ªå­—ç¬¦ç»„æˆçš„å­—ç¬¦ä¸²
 void test05(){
     string s1 = "hello world!!";
     string s2;
     s2 = s1.substr(0, 5);
     cout << s2 << endl;
 
-    //ĞèÇó£¬²éÕÒÒ»¸öÓÒ¼üµÄÓÃ»§Ãû
+    //éœ€æ±‚ï¼ŒæŸ¥æ‰¾ä¸€ä¸ªå³é”®çš„ç”¨æˆ·å
     string email = "zhangtao@sina.com";
 
     int pos = email.find("@");
@@ -172,20 +172,20 @@ void test05(){
     cout << "username:" << email.substr(0, pos) << endl;
 }
 
-//stringµÄ²åÈëºÍÉ¾³ı
+//stringçš„æ’å…¥å’Œåˆ é™¤
 /**
- * string& insert(int pos, const char* s&)//²åÈë×Ö·û´®
- * string& insert(int pos, const string& str)//²åÈë×Ö·û´®
- * string& insert(int pos, int n, char c)//ÔÚÖ¸¶¨Î»ÖÃ²åÈën¸ö×Ö·ûc
+ * string& insert(int pos, const char* s&)//æ’å…¥å­—ç¬¦ä¸²
+ * string& insert(int pos, const string& str)//æ’å…¥å­—ç¬¦ä¸²
+ * string& insert(int pos, int n, char c)//åœ¨æŒ‡å®šä½ç½®æ’å…¥nä¸ªå­—ç¬¦c
  * 
- * string& erase(int pos, int n = npos)//É¾³ı´Ópos¿ªÊ¼µÄn¸ö×Ö·û
+ * string& erase(int pos, int n = npos)//åˆ é™¤ä»poså¼€å§‹çš„nä¸ªå­—ç¬¦
  **/ 
 void test06(){
     string s1 = "hello";
     s1.insert(1, "111");
     cout << "s1 = " << s1 << endl;
 
-    //É¾³ı111
+    //åˆ é™¤111
     s1.erase(1, 3);
     cout << "s1 = " << s1 << endl;
 }
@@ -201,21 +201,21 @@ void func2(char *s){
 void test07(){
     string s = "abc";
 
-    //string ×ª char
+    //string è½¬ char
     const char *p = s.c_str();
 
-    func(p);//ÒşÊ½×ª»»£¬const charÒşÊ½×ª»»Îªstring
+    func(p);//éšå¼è½¬æ¢ï¼Œconst charéšå¼è½¬æ¢ä¸ºstring
 
-    //char ×ª stirng
+    //char è½¬ stirng
     string s2(p);
 
-    // func2(s2);//ÕâÀï²»ÄÜ¹»ÓÉstringÒşÊ½×ª»»Îªchar
+    // func2(s2);//è¿™é‡Œä¸èƒ½å¤Ÿç”±stringéšå¼è½¬æ¢ä¸ºchar
 }
 
 void test08(){
-    //¼Ç×¡Ò»Ìõ£¬µ±×Ö·û´®±»ÖØĞÂ¸³ÖµÖØĞÂ·ÖÅäÄÚ´æµÄÊ±ºò£¬µØÖ·¾Í»á·¢Éú¸Ä±ä
-    //ÄÇÃ´¸Ä±äÖ®Ç°Ô­À´µÄµØÖ·¾Í²»»á¸Ä±äÏÖÔÚsµÄÖµÁË
-    //¿ÉÎÊÌâÊÇÎÒÕâÀïµÄµØÖ·Ã»ÓĞ·¢Éú¸Ä±ä°¡£¿£¿£¿£¿(¸Ä±äÁË£¬¿ÉÄÜÊÇÔ­À´µÄ´óĞ¡¹»£¬¾ÍÃ»ÓĞÖØĞÂ·ÖÅä¿Õ¼ä)
+    //è®°ä½ä¸€æ¡ï¼Œå½“å­—ç¬¦ä¸²è¢«é‡æ–°èµ‹å€¼é‡æ–°åˆ†é…å†…å­˜çš„æ—¶å€™ï¼Œåœ°å€å°±ä¼šå‘ç”Ÿæ”¹å˜
+    //é‚£ä¹ˆæ”¹å˜ä¹‹å‰åŸæ¥çš„åœ°å€å°±ä¸ä¼šæ”¹å˜ç°åœ¨sçš„å€¼äº†
+    //å¯é—®é¢˜æ˜¯æˆ‘è¿™é‡Œçš„åœ°å€æ²¡æœ‰å‘ç”Ÿæ”¹å˜å•Šï¼Ÿï¼Ÿï¼Ÿï¼Ÿ(æ”¹å˜äº†ï¼Œå¯èƒ½æ˜¯åŸæ¥çš„å¤§å°å¤Ÿï¼Œå°±æ²¡æœ‰é‡æ–°åˆ†é…ç©ºé—´)
     string s = "abcdef";
     char& a = s[1];
     char& b = s[2];
@@ -231,13 +231,13 @@ void test08(){
     cout << (int*)s.c_str() << endl;
 }
 
-//Ğ´Ò»¸öº¯Êı£¬º¯ÊıÄÚ²¿½«string×Ö·û´®ÖĞµÄËùÓĞĞ¡Ğ´×ÖÄ¸¶¼±äÎª´óĞ´×ÖÄ¸
+//å†™ä¸€ä¸ªå‡½æ•°ï¼Œå‡½æ•°å†…éƒ¨å°†stringå­—ç¬¦ä¸²ä¸­çš„æ‰€æœ‰å°å†™å­—æ¯éƒ½å˜ä¸ºå¤§å†™å­—æ¯
 void test09(string &s){
     for (int i = 0; i < s.size(); i ++){
-        //È«±äÎª´óĞ´
+        //å…¨å˜ä¸ºå¤§å†™
         s[i] = toupper(s[i]);
 
-        //È«±äÎªĞ¡Ğ´
+        //å…¨å˜ä¸ºå°å†™
         // s[i] = tolower(s[i]);
     }
 

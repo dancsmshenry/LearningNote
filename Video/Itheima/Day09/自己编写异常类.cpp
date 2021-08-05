@@ -26,7 +26,7 @@ class Person{
             this->m_Name = name;
 
             if (age < 0 || age > 200){
-                throw MyOutOfRangeException(string("年龄越界了"));
+                throw MyOutOfRangeException(string("out of age range!"));
             }            
         }
 
@@ -36,7 +36,7 @@ class Person{
 
 void test01(){
     try{
-        Person("张三", 300);
+        Person("zhangsan", 300);
     }
     catch(MyOutOfRangeException &e){
         cout << "Error:" << e.what() << endl;
