@@ -25,9 +25,9 @@ int main(){
     Complex complex1(0);
     Complex complex2(1);
     if (complex1 && (complex1 += complex2)){
-        cout << "真" << endl;
+        cout << "True" << endl;
     }
     else{
-        cout << "假" << endl;
+        cout << "False" << endl;
     }
 }

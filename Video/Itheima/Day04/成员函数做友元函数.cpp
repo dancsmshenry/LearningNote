@@ -2,9 +2,11 @@
 
 using namespace std;
 
-//只让visit做Building的好朋友，visit2不可以访问私有属性
-class Building;//这里必须声明Building，否则编辑器会不知道goodGay中的Building是干什么的
 //https://blog.csdn.net/qq_43259304/article/details/89605118
+//只让visit做Building的好朋友，visit2不可以访问私有属性
+//这里必须声明Building，否则编辑器会不知道goodGay中的Building是干什么的
+class Building;
+
 class goodGay{
     public:
         goodGay();
@@ -17,9 +19,6 @@ class goodGay{
 };
 
 class Building{
-    //让好基友类作为Building的好朋友
-    //friend class goodGay;
-
     //让成员函数visit作为友元函数
     friend void goodGay::visit();
 
@@ -37,18 +36,17 @@ goodGay::goodGay(){
 }
 
 void goodGay::visit(){
-    cout << "好基友正在访问，" << this->building->m_SittingRoom << endl;
-    cout << "好基友正在访问，" << this->building->m_BedRoom << endl;
+    cout << "goodGay::visit() :: " << this->building->m_SittingRoom << endl;
+    cout << "goodGay::visit() :: " << this->building->m_BedRoom << endl;
 }
 
 void goodGay::visit2(){
-    cout << "好基友正在访问，" << this->building->m_SittingRoom << endl;
-    //cout << "好基友正在访问，" << this->building->m_BedRoom << endl;
+    cout << "goodGay::visit2() :: " << this->building->m_SittingRoom << endl;
 }
 
 Building::Building(){
-    this->m_SittingRoom = "客厅";
-    this->m_BedRoom = "卧室";
+    this->m_SittingRoom = "Building::sittingRoom";
+    this->m_BedRoom = "Building::BedRoom";
 }
 
 void test01(){

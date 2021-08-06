@@ -25,9 +25,10 @@ class Person{
  **/
 
 void test01(){
-    //前提是Person为空类
-    cout << "size of Person = " <<sizeof(Person) << endl;
+    //当Person为空类
     //空类的大小为1，每个实例的对象都有独一无二的地址，char维护这个地址，所以大小就为1
+    cout << "size of Person = " <<sizeof(Person) << endl;
+    
     Person p[10];
     cout << "size of p = " <<sizeof(p) << endl;//同理
 
@@ -40,7 +41,6 @@ void test02(){
      * this指针是隐含在每个类的非静态成员函数中
      * 当一个对象被创建以后，它的每一个成员函数都含有一个系统自动生成的隐含指针this，用以保存这个对象的地址
      * 
-     * ps:
      * 静态成员函数内部没有this指针
      **/
 
@@ -54,4 +54,6 @@ void test02(){
 
 int main(){
     test01();
+
+    // test02();
 }

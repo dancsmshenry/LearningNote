@@ -20,7 +20,7 @@ class Person{
         }
 
         ~Person(){
-            cout << "默认析造函数" << endl;
+            cout << "默认析构函数" << endl;
         }
 
         int m_A;
@@ -60,7 +60,9 @@ void test03(){
 }
 
 int main(){
-    //test01();
-    //test02();
+    // test01();
+
+    // test02();
+    
     test03();
 }

@@ -5,7 +5,7 @@ using namespace std;
 class Base1{
     public:
         Base1(){
-            cout << "µ÷ÓÃBase1µÄ¹¹Ôì" << endl;
+            cout << "Base1::Base1()" << endl;
             m_A = 100;
         }
 
@@ -15,17 +15,18 @@ class Base1{
 class Base2{
     public:
         Base2(){
-            cout << "µ÷ÓÃBase2µÄ¹¹Ôì" << endl;
+            cout << "Base2::Base2()" << endl;
+            m_A = 200;
         }
 
         int m_A;
         int m_B;
 };
 
-class Son :public Base1, public Base2{//¶à¼Ì³ÐµÄÐ´·¨
+class Son :public Base1, public Base2{//å¤šç»§æ‰¿çš„å†™æ³•
     public:
         Son(){
-            cout << "µ÷ÓÃSonµÄ¹¹Ôì" << endl;
+            cout << "Son::Son()" << endl;
         }
 
         int m_C;
@@ -34,8 +35,11 @@ class Son :public Base1, public Base2{//¶à¼Ì³ÐµÄÐ´·¨
 
 void test01(){
     //cout << sizeof(Son) << endl;//16 = 4 * 4
+
      Son son1;
-     //cout << son1.m_A << endl;//ÕâÊ±ºò¾Í»á³öÏÖ¶þÒåÐÔ£¬¼´±àÒëÆ÷±ÈÖªµÀÄã·ÃÎÊµÄÊÇÄÄÒ»¸ö
+
+    //å¤šç»§æ‰¿ä¸­å¾ˆå®¹æ˜“å¼•å‘äºŒä¹‰æ€§
+    //  cout << son1.m_A << endl;//è¿™æ—¶å€™å°±ä¼šå‡ºçŽ°äºŒä¹‰æ€§ï¼Œå³ç¼–è¯‘å™¨ä¸çŸ¥é“ä½ è®¿é—®çš„æ˜¯å“ªä¸€ä¸ª
      cout << son1.Base1::m_A << endl;
 }
 

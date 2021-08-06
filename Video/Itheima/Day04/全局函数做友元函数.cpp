@@ -8,20 +8,20 @@ class Building{
 
     public:
         Building(){
-            this->m_SittingRoom = "客厅";
-            this->m_BedRoom = "卧室";
+            this->m_SittingRoom = "sittingroom";
+            this->m_BedRoom = "bedroom";
         }
 
-        string m_SittingRoom;//客厅
+        string m_SittingRoom;
 
     private://私有属性只能在类内
-        string m_BedRoom;//卧室
+        string m_BedRoom;
 };
 
 //友元函数 目的访问类中的私有成员属性
 void goodGay(Building *building){
-    cout << "好基友正在访问"<<building->m_SittingRoom << endl;
-    cout << "好基友正在访问"<<building->m_BedRoom << endl;
+    cout << "this is building->m_SittingRoom "<<building->m_SittingRoom << endl;
+    cout << "this is building->m_BedRoom "<<building->m_BedRoom << endl;
 }
 
 void test01(){
