@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+F:/Code/Cplusplus/Video/Itheima/Day02/extern c/main.cpp
+iostream
+-
+test.h
+F:/Code/Cplusplus/Video/Itheima/Day02/extern c/test.h
+
+F:/Code/Cplusplus/Video/Itheima/Day02/extern c/test.h
+stdio.h
+-
+

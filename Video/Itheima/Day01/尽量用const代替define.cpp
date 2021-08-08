@@ -1,3 +1,11 @@
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    
+}
+
 /**
  * 因为define所指定的内容会在预处理阶段，即被编译之前给替换为所要指向的内容
  * 如果define所定义的是在一个我不知道的头文件当中，出现错误的时候难以察觉

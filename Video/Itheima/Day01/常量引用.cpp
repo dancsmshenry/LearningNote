@@ -22,19 +22,23 @@ void showValue(const int &val){
     //即形参加const以后就不能够在函数内部被修改了
 
     //这里多说一句，其实是可以通过二级指针再对该变量进行修改的
-    // int *p = (int *)&val;
-    // *p = 11000;
+    int *p = (int *)&val;
+    *p = 11000;
     
     cout << "value = " << val << endl;
 }
 
 void test02(){
     int a = 10;
+
     showValue(a);
+
+    cout << "a = " << a << endl;
 }
 
 int main(){
     // test01();
+
     test02();
 }
 //引用不产生新的变量，减少形参与实参传递时的开销
