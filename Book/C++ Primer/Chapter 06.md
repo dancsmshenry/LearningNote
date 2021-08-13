@@ -172,3 +172,40 @@ err_msg(ErrCode(0), {"functionX", "okay});
   - 使用类型别名或者`decltype`。
 
 - **返回指向函数的指针**：1.类型别名；2.尾置返回类型。
+
+
+
+
+
+```c++
+#include <iostream>
+
+using namespace std;
+
+int test01(int a, int b){
+    return a > b ? a : b;
+}
+
+int test02(int a, int b, int(*p)(int, int)){
+    return p(a, b);
+}
+
+int main(){
+    int (*p)(int, int);
+    p = test01;
+
+    cout << test02(10, 9, p);
+}
+
+#include <iostream>
+
+using namespace std;
+
+int func1(const int a);
+int func1(int a);//这两个函数声明是一样的
+
+int main(){
+
+}
+```
+
