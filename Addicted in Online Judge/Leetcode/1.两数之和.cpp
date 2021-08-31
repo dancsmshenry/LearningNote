@@ -1,23 +1,26 @@
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-int* twoSum(int* nums, int numsSize, int target, int* returnSize)
-{
-    int i, j;
-    int* f = malloc(numsSize * sizeof(int));
-    * returnSize = 2;
-    f[0] = 0;
-    f[1] = 0;
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        /**
+            思路：
+            先把哈希表全部设为空
+            然后对当前的nums数组进行一次遍历，用来查找target-nums[i]
+            如果没找到，就把当前的数字和下标插入到哈希表当中
+            如果找到了，就返回当前数字的下标和target-nums[i]的下标
+        **/
 
-    for (i = 0; i < numsSize; i++)
-    {
-        for (j = numsSize - 1; j > i; j--)
-        if (nums[i] + nums[j] == target)
-        {
-            f[0] = i;
-            f[1] = j;
+        unordered_map<int, int> hashtable;
+
+        for (int i = 0; i < nums.size(); ++i){
+            auto it = hashtable.find(target - nums[i]);
+
+            if (it != hashtable.end()){
+                return {it->second, i};
+            }
+            
+            hashtable[nums[i]] = i;
         }
-    }
 
-    return f;
-}
+        return {};
+    }
+};
