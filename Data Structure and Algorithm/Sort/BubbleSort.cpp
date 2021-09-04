@@ -9,6 +9,7 @@ int n;
 int arr[N];
 
 void bubble_sort(int arr1[], int len)
+//void bubble_sort(int (&arr1)[N], int len)，而上式时数组退化为指针了
 {
 	bool check = false;
 	for (int i = len - 1; i > 0; i --)
