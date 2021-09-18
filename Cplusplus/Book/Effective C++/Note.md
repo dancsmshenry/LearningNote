@@ -703,3 +703,339 @@
 
   - 尽可能延后变量定义式的出现，这样做可增加程序的清晰度并改善程序效率
 
+
+
+###### 条款27：尽量少做转型动作
+
+- cpp兼容c中的转型操作
+  - （类型）expression
+
+- cpp中四种新式类型转换
+
+  - const_cast：通常被用来将对象的常量性转除（去掉const）
+  - dynamic_cast：安全向下转型，用来决定某对象是否归属继承体系中的某个类型，是唯一无法由旧式语法执行的动作，也是唯一可能耗费重大运行成本的转型动作
+  - reinterpret_cast：低级转型，实际动作以及结果可能取决于编译器，是不可移植的
+  - static_cast：强迫隐式转换（什么都可以强转，维度不可以转const）
+
+- 新转型的好处：
+
+  - 容易在代码中被辨认出来；各转型动作的目标愈窄化，编译器愈可能诊断出错误的运用
+
+- 参考以下代码
+
+  - ```cpp
+    class Window{
+        public:
+        	virtual void onResize();
+    }
+    
+    class Special: public Window{
+        virutal void onResize(){
+            static_cast<Window>(*this).onResize();
+            /*
+            这段代码的想法是说，想要在子类使用父类的onResize函数（然后以为是调用的是Special类型去使用父类函数）
+            
+            但实际上，是通过this新建了一个Window对象，从而调用onResize函数
+            这里就会有多余的开销，浪费时间和空间
+            
+            同时，如果是想要通过Window的onResize来修改当前对象的属性，是不可以做到的
+            因为这是新建出来的一个副本，这样就不符合设计者的想法了
+            而Special的onResize就可以修改当前的对象
+            */
+        }
+    }
+    
+    //解决办法
+    class Special: public Window{
+        virtual void onResize(){
+            Window::onResize();
+        }
+    }
+    ```
+
+- dynamic_cast速度比较慢
+
+- 避免父类指针指向子类的问题：
+
+  - 第一， 使用容器并在其中存储直接指向derived class的指针（使用类型安全容器）
+  - 第二，利用多态，在base class内提供virtual函数做你想对各个window派生类做的事，这样就不会发生父类指针指向子类对象的情况（将virtual函数往继承体系上方移动）
+
+- 请记住：
+
+  - 如果可以，尽量避免转型，特别是在注重效率的代码中避免dynamic_cast，如果有个涉及需要转型动作，试着发展无需转型的替代设计
+  - 如果转型是必要的，试着将它隐藏于某个函数背后，客户随后可以调用函数，而不需要将转型放进它们自己的代码内
+  - 宁可使用cpp-style转型，不要使用旧式转型，前者很容易辨认，而且也有着比较分门别类的职掌
+
+
+
+###### 条款28：避免返回handles指向对象内部成分
+
+- 参考以下代码
+
+  - ```cpp
+    #include <iostream>
+    #include <memory>
+    
+    using namespace std;
+    
+    class Point{
+        public:
+            Point(int x, int y) : x(x), y(y) {}
+    
+            void setX(int newx){x = newx;}
+    
+            void setY(int newy){y = newy;}
+    
+            int getX() const { return x; }
+    
+            int getY() const { return y; }
+    
+        private:
+            int x;
+            int y;
+    };
+    
+    struct RectangleData{
+        RectangleData(Point x, Point y) : ulhc(x), lrhcl(y) {}
+        Point ulhc;
+        Point lrhcl;
+    };
+    
+    class Rectangle{
+        public:
+            RectangleData* r1;
+    
+            Rectangle(RectangleData* z):r1(z) { }
+    
+            Point& upperLeft() const{
+                return r1->ulhc;
+            }
+    };
+    
+    int main(){
+        Point p1(10, 20);
+        Point p2(20, 30);
+        RectangleData r11(p1, p2);
+        const Rectangle r1(&r11);
+    
+        cout << "r1.upperleft().getX() = " << r1.upperLeft().getX() << endl;
+        r1.upperLeft().setX(10000);
+        cout << "r1.upperleft().getX() = " << r1.upperLeft().getX() << endl;
+    }
+    ```
+
+  - 题外话：对于const的一个理解
+
+    - 如果一个成员函数后面加上了一个const，就表示该函数不能对对象的属性做出变化
+
+      - 这里有一个问题，什么是对象的属性？int，double，float都算是对象的属性吧，那如果是自己编写的对象呢？自己编写的对象的属性呢？
+      - 经过测试，发现如果是以自己编写的对象作为实体的话，那么该对象如果作为一个大的对象的属性的话，该对象的属性也是不可变化的
+      - 但，如果是把一个指向该对象的指针作为对象的属性的话，我感觉哈，应该是指针不可变，但是指针所指的该对象的属性是可以变的（即可以通过指针来修改对象属性的属性），那这样的话封装性就是不存在的了
+
+    - 测试1：当函数为const的时候，是否可以修改对象的属性（包括基本类型和指针），发现是不可以的
+
+      - ```cpp
+        Point p3(10, 10);
+        Point p4(100,100);
+        
+        class Rectangle{
+            public:
+                RectangleData* r1;
+        
+                Rectangle(RectangleData* z):r1(z) { }
+        
+                Point& upperLeft() const{
+                    RectangleData* r2 = new RectangleData(p3, p4);
+                    r1 = r2;//这里就会报错，因为const是保证对象的属性不发生变化，但是r1的指向，即r1所存储的地址发生了变化，不符合const，所以报错
+                    return r1->ulhc;
+                }
+        };
+        ```
+
+    - 测试2：当函数为const的时候，是否可以修改对象的属性的属性（第一个属性为一个对象，第二个属性为前一个对象的属性），发现也是不可以的
+
+      - ```cpp
+        struct RectangleData{
+            RectangleData(Point x, Point y) : ulhc(x), lrhcl(y) {}
+            Point ulhc;
+            Point lrhcl;
+        };
+        
+        class Rectangle{
+            public:
+                RectangleData r1;
+        
+                Rectangle(RectangleData z):r1(z) { }
+        
+                Point& upperLeft() const{
+                    return r1.ulhc;
+                    /*
+                    这里会报错：
+                    首先，因为返回的是引用，本质是指针，可以借此来修改RectanglaData的ulhc
+                    而被const修饰的函数是不可以修改对象的值的，所以会报错
+                    */
+                }
+        };
+        ```
+
+  - ok，说完了题外话，这种方式就表明，即使是用const来修饰了变量，但是如果最终返回的是一个引用，还是有可能修改变更对象内部的值的，致使const变得无用。同样的，如果返回的是指针，或是迭代器，也是会间接修改对象的值的
+
+    - 因为reference、point和迭代器都是handles（号码牌，用来取得某个对象）
+    - 返回handles会使得对象的封装性减低，造成“虽然调用const成员函数却造成对象状态被更改”
+
+  - 函数前面加上const表示函数的返回值不可被修改
+
+  - 而如何解决上述问题呢？
+
+    - ```cpp
+      class Rectangle{
+          public:
+          	const Point& upperLeft() const{
+                  return pData->ulhc;
+              }
+          
+          	const Point& lowerRight() const{
+                  return pData->lrhc;
+              }//即在函数的前面加上const，防止返回的引用或指针或迭代器被修改
+      }
+      ```
+
+- 另一个问题：
+
+  - 如果让函数返回的是一个对象的话，并且还用指针来接收这个对象，就会导致在这条语句结束后，对象会被销毁，指针指向空值
+
+- 请记住：
+
+  - 避免返回handles（包括引用，指针，迭代器）指向对象内部。遵守这个条款可增加封装性，帮助const成员函数的行为像个const，并将发生“虚吊号码”的可能性降至最低
+
+
+
+###### 条款32:确定你的public继承塑模出is-a关系
+
+- 类D以public的方式继承B，则表示每一个D都是一个B，即B比D表现出更一般化的概念，D比B表现出更特殊化的概念
+- 所谓的最佳设计，取决于系统希望做什么事，包括现在和未来
+- 这里有两个例子，引人深思：
+  - 企鹅是鸟类吗，是的；那鸟类都会飞吗？第一感觉，是啊，鸟嘛，肯定会飞的嘛。但是事实上企鹅是不会飞的。
+  - 所以如果要public继承鸟类的话，就要思考fly函数到底应该怎么放置才算好
+    - 第一种，鸟类是分为会飞的和不会飞的，所以就让企鹅继承不会飞的鸟类即可
+    - 第二种，重写企鹅的fly函数，令其在运行期发生报错
+  - 那正方形是矩形吗？是的，那我写一个函数令矩形的一组边变大，如果正方形是直接继承使用的话，按照正方形的性质，这个函数应该令正方形所有的边都变大才对啊
+- 所以，对于类与类之间的关系一定要慎重考虑
+- 请记住：
+  - public继承意味is-a。适用于base classes身上的每一件事情一定也适用于derived classes身上，因为每一个derived class对象也都是一个base class对象
+
+
+
+###### 条款33：避免遮掩继承而来的名称
+
+- 补充：
+
+  - 虚函数是为了多态而生的，而不是因为继承同名而生，所以是纯虚函数才需要在继承后被重写，虚函数可以不被重写
+
+- 在继承体系中，对于一个变量来说，是先在该函数内部进行查找，然后是在该子类中进行查找，接着再在其父类中进行查找，而后是在其命名空间查找
+
+- 而对于一个函数也是一样
+
+  - 如果父类和子类都有这个函数，那么一般情况下，父类的这个同名函数会被掩盖掉，只能调用得到子类的该名函数
+
+    - 此时，如果想要调用父类的该函数的话，那就
+
+      - ```cpp
+        class Base{
+            public:
+            	void mf3(int z);
+        };
+        
+        class Derived : public Base{
+            public:
+            	using Base::mf3;//使得Base中的mf3可以被子类看见
+        }
+        ```
+
+      - 
+
+  - 如果子类没有而父类有的话，那就调用父类的该函数
+
+- 私有继承：父类的所有属性函数到子类都变为了private
+
+  - ```cpp
+    class Base{
+        public:
+        	virtual void func1() = 0;
+        	virtual void mf1(int);
+    };
+    
+    class Derived:private Base{
+        public:
+        	virtual void mf1(){
+                Base::mf1();//暗自变为inline
+            }
+    }
+    ```
+
+  - inline转交函数的另一个用途是为那些不支持using声明式的老旧编译器另辟一条新路，将继承而得的名称汇入derived class作用域内
+
+- 请记住：
+
+  - derived classes内的名称会遮掩base classes内的名称，在public继承下从来没有人希望如此
+  - 为了让被遮掩的名称再见天日，可使用using声明式或转交函数
+
+
+
+###### 条款34：区分接口继承和实现继承
+
+- 纯虚函数（pure virtual）（只继承接口）
+
+  - 性质
+
+    - 不能实例化有纯虚函数的类
+    - 任何继承了这个类的类都必须重新声明该函数
+
+  - 声明一个pure virtual函数的目的是为了让derived class只继承函数接口
+
+    - 抽象类的纯虚函数是可以被定义的，也可被子类调用
+
+      - ```cpp
+        class Shape{
+            public:
+            	virtual void draw() const = 0;
+        }
+        
+        class Rectangle{
+            
+        };
+        
+        Shape* ps = new Rectangle;
+        ps->Shape:draw();
+        ```
+
+- 虚函数（impure virtual）（继承接口和一份强制实现）
+
+  - 为多态而生
+  - 目的：为了让子类继承该函数的接口和缺省实现
+    - 对于每一个子类，最好都要继承重写这个函数，如果子类不写，也可以退回到父类的版本
+
+- non-virtual函数（继承接口和一份强制实现）
+
+  - 目的：为了令derived class继承函数的接口及一份强制性执行
+
+- tips：
+
+  - 不要把所有的函数都设为non-virtual，这样子类就无法特化操作
+  - 也不要把所有的函数都变为virtual，感觉会加重子类的负担
+
+- 请记住：
+
+  - 接口继承和实现继承不同，在public继承之下，derived class总是继承base class的接口
+  - pure virtual函数只具体指定接口继承
+  - 简朴的impure virtual函数具体指定接口继承及缺省实现继承
+  - non-virtual函数具体指定接口继承以及强制性实现继承
+
+
+
+###### 条款35：考虑virtual函数以外的其他选择
+
+- NVI（non-virtual-interface）
+  - 将接口和实现分开，即接口设为public non-virtual函数，而实现函数变为private-virtual函数
+- straegy设计模式
+
