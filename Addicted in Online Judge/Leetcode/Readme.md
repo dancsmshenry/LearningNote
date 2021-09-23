@@ -10,6 +10,18 @@
 
 
 
+### Stack
+
+
+
+
+
+### Queue
+
+
+
+
+
 ### Binary Tree
 
 
@@ -26,14 +38,14 @@
 
 #### Easy
 
-- [234.回文链表](AddictedinOnlineJudge\Leetcode\234.回文链表.cpp)
-- [237.删除链表中的节点](AddictedinOnlineJudge\Leetcode\237.删除链表中的节点.cpp)
-- [160.相交链表](AddictedinOnlineJudge\Leetcode\160.相交链表.cpp)
+- [回文链表](234.回文链表.cpp)
+- [删除链表中的节点](237.删除链表中的节点.cpp)
+- [相交链表](160.相交链表.cpp)
 
 #### Medium
 
-- [328.奇偶链表](AddictedinOnlineJudge\Leetcode\328.奇偶链表.cpp)
-- [82.删除排序链表中的重复元素](AddictedinOnlineJudge\Leetcode\82.删除排序链表中的重复元素.cpp)
+- [奇偶链表](328.奇偶链表.cpp)
+- [删除排序链表中的重复元素](82.删除排序链表中的重复元素.cpp)
 
 
 
@@ -56,6 +68,18 @@
 
 
 ### Bit Manipulation
+
+
+
+
+
+### Bitwise Operation
+
+
+
+
+
+### greedy algorithm
 
 
 

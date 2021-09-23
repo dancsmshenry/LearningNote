@@ -1,4 +1,4 @@
-第一节
+##### 第一节
 
 - 测试cpp所支持的版本
 
@@ -14,7 +14,7 @@
 
 
 
-第二节
+##### 第二节
 
 - variadic template（可变参数模板）
 
@@ -47,7 +47,7 @@
 
 
 
-第三节
+##### 第三节
 
 - automatic type deduction with auto
 
@@ -79,7 +79,7 @@
 
 
 
-第四节
+##### 第四节
 
 - uniform initialization（一致性的初始化，设初值）
 
@@ -103,7 +103,7 @@
 
 
 
-第五节
+##### 第五节
 
 - initializer_list（初始化列表）上
   - 用初始化列表初始化变量，会为变量设定初值
@@ -112,7 +112,7 @@
 
 
 
-第六节
+##### 第六节
 
 - initializer_list（初始化列表）下
 
@@ -139,3 +139,109 @@
 
   - 被广泛的用于stl中（用list，接受任意个数的对象作为初值）
 
+
+
+##### 第九节
+
+- 如果你自行定义了一个构造函数，编译器不会再给你一个默认构造函数
+
+- 如果你强制加上=default，就可以重新获得并使用default 构造函数
+
+- ```cpp
+  class Foo{
+      private:
+      	int _i;
+      
+      public:
+      	Foo(i):_i(i){}
+      	Foo() = default;//表示使用编译器默认提供的版本（因为有了参数构造函数，编译器是不会提供那个默认构造的函数的）
+      	
+      	~Foo() = default;
+      	void func1() = default;//一般的函数没有默认版本，所以不能用
+      	void func2() = delete;//禁止使用编译器默认生成的函数，可以用于任何函数
+      	//也可以禁止使用某函数
+  };
+  ```
+
+- 一般，构造函数（默认构造函数，默认拷贝构造函数，移动构造函数，移动拷贝函数），运算符（拷贝运算符），析构函数，会使用=default
+
+- 而=delete可以用于任何函数身上
+
+- 一个类只要含有指针类对象，就一定要自己写big three（析构函数，复制构造函数，operator=）
+
+- 在cpp11中有big five，析构函数，拷贝构造函数，移动构造函数，拷贝赋值操作，移动赋值操作
+
+- 浅拷贝，深拷贝
+
+
+
+
+
+###### 第十一节
+
+- template template parameter
+
+- ```cpp
+  template<typename T, template<class> class Container>//传进来一个模板Container，模板的模板的类型是T
+  class XCLs{
+    private:
+      Container<T> c;
+    public:
+      XCIs(){
+          for (long i = 0; i < size; ++ i){
+              c.insert(c.end(), T());
+          }
+          output_static_data(T());
+          Container<T> c1(c);
+          Container<T> c2(std::move(c));
+          c1.swap(c2);
+      }
+  };
+  ```
+
+- 
+
+
+
+
+
+###### 第十二节
+
+- noexcept
+
+  - 写在函数后面，表示保证该函数不会爆出异常
+
+  - ```cpp
+    void foo() noexcept(true);//保证foo函数不会爆出异常
+    
+    void swap(int &x, int &y)noexcept(noexcept(swap(x, y))){
+        swap(x, y);
+    }
+    ```
+
+- override
+
+  - 用在函数的后面，表示该函数父类的一个重载
+
+  - ```cpp
+    class Base{
+      public:
+        void foo(int a);
+    };
+    
+    class Derive:public Base{
+        public:
+        	void foo(int a) override;
+    }
+    ```
+
+- final
+
+  - 不让当前的类被继承
+
+  - ```cpp
+    struct Base1 final{};
+    struct Derived:Base1{};//不能继承base1类
+    ```
+
+  - 

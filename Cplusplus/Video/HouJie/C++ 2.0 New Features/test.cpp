@@ -1,5 +1,6 @@
 #include <iostream>
 #include <bitset>
+#include <vector>
 
 using namespace std;
 
@@ -20,6 +21,25 @@ void prin(initializer_list<int> vals){
     }
 }
 
+class Foo{
+    public:
+        Foo(int i):_i(i){}
+        Foo() = default;
+        void func2() = delete;
+    
+    private:
+        int _i;
+};
+
+template<typename T>
+using vec = vector<T, allocator<T>>;
+
+template<typename T, template<class> class Container>
+class X{
+    private:
+        Container<T> c;
+};
+
 int main(){
     // cout << __cplusplus << endl;
 
@@ -27,5 +47,9 @@ int main(){
 
     // prin({1,2,3,4,5,6,7,1});
 
-    cout << min(10, 11, 12 );
+    // cout << min(10, 11, 12 );
+
+    X<int, vec> c1;//因为vector是有两个参数的（_tp,_ALLOC）,如果是以模板传入的话，模板是无法自动推导后面的参数的
+
+    Foo f;
 }
