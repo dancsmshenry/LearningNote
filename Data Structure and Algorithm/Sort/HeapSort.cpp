@@ -1,50 +1,49 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 const int N = 1e6 + 10;
 
+int length;
 int arr[N];
-int n;
 
 void HeapAdjust(int *arr, int n)
 {
-	for (int i = 1; i < n; i++)
-	{
-		int record = i, Father = (i - 1) / 2;
-		while (1)
-		{
-			if (arr[i] > arr[Father])
-			{
-				swap(arr[i], arr[Father]);
-				i = Father;
-				Father = (i - 1) / 2;
+	for (int i = 1; i < n; i++){
+		int record = i, father = (i - 1) / 2;
+		while (1){
+			if (arr[i] > arr[father]){
+				swap(arr[i], arr[father]);
+				i = father;
+				father = (i - 1) / 2;
 			}
-			else
+			else{
 				break;
+			}
 		}
 		i = record;
 	}
 }
 
-void HeapSort(int *arr, int n)
+void heap_sort(int *arr, int length)
 {
-	HeapAdjust(arr, n);
-	for (int i = n - 1; i > 0; i--)
-	{
+	HeapAdjust(arr, length);
+	for (int i = length - 1; i > 0; i --){
 		swap(arr[0], arr[i]);
-		if (i != 1)
+		if (i != 1){
 			HeapAdjust(arr, i);
+		}
 	}
 }
 
 int main()
 {
-	cin >> n;
-	for (int i = 0; i < n; i++) cin >> arr[i];
+	cin >> length;
+	for (int i = 0; i < length; i++) cin >> arr[i];
 
-	HeapSort(arr, n);
+	heap_sort(arr, length);
 
-	for (int i = 0; i < n; i++) cout << arr[i] << " ";
+	for (int i = 0; i < length; i++) cout << arr[i] << " ";
 	return 0;
 }

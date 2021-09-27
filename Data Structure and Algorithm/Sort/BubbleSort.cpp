@@ -5,20 +5,19 @@ using namespace std;
 
 const int N = 1e6 + 10;
 
-int n;
+int length;
 int arr[N];
 
-void bubble_sort(int arr1[], int len)
-//void bubble_sort(int (&arr1)[N], int len)，而上式时数组退化为指针了
+void bubble_sort(int arr[], int length)
 {
 	bool check = false;
-	for (int i = len - 1; i > 0; i --)
+	for (int i = length - 1; i > 0; i --)
 	{
 		for (int j = 0; j < i; j ++)
 		{
-			if (arr1[j] > arr1[j + 1])
+			if (arr[j] > arr[j + 1])
 			{
-				swap(arr1[j], arr1[j + 1]);
+				swap(arr[j], arr[j + 1]);
 				check = true;
 			}
 		}
@@ -28,12 +27,12 @@ void bubble_sort(int arr1[], int len)
 
 int main()
 {
-	cin >> n;
-	for (int i = 0; i < n; i ++) cin >> arr[i];
+	cin >> length;
+	for (int i = 0; i < length; i ++) cin >> arr[i];
 
-	bubble_sort(arr, n);
+	bubble_sort(arr, length);
 
-	for (int i = 0; i < n; i ++) cout << arr[i] << " ";
+	for (int i = 0; i < length; i ++) cout << arr[i] << " ";
 	
 	return 0;
 }

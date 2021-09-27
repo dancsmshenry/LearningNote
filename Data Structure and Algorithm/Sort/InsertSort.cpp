@@ -4,31 +4,32 @@ using namespace std;
 
 const int N = 1e6 + 10;
 
-int n;
+int length;
 int arr[N];
 
-void insert_sort(int arr1[], int n)
+void insert_sort(int arr[], int n)
 {
 	for (int i = 1; i < n; i ++)
 	{
-		int mid = arr1[i];
+		int temp = arr[i];
 		for (int j = i - 1; j >= 0; j --)
-			if (arr1[j] > mid)
-			{
-				arr1[j + 1] = arr1[j];
-				arr1[j] = mid;
+			if (arr[j] > temp){
+				arr[j + 1] = arr[j];
+				arr[j] = temp;
+			}else {
+				break;
 			}
 	}
 }
 
 int main()
 {
-	cin >> n;
-	for (int i = 0; i < n; i ++) cin >> arr[i];
+	cin >> length;
+	for (int i = 0; i < length; i ++) cin >> arr[i];
 
-	insert_sort(arr, n);
+	insert_sort(arr, length);
 
-	for (int i = 0; i < n; i ++) cout << arr[i] << " ";
+	for (int i = 0; i < length; i ++) cout << arr[i] << " ";
 
 	return 0;
 }

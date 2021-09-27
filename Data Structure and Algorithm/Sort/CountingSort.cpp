@@ -3,24 +3,35 @@
 
 using namespace std;
 
+const int N = 1e6 + 10;
+
+int length;
+int arr[N];
+int maxn = INT_MIN;
+
+void counting_sort(int *arr, int length, int maxn){
+    int buckets[N];
+    for (int i = 0; i < length; i ++ ){
+        buckets[arr[i]] ++;
+    }
+    for (int i = 0, j = 0; i <= maxn; i ++ ){
+        while((buckets[i]--) > 0){
+            arr[j ++ ] = i;
+        }
+    }
+}
+
 int main()
 {
-    int n, maxn = INT_MIN;
-    int a[10000], buckets[10000];
-
-    cin >> n;
-    for (int i = 0; i < n; i ++ )
-    {
-        cin >> a[i];
-        maxn = max(a[i], maxn);
+    cin >> length;
+    for (int i = 0; i < length; i ++ ){
+        cin >> arr[i];
+        maxn = max(arr[i], maxn);
     }
 
-    for (int i = 0; i < n; i ++ ) buckets[a[i]] ++;
-    for (int i = 0, j = 0; i <= maxn; i ++ )
-        while((buckets[i]--) > 0)
-            a[j ++ ] = i;
+    counting_sort(arr, length, maxn);    
 
-    for (int i = 0; i < n; i ++ ) cout << a[i] << " ";
+    for (int i = 0; i < length; i ++ ) cout << arr[i] << " ";
 
     return 0;
 }

@@ -1,37 +1,37 @@
 #include <iostream>
-#include <stdio.h> 
+#include <algorithm>
 
 using namespace std;
 
 const int N = 1e6 + 10;
 
-int n;
-int q[N];
+int length;
+int arr[N];
 
-void quick_sort(int *q, int l, int r)
+void quick_sort(int *arr, int left, int right)
 {
-	if (l >= r) return;
+	if (left >= right) return;
 	
-	int x = q[l], i = l - 1, j = r + 1;
+	int temp = arr[left], i = left - 1, j = right + 1;
 	while (i < j)
 	{
-		do i ++ ; while (q[i] < x);
-		do j -- ; while (q[j] > x);
-		if (i < j) swap(q[i], q[j]);
+		do i ++ ; while (arr[i] < temp);
+		do j -- ; while (arr[j] > temp);
+		if (i < j) swap(arr[i], arr[j]);
 	}
-	
-	quick_sort(q, l, j);
-	quick_sort(q, j + 1, r);
+		
+	quick_sort(arr, left, j);
+	quick_sort(arr, j + 1, right);
 }
 
 int main()
 {
-	cin >> n;
-	for (int i = 0; i < n; i ++ ) cin >> q[i];
+	cin >> length;
+	for (int i = 0; i < length; i ++ ) cin >> arr[i];
 	
-	quick_sort(q, 0, n - 1);
+	quick_sort(arr, 0, length - 1);
 	
-	for (int i = 0; i < n; i ++ ) cout << q[i] << " ";
+	for (int i = 0; i < length; i ++ ) cout << arr[i] << " ";
 	
 	return 0;
 }

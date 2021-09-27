@@ -1,38 +1,40 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 const int N = 1e6 + 10;
 
-int n;
-int q[N] ,tmp[N];
+int length;
+int arr[N] ,tmp[N];
 
-void merge_sort(int q[], int l, int r)
+void merge_sort(int *arr, int left, int right)
 {
-	int mid = (l + r) >> 1;
+	if (left >= right) return;
+
+	int mid = (left + right) >> 1;
+	merge_sort(arr, left, mid);
+	merge_sort(arr, mid + 1, right);
 	
-	if (l >= r) return;
-	merge_sort(q, l, mid);
-	merge_sort(q, mid + 1, r);
+	int k = 0, i = left, j = mid + 1;
+	while (i <= mid && j <= right){
+		if (arr[i] <= arr[j]) tmp[k ++ ] = arr[i ++ ];
+		else tmp[k ++ ] = arr[j ++ ];
+	}
+	while (i <= mid) tmp[k ++ ] = arr[i ++ ];
+	while (j <= right) tmp[k ++ ] = arr[j ++ ];
 	
-	int k = 0, i = l, j = mid + 1;
-	while (i <= mid && j <= r)
-		if (q[i] <= q[j]) tmp[k ++ ] = q[i ++ ];
-		else tmp[k ++ ] = q[j ++ ];
-	while (i <= mid) tmp[k ++ ] = q[i ++ ];
-	while (j <= r) tmp[k ++ ] = q[j ++ ];
-	
-	for (i = l, j = 0; i <= r; i ++, j ++ ) q[i] = tmp[j];
+	for (i = left, j = 0; i <= right; i ++, j ++) arr[i] = tmp[j];
 }
 
 int main()
 {
-	cin >> n;
-	for (int i = 0; i < n; i ++ ) cin >> q[i];
+	cin >> length;
+	for (int i = 0; i < length; i ++ ) cin >> arr[i];
 	
-	merge_sort(q, 0, n - 1);
+	merge_sort(arr, 0, length - 1);
 	
-	for (int i = 0; i < n; i ++ ) cout << q[i] << " ";
+	for (int i = 0; i < length; i ++ ) cout << arr[i] << " ";
 	
 	return 0;
 }
