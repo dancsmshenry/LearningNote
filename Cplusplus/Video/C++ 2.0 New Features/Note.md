@@ -550,8 +550,298 @@
 
 #### Chapter13、decltype
 
-- 
+- ```cpp
+  map<string, float> coll;
+  map<string, float>::value_type elem;//cpp11之前的写法
+  decltype(coll)::value_type elem;//cpp11之后的写法，decltype可以自动推导出类型
+  //defines a type equivalent to the type of an expression
+  ```
+
+- 作用一：
+
+  - ```cpp
+    //used to declare return types
+    template<typename T1, typename T2>
+    decltype(x + y) add(T1 x, T2 y);
+    auto add(T1 x, T2 y);//等价于这个
+    ```
+
+- 作用二：
+
+  - ```cpp
+    //in metaprogramming
+    template<typename T>
+    void test(T obj){
+        typedef typename decltype(obj)::iterator iType;
+        //等价于typedef typename T::itreator iType;
+        //模板只是半成品，编译通过不代表使用的时候也会通过
+    }
+    
+    test(complex<int>());//编译失败，因为复数是没有迭代器的
+    ```
+
+- 作用三：
+
+  - ```cpp
+    //used to pass the type of a lambda
+    auto cmp = [](const Person& p1, const Person& p2){
+        return p1.lastname() < p2.lastname();
+    }
+    
+    std::set<Person,decltype(cmp)> coll(cmp);
+    ```
 
 
 
-#### Chapter14、
+#### Chapter14、lambdas
+
+- ```cpp
+  auto I = []{
+      cout << "Hello World!" << endl;
+  }
+  
+  I();
+  
+  //完整形式
+  [...](...) mutable throwSpec -> retType;
+  //()里面写参数，mutable表示是否可变，retType表示lambdas的返回类型
+  //上述三个参数都是可有可无的，但是如果写了其中一个，全部都要写
+  //[]里面写的是传进来的参数，这个参数是在外面就已经定义好了的
+  ```
+
+- ```cpp
+  auto f = [id]() mutable{
+      cout << "id:" << id << endl;
+      ++ id;
+  };
+  
+  //等价于下面这样
+  class Functor{
+      private:
+      	int id;
+      public:
+      	void operator()(){
+              cout << "id:" << id << endl;
+      		++ id;
+          }
+  };
+  
+  Functor f;
+  ```
+
+- ```cpp
+  int id = 0;
+  auto f = [id]() mutable{//如果没有加上mutable，以值传递进来的变量是无法更改的（但是以引用传递的）
+      cout << "id:" << id << endl;
+      ++ id;
+  };
+  
+  id = 42;
+  f();//id:0
+  f();//id:1
+  f();//id:2
+  cout << id << endl;//42
+  //理解：就和上面创建一个类一样，是把属性以值传递给了这个类，所以后续调用这个函数相当于是不断调用类的函数（重点是值传递）
+  //理解：要想变为43 44 45的话，就改为引用传递
+  ```
+
+- 一种写法
+
+  - ```cpp
+    auto qqq = [=, &y]{};//等号的位置表示可以以值传递传入任何对象
+    ```
+
+- 深度解析lambda
+
+  - ```cpp
+    int tobefound = 5;
+    auto lambda1 = [tobefound](int val){return val == tobefound};
+    
+    //等价于下面的代码
+    class UnNamedLocalFunction{
+      int localVar;
+      public:
+        UnNamedLocalFunction(int var):localVar(var){}
+        bool operator()(int val){
+            return val == localVar;
+        }
+    };
+    UnNameLocalFunction lambda2(tobefound);
+    
+    bool b1 = lambda1(5);
+    bool b2 = lambda1(5);
+    ```
+
+- 总结：
+
+  - []符号里面装的是传进函数里的一个固定的参数（可以这样理解），()里面是后续调用这个函数传入的函数，{}写入调动的函数
+  - 其中[]里面的参数应该是已经在前面的代码中出现过的，所以会出现值传递和引用传递的情况
+  - 对于lambda的理解：可以认为是用了一个类写一个仿函数（是一个匿名函数对象）
+  - 完整版的lambda式子：`[captures] (params) -> ret {Statments;} `
+
+
+
+#### Chapter15、Variadic templates I
+
+- 变化的是：
+
+  - 参数个数（利用参数个数逐一逐减的特性，实现递归函数调用，使用function template完成）
+  - 参数类型（利用参数个数逐一逐减导致参数类型也逐一逐减的特性，以class template完成）
+
+- 代码一
+
+  - ```cpp
+    void printX{}
+    
+    template<typename T, typename... Types>
+    void printX(const T& firstArg, const Types&... args){
+        cout << firstAeg << endl;
+        printX(args);
+    }
+    
+    template<typename... Types>
+    void printX(const Types&... args){
+        ...
+    }
+    
+    /**
+    对于模板函数的重载，是谁更特化就用谁，这里的话，认为是第一个版本更加的特化（可能是第一个版本有第一个参数吗？）
+    **/
+    ```
+
+
+
+#### Chapter16、Variadic templates II
+
+- 代码二
+
+  - ```cpp
+    template<typename T, typename... Args>
+    void printf(const char* s, T value, Args... args){
+        while (*s){//一直循环
+            if (*s == '%' && *(++s) != '%'){
+                cout << value;//如果是符号，并且后面一项不是符号，就把后面的值，即value给输出
+                printf(++s, args...);
+                return ;
+            }
+            cout << *s ++ ;//不是符号的话就直接输出
+        }
+        throw logic_erroe("extra argtements provided to printf");
+    }
+    
+    void printf(const char* s){
+        while (*s){
+            if (*s == '%' && *(++s) != '%'){
+                throw logic_erroe("extra argtements provided to printf");
+            }
+            cout << *s ++ ;
+        }
+    }
+    ```
+
+
+
+#### Chapter17、Variadic templates III
+
+- 比较同一种数据的大小，可以用initializer_list来实现
+- 代码三
+  - 使用initializer_list来实现代码过多，下次用图片来代替
+
+
+
+#### Chapter18、Variadic templates IV
+
+- 若参数type相同，比较的是同一种数据，则无需改动
+
+- 代码四
+
+  - ```cpp
+    int maximum(int n){return n;}
+    
+    template<typename... Args>
+    int maximum(int n, Args... args){
+        return std::max(n, maximum(args...));
+    }
+    ```
+
+- 在标准库中，max已经可以接收任意数量的参数值了，不过要这样写
+
+  - ```cpp
+    #include<algorithm>
+    cout << max({1,2,3,4,5,6,7,8,9,10}) << endl;
+    ```
+
+
+
+#### Chapter19、Variadic templates V
+
+- 代码五
+
+  - ```cpp
+    template<typename... Args>//重载操作符，如果是对tuple进行操作，就用这个
+    ostream& operator<<(ostream& os, const tuple<Args...> &t){
+        os << "[";
+        PRINT_TUPLE<0, sizeof...(Args), Args...>::print(os, t);
+        return os << "]"; 
+    }
+    
+    template<int IDX, int MAX, typename... Args>//IDX表示当前输出到了第几个，MAX表示tuple的长度
+    struct PRINT_TUPLE{
+        static void print(ostream& os, const tuple<Args...> &t){
+            os << get<IDX>(t) << (IDX + 1 == MAX ? "" : ",");//输出第几个字符，get应该是tuple的专用函数
+            PRINT_TUPLE<IDX + 1, MAX, Args...>::print(os, t);
+        }
+    }
+    
+    template<int MAX, typename... Args>
+    struct PRINT_TUPLE<MAX, MAX, Args...>{//如果当前操作的是最后一个，即全部都输出完了，就return
+        static void print(ostream& os, const tuple<Args...> &t){
+            return;
+        }
+    }
+    
+    //使用过程
+    cout << make_tuple(7.5,546,64116,16,"lsdjkf") << endl;
+    //结果是：[7.5,546,64116,16,lsdjkf]
+    ```
+
+
+
+#### Chapter20、Variadic templates VI
+
+- 代码六（递归+复合）
+
+  - ```cpp
+    //递归的继承
+    template<typename Head, typename... Tail>
+    class tuple<Head, Tail...>:private tuple<Tail...>{
+        typedef tuple<Tail...> inherited;
+        protected:
+        	Head m_head;
+        public:
+        	tuple(){}
+        	tuple(Head v, Tail... vtail):m_head(v),inherited(vtail...){}
+        //前缀是表示Head的类型是什么
+        //意义是取出第一个元素
+        	typename Head::type head(){return m_head;}//这里是无法编译过的，是求出Head类型的时候出现了问题，用auto可以解决
+        	auto head() -> decltype(m_head){return m_head}
+        	Head head() {return m_head;}
+        //意义是取出除去第一个元素后的tuple，用到的一个技巧就是，this指针子类指针指向父类对象
+        	inherited& tail(){return *this;}
+    };
+    
+    template<typename... Values> class tuple;
+    template<> class tuple<> {};
+    ```
+
+
+
+#### Chapter21、Variadic templates VII & Cpp keywords
+
+- 代码七
+
+  - ```cpp
+    t
+    ```
+
+  - 
