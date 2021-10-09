@@ -595,60 +595,82 @@
 
 #### Chapter14、lambdas
 
-- ```cpp
-  auto I = []{
-      cout << "Hello World!" << endl;
-  }
-  
-  I();
-  
-  //完整形式
-  [...](...) mutable throwSpec -> retType;
-  //()里面写参数，mutable表示是否可变，retType表示lambdas的返回类型
-  //上述三个参数都是可有可无的，但是如果写了其中一个，全部都要写
-  //[]里面写的是传进来的参数，这个参数是在外面就已经定义好了的
-  ```
+- lambda的介绍
+  - ```cpp
+    auto I = []{
+        cout << "Hello World!" << endl;
+    }
+    
+    I();
+    
+    //完整形式
+    [...](...) mutable throwSpec -> retType{};
+    //()里面写参数（一般函数的参数）
+    //[]里面写的是可以取用的外部的变量（所以对于外部的值，会出现值传递和引用传递的情况）
+    //mutable表示是否可变
+    //retType表示lambdas的返回类型
+    //throwSpec表示是否可以丢出异常
+    //上述三个参数都是可有可无的，但是如果写了其中一个，就要加上小括号
+    ```
 
-- ```cpp
-  auto f = [id]() mutable{
-      cout << "id:" << id << endl;
-      ++ id;
-  };
-  
-  //等价于下面这样
-  class Functor{
-      private:
-      	int id;
-      public:
-      	void operator()(){
-              cout << "id:" << id << endl;
-      		++ id;
-          }
-  };
-  
-  Functor f;
-  ```
+- 有关值传递和引用传递
 
-- ```cpp
-  int id = 0;
-  auto f = [id]() mutable{//如果没有加上mutable，以值传递进来的变量是无法更改的（但是以引用传递的）
-      cout << "id:" << id << endl;
-      ++ id;
-  };
-  
-  id = 42;
-  f();//id:0
-  f();//id:1
-  f();//id:2
-  cout << id << endl;//42
-  //理解：就和上面创建一个类一样，是把属性以值传递给了这个类，所以后续调用这个函数相当于是不断调用类的函数（重点是值传递）
-  //理解：要想变为43 44 45的话，就改为引用传递
-  ```
+  - ```cpp
+    int id = 0;
+    auto f = [id]() mutable{
+        //mutable表示该传进来的变量[]里面的变量是可变的
+        //如果没有加上mutable，以值传递进来的变量是无法更改的（但是以引用传递的加不加mutable都可以改变，可以理解为：引用传递的本质是指针，无论如何引用的指针都是不会变化的吗？）
+        cout << "id:" << id << endl;
+        ++ id;
+    };
+    
+    id = 42;
+    f();//id:0
+    f();//id:1
+    f();//id:2
+    cout << id << endl;//42
+    /**
+    理解：
+    就和上面创建一个类一样，是把属性以值传递给了这个类，所以后续调用这个函数相当于是不断调用类的函数（重点是值传递）
+    要想变为43 44 45的话，就改为引用传递
+    **/
+    ```
 
-- 一种写法
+- 一种奇怪的写法
 
   - ```cpp
     auto qqq = [=, &y]{};//等号的位置表示可以以值传递传入任何对象
+    ```
+
+- 有关lambda的坑
+
+  - ```cpp
+    auto cmp[...](...){...};
+    
+    std::set<Person, decltype(cmp)> coll(cmp);//这里必须要在coll后面加上cmp
+    ```
+
+- 能够简化代码
+
+  - ```cpp
+    vector<int> vi = {};
+    int x = 30;
+    int y = 100;
+    vi.erase(remove_if(vi.begin(), vi.end(), [x, y](int n){return x < n && n < y;}), vi.end());
+    
+    //下面是以前的写法
+    class LambdaFunctor{
+      public:
+        LambdaFunctor(int a, int b):m_a(a), m_b(b){}
+        bool operator()(int n)const{
+            return m_a < n && n < m_b;
+        }
+      private:
+        int m_a;
+        int m_b;
+    };
+    
+    vi.erase(remove_if(vi.begin(), vi.end(), LambdaFunctor(x, y)), vi.end());
     ```
 
 - 深度解析lambda
@@ -668,16 +690,10 @@
     };
     UnNameLocalFunction lambda2(tobefound);
     
+    //可以把lambda理解为一个匿名的函数对象
     bool b1 = lambda1(5);
     bool b2 = lambda1(5);
     ```
-
-- 总结：
-
-  - []符号里面装的是传进函数里的一个固定的参数（可以这样理解），()里面是后续调用这个函数传入的函数，{}写入调动的函数
-  - 其中[]里面的参数应该是已经在前面的代码中出现过的，所以会出现值传递和引用传递的情况
-  - 对于lambda的理解：可以认为是用了一个类写一个仿函数（是一个匿名函数对象）
-  - 完整版的lambda式子：`[captures] (params) -> ret {Statments;} `
 
 
 
@@ -809,7 +825,7 @@
 
 #### Chapter20、Variadic templates VI
 
-- 代码六（递归+复合）
+- 代码六（递归+继承）
 
   - ```cpp
     //递归的继承
@@ -838,10 +854,253 @@
 
 #### Chapter21、Variadic templates VII & Cpp keywords
 
-- 代码七
+- 代码七（递归+复合）
 
   - ```cpp
-    t
+    template<typename... Values> class tup;
+    template<> class tup<> {};
+    
+    template<typename Head, typename... Tail>
+    class tup<Head, Tail...>{
+        typedef tup<Tail...> composited;
+        protected:
+        	composited m_tail;
+        	Head m_head;
+        public:
+        	tup(){}
+        	tup(Head v, Tail... vtail):m_tail(vtail...), m_head(v){}
+        	Head head(){return m_head;}
+        	composited& tail(){return m_tail;}
+    };
+    ```
+    
+
+
+
+#### Chapter22、标准库源代码分布
+
+- 查看c++2.0的源代码
+
+
+
+#### Chapter23、Rvalue references and Move Semantics
+
+- Rvalue references（右值引用）
+  - 目的：用来解决非必要的拷贝（临时对象的insert，push_back）
+  - 当赋值的右手边是右值，那么左边的接收端可以去偷右边的值而不用去执行copy，分配空间等操作
+  - 左值一般是变量，可以出现在operator=左侧者
+  - 右值出现在operator=右侧者，一般是临时匿名对象或数值常量
+    - （准确来说是不能放到左边的？但是左值又都可以作为右值啊）
+    - 解释：左值是可以出现在左边的，右值是只能出现在右边的，所以不能以是在=的左右来判断是否为左右值
+    - 但是有一点，右值是不可以出现在左边的
+  - 当右值出现于operator=(copy assignment)的右侧，我们认为对其资源进行偷取/搬运（move）而非拷贝是可以的，是合理的
+    - 必须有语法让我们在调用端告诉编译器，这个是rvalue
+    - 必须有语法让我们在被调用端写出一个专门处理Rvalue的所谓move assignment函数
+  - 一个理解：右值的意思是说，对于传进来的对象，此前我们是以这个临时对象作为模板，copy一个新的对象出来，而有了右值引用，我们就直接让指针指向这个临时对象吗？
+  - `std::move`的作用：把一个变量（左值）放进去，得到的就是一个右值
+
+
+
+#### Chapter24、Perfect Forwarding
+
+- unperfect forwarding
+
+  - ```cpp
+    void process(int& i){
+        cout << "int& i = " << i << endl;
+    }
+    
+    void process(int&& i){
+        cout << "int&& i = " << i << endl;
+    }
+    
+    ina a = 0;
+    
+    process(a);//a被当作左值处理
+    process(1);//1被当作右值处理
+    process(move(a));//move使得变为右值，当作右值处理
+    
+    void forward(int&& i){
+        cout << "forward(int&&)" << endl;
+        process(i);
+    }
+    
+    forward(2);//以右值的方式传入forward，但是最后却是以左值的方式传入process,原因：传递过程中它变成了一个named object
+    forward(move(a));//理由同上，最后都是以左值的方式传入process
+    forward(a);//error，左值根本调用不起来
     ```
 
-  - 
+  - 起初的目标：想要设计一个类型，它的值是可以被偷的，从而大幅提高容器的效率
+
+
+
+#### Chapter25、写一个Move-aware class
+
+- ```cpp
+  class MyString{
+    static size_t DCtor;
+    static size_t CTor;
+    static size_t CCtor;
+    static size_t MCtor;
+    static size_t MAsgn;
+    static size_t Dtor;
+    private:
+      char* _data;
+      size_t _len;
+      void _init_data(const char *s){
+          _data = new char[_len + 1];
+          memcpy(_data, s, _len);
+          _data[_len] = '\0';
+      }
+    public:
+      //default constructor
+      MyString():_data(NULL), _len(0){++DCtor;}
+      
+      //constructor
+      MyString(const char* p):_len(strlen(p)){
+          ++CTor;
+          _init_data(p);
+      }
+      
+      //copy constructor
+      MyString(const MyString& str): _len(str._len){
+          ++CTor;
+          _init_data(str._data);
+      }
+      
+      //move constructor
+      MyString(MyString&& str) noexcept:_data(str._data), len(str._len){
+          ++MCtor;
+          str.len = 0;//新的指针指向了传进来的对象后，原来的那个对象的指针的len属性就要设为0，_data就要指向空（如果没指向空，就会造成多个指针指向同一个对象，而如果这里直接是删除了这个指针，那么在后面的析构函数的位置，就会变为delete一个不存在的东西，就会报错；同时，因为传进来的大多是临时对象，在作用域结束后会消失的，如果指针没有指向null，那么就会使得本对象一起和他消失）
+          str._data = NULL;//重要
+      }
+      
+      //copy assignment
+      MyString& operator=(const MyString& str){
+          ++CAsgn;
+          if (this != &str){
+              if (_data) delete _data;
+              _len = str._len;
+              _inity_data(str._data);
+          }else{}
+          
+          return *this;
+      }
+      
+      //move assignment
+      MyString& operator=(MyString&& str) noexcept{
+          ++MAsgn;
+          if (this 1= &str){
+              if (_data) delete _data;//如果原来有指向的，先把它删除
+              _len = str._len;
+              _data = str._data;
+              str.len = 0;
+              str._data = NULL;
+          }
+          return *this;
+      }
+      
+      //dtor
+      virtual ~MyString(){
+          ++Dtor;
+          if (_data){//需要先判断是不是null，如果不是才delete
+              delete _data;
+          }
+      }
+  };
+  ```
+
+
+
+#### Chater26、Move-aware class对容器的效能测试
+
+- 只要是以结点形式存在的，move construct和copy construct都是一样的
+- 针对vector，deque，list等容器进行了move construct测试，发现性能有显著的提升
+
+
+
+#### Chapter27、容器-结构与分类_ 旧与新的比较 _ 关于实现手法
+
+- 注意：把一个对象当作了右值，进行了move construct，就不能用这个资源了
+- sequence containers
+  - array(cpp11)
+  - vector
+  - deque
+  - list(双向链表)
+  - forward-list(cpp11，单向链表)
+- assoviative containers
+  - set/multiset
+  - map/multimap
+- unordered containers(cpp11)
+  - unordered set/multiset
+  - unordered map/multimap
+
+
+
+#### Chapter28、容器 array
+
+- 相当于一个包装好的数组
+
+- gcc2.9版本
+  - 没有ctor，也没有dtor
+
+- cpp2.0后的array
+
+  - ```cpp
+    int a[1000];
+    int[1000] b;//error
+    typedef int T[100];
+    T b;//yes
+    ```
+
+
+
+#### Chapter29、容器hashtable
+
+- hashtable的底层实现（我理解的）：是有一个指针数组，每个位置都装有一个指针，每个指针接着一串链表，链表可以是双向的，也可以是单向的
+- 每算出一个hashcode，就把数据接到这个链表下面
+
+
+
+#### Chapter30、Hash function
+
+- g4.9
+
+  - ```cpp
+    //hash是一个仿函数对象，（1，2，3）的前面是构造出一个临时对象，（1，2，3）则是调用它重载的()函数
+    cout << hash<int>()(1,2,3) << endl;//返回的是一个hash code
+    ```
+
+- 查看底层是如何实现hash code的（在g2.9？）
+
+  - int等整数类型直接返回整数类型
+  - char用特殊的hash算法实现
+
+
+
+#### Chapter31、tuple
+
+- ```cpp
+  tuple<string, int, int, complex<double>> t;
+  cout << "sizeof = " << sizeof(t) << endl;//32,为什么不是（4+4+4+16）呢？
+  
+  cout << get<0>(t) << get<1>(t) << endl;//get是获取tuple中的第n个元素
+  
+  auto t2 = make_tuple(22,49,"77");//make_tuple制造出一个tuple
+  
+  get<1>(t1) = get<1>(t2);//get其中的元素并赋值
+  
+  t1 < t2;//把tuple中的每个元素都拿出来进行比较，最后返回结果
+  
+  tuple<int, float, string> t3(77, 1.1, "more light");
+  int i1;
+  float f1;
+  string s1;
+  tie(i1, f1, s1) = t3;//把i1,f1,s1三个值放到t3里面
+  
+  typedef tuple<int, float, string> TupleType;
+  cout << tuple_size<TupleType>::value << endl;//输出tuple的元素个数
+  tuple_element<1, TupleType>::type f1 = 1.0;//拿出tuple的第一个值的类型来定义参数
+  ```
+
+- 在cpp11之前，实现tuple这种数据类型都是逐个逐个去定义的
