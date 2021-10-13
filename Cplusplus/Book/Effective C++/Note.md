@@ -14,22 +14,20 @@
 - [条款14：在资源管理类中小心copying行为](#条款14在资源管理类中小心copying行为)
 - [条款15：在资源管理类中提供对原始资源的访问](#条款15在资源管理类中提供对原始资源的访问)
 - [条款16：成对使用new和delete时要采取相同形式](#条款16成对使用new和delete时要采取相同形式)
-- [条款17：以独立语句将newed对象置入智能指针](#条款17以独立语句将newed对象置入智能指针)
-- [条款18：让接口容易被正确使用，不易被误用](#条款18让接口容易被正确使用不易被误用)
-- [条款19：设计class犹如设计type](#条款19设计class犹如设计type)
-- [条款20：宁以 pass-by-reference-to-const 替换 pass-by-value](#条款20宁以-pass-by-reference-to-const-替换-pass-by-value)
-- [条款21：必须返回对象时，别妄想返回其reference](#条款21必须返回对象时别妄想返回其reference)
-- [条款22：将成员变量声明为private](#条款22将成员变量声明为private)
-- [条款23：宁以non-member、non-friend替换member函数](#条款23宁以non-membernon-friend替换member函数)
-- [条款24：若所有参数皆需类型转换，请为此采用non-member函数](#条款24若所有参数皆需类型转换请为此采用non-member函数)
-- [条款25：考虑写出一个不抛出异常的swap函数](#条款25考虑写出一个不抛出异常的swap函数)
-- [条款26：尽可能延后变量定义式的出现时间](#条款26尽可能延后变量定义式的出现时间)
-
-
-
-
-
-
+- [条款37：绝不重新定义继承而来的缺省参数值](#条款37绝不重新定义继承而来的缺省参数值)
+- [条款38、通过复合塑模出has-a或“根据某物实现出”](#条款38通过复合塑模出has-a或根据某物实现出)
+- [条款39：明智而审慎地使用private继承](#条款39明智而审慎地使用private继承)
+- [条款40：明智而审慎地使用多重继承](#条款40明智而审慎地使用多重继承)
+- [条款41：了解隐式接口和编译期多态](#条款41了解隐式接口和编译期多态)
+- [条款42：了解typename的双重意义](#条款42了解typename的双重意义)
+- [条款43：学习处理模板化基类内的名称](#条款43学习处理模板化基类内的名称)
+- [条款44：将与参数无关的代码抽离templates](#条款44将与参数无关的代码抽离templates)
+- [条款45：运用成员函数模板接受所有兼容类型](#条款45运用成员函数模板接受所有兼容类型)
+- [条款46：需要类型转换时请为模板定义非成员函数](#条款46需要类型转换时请为模板定义非成员函数)
+- [条款48：认识template元编程](#条款48认识template元编程)
+- [条款53：不要轻忽编译器的警告](#条款53不要轻忽编译器的警告)
+- [条款54：让自己熟悉包括TR1在内的标准程序库](#条款54让自己熟悉包括tr1在内的标准程序库)
+- [条款55：让自己熟悉Boost](#条款55让自己熟悉boost)
 
 
 
@@ -42,9 +40,9 @@
 
 - C++语言可以分为四个子语言
   - C。C++是以C为基础的（区块，语句，预处理器，内置数据类型，数组，指针）
-  - Object-Oriented C++。class的构造和析构函数，封装，继承，多态，虚函数，动态绑定
-  - Template C++。泛型编程
-  - Stl。容器，迭代器，算法，函数对象
+  - Object-Oriented C++（class的构造和析构函数，封装，继承，多态，虚函数，动态绑定）
+  - Template C++（泛型编程）
+  - Stl（容器，迭代器，算法，函数对象）
 
 
 
@@ -910,7 +908,23 @@
 
 
 
-###### 条款30、透彻了解inlining的里里外外
+###### 条款29、为“异常安全”而努力是值得的
+
+- 当异常被抛出时，带有异常安全性的函数会：
+  - 不泄露任何资源（用对象来管理资源）
+  - 不允许数据败坏
+- 异常安全函数提供以下三个保证之一：
+  - 基本承诺：如果异常被抛出，程序内的任何事物仍然保持在有效状态下，没有任何对象或数据结构会因此而败坏
+  - 强烈保证：如果异常被抛出，程序状态不改变，如果成功，就完全成功，如果失败，程序会恢复到“调用函数之前”的状态
+  - 不抛掷保证：承诺绝不抛出异常，因为它们总是能够完成它们原先承诺的功能
+- 请记住
+  - 异常安全函数即使发生异常也不会泄漏资源或允许任何数据类型结构败坏，这样的函数区分三种可能的保证：基本型，强烈型，不抛异常型、
+  - “强烈保证”往往能够以“copy and swap”实现出来，但“强烈保证”并非对所有函数都可实现或具备现实意义
+  - 函数提供的“异常安全保证”通常最高只等于其所调用之各个函数的“异常安全保证”中的弱者
+
+
+
+###### 条款30：透彻了解inlining的里里外外
 
 - 调用inline不需要蒙受函数调用所招致的额外开销
 
@@ -948,6 +962,22 @@
 
   - 将大多数inlining限制在小型、被频繁调用的函数身上，这可使日后的调试过程和二进制升级更容易，也可使潜在的代码膨胀问题最小化，使程序的速度提升机会最大化
   - 不要只因为function templates出现在头文件，就将它们声明为inline
+
+
+
+###### 条款31：将文件间的编译依存关系降至最低
+
+- 背景：如果这些头文件中又任何一个被改变，或这些头文件所以来的其他头文件有任何改变，那么每一个函数Person class的文件就得重新编译，任何使用Person class的文件也必须重新编译
+- 解决办法：
+  - 接口和实现分离，一个头文件写实现（实现），另一个头文件写接口（接口）
+  - 设计纯虚函数，后面写的类都调用这个接口
+- 一些设计策略
+  - 如果使用object references或object pointers可以完成任务，就不要使用objects
+  - 如果能够，尽量以class声明式替换class定义式
+  - 为声明式和定义式提供不同的头文件
+- 请记住
+  - 支持“编译依存性最小化”的一般构想是：相依于声明式。不要相依于定义式、基于此构想的两个手段是handle classes和interface classes
+  - 程序库头文件应该以”完全且仅有声明式“的形式存在，这种做法不论是否设计templates都适用
 
 
 
@@ -1072,7 +1102,7 @@
 
 
 
-###### 条款35：考虑virtual函数以外的其他选择（挖坑，待填）
+###### 条款35：考虑virtual函数以外的其他选择
 
 - NVI（non-virtual-interface）
   - 将接口和实现分开，即接口设为public non-virtual函数，而实现函数变为private-virtual函数
@@ -1179,6 +1209,134 @@
 - 请记住
   - 复合（composition）的意义和public继承是不一样的
   - 在应用层（application domain），复合意味has-a（有一个），在实物领域，复合意味着is-implemented-in-terms-of（根据某物实现出）
+
+
+
+###### 条款39：明智而审慎地使用private继承
+
+- 对于private继承
+
+  - 编译器不会自动将一个derived class对象转换为一个base class对象（针对private继承来说）
+  - 由private base class继承来的所有成员，在derived class中都会变为private属性
+
+- private继承意味着：implemented in terms of（根据某物实现出）
+
+- private主要用于：
+
+  - 当一个意欲称为derived class者想访问一个意欲称为base class者的protected成分
+  - 或为了重新定义一或多个virtual函数
+
+- private继承不能使用多态了嘛？
+
+  - ```cpp
+    #include<iostream>
+    
+    class A{
+        public:
+            virtual void test(){
+                std::cout << "A::test()" << std::endl;
+            }
+    };
+    
+    class B:private A{
+        public:
+            virtual void test(){
+                std::cout << "B::test()" << std::endl;
+            }
+    };
+    
+    int main(){
+        B b;
+        A *a1 = &b;
+        // b.test();
+    }
+    ```
+
+  - 更加准确的说，对于私有继承，不能用父类指针指向子类对象
+
+  - 所以，private继承确实不能用多态了
+
+- 对于空对象
+
+  - ```cpp
+    class A{};//它的大小是1，里面有一个char字符；所以如果它作为一个类对象的成员的话，会占用一个字符
+    //但是，如果一个空类作为一个基类，被子类私有继承了的话，就不会占用大小，如：
+    
+    class B:private A{
+        int x;//sizeof(A) == sizeof(int)
+    };
+    ```
+
+  - EBO(空白基类最优化)
+
+- 请记住
+
+  - Private继承意味is-implemented-in-terms-of（根据某物实现出）。通常比复合（compoosition）的级别低，但是当derived class需要访问protected base class的成员，或需要重新定义继承而来的virtual函数时（这里也表明了会导致多态失效），这么设计是合理的
+  - 和复合（composition）不同，private 继承可以造成empty base最优化，这对致力于“对象尺寸最小化”的程序库开发者而言，可能很重要
+
+
+
+###### 条款40：明智而审慎地使用多重继承
+
+- 如果没有虚继承：A类继承了Base类，B类继承了Base类，C类同时继承了A类和B类，那么C类中就会有两个Base类，那到底该听谁的呢？
+
+  - ```cpp
+    class Base{
+        int a;
+    };
+    
+    class A:public Base{};
+    
+    class B:public Base{};
+    
+    class C:public B, public C{};//菱形继承
+    
+    C c1;//c1.a = ?，从逻辑上看，应该是只有一个a的
+    
+    //没有虚继承
+    c1.A::a = 10;
+    c1.B::a = 100;//用作用域来访问变量
+    ```
+
+- 解决办法：
+
+  - ```cpp
+    class Base{
+        int a;
+    };
+    
+    class A:virtual public Base{};
+    
+    class B:virtual public Base{};
+    
+    class C:public B, public C{};//菱形继承，虚继承来解决二义性
+    ```
+
+- cpp的解析规则：首先确认这个函数对此调用之言是最佳匹配，找出最佳匹配函数后才检验其可取用性
+
+- 使用virtual继承的那些classes所产生的对象往往比使用non-virtual继承的兄弟吗体积大，访问virtual base classes的成员变量时，也比访问non-virtual base classes的成员变量速度慢
+
+- virtual继承的成本
+
+  - classes若派生自virtual bases而需要初始化，必须认知其virtual class
+  - 当一个新的derived class加入继承体系，它必须承担其virtual class的初始化责任
+
+- 忠告
+
+  - 非必要不使用base classes
+  - 尽量避免在其中放置数据
+
+- 后面举了一个CPerson，IPerson和PersonInfo三个类关系的例子
+
+  - CPerson需要实现PersonInfo类中的一些功能，那么就有两种实现方式：私有继承或复合
+  - IPerson的话则是CPerson本应该继承的对象类
+  - 所以这里就用到了多重继承
+
+- 请记住
+
+  - 多重继承比单一继承复杂，它可能导致新的歧义性，以及对virtual继承的需要
+  - virtual继承会增加大小、速度、初始化（及赋值）复杂度等等成本，如果virtual base class不带任何数据，将是最具使用价值的情况
+  - 多重继承的确有正当用途。其中一个情节涉及“public继承某个Interface class”和“private继承某个协助实现的class”的两相结合
 
 
 
@@ -1384,6 +1542,143 @@
 
 
 
+###### 条款44：将与参数无关的代码抽离templates
+
+- review一下之前的知识
+
+  - ```cpp
+    template<typename T>
+    class SquareMatrixBase{
+        protected:
+        	void invert(size_t matrixSize);
+    };
+    
+    template<typename T, size_t n>
+    class SquareMatrix:private SquareMatrixBase<T>{
+        private:
+        	using SquareMatrixBase<T>::invert;
+        public:
+        	void invert(){this -> invert(n);}//模板化基类内的函数会被derived classes覆盖
+    };
+    ```
+
+- 其实，对于它书上说的逆矩阵的写法，我不是很理解，本来用一个模板一个参数就可以解决的，为什么要改为用多个模板才能解决啊？
+
+- 对于类型参数导致的代码膨胀：int和long都有相同的二进制表达，但是有些编译器会把他们编译为两个不同的版本，使得代码膨胀
+
+  - 解决办法：在大多数平台上，所有指针类型都有相同的二进制表述，即可以把`T*`都换为`void*`
+
+- 请记住
+  - Templates生成多个classes和多个函数，所以任何template代码都不该与某个造成膨胀的template参数产生相依关系
+  - 因非类型模板参数而造成的代码膨胀，往往可消除，做法是以函数参数或class成员变量替换template参数
+  - 因类型参数而造成的代码膨胀，往往可降低，做法是让带有完全相同二进制表述的具现类型共享实现码
+
+
+
+###### 条款45：运用成员函数模板接受所有兼容类型
+
+- 背景：对于传统的子类和父类，我们都可以用父类的指针指向子类对象。但是，对于有模板的子类和父类，做不到改变指针指向的类型，比如让子类指向父类
+
+  - ```cpp
+    template<typename T>
+    class SmartPtr{
+        public:
+        	explicit SmartPtr(T* realPtr);
+    };
+    
+    SmartPtr<Top> pt1 = Smart<Middle>{new Middle};//将SmartPtr<Middle>转换为SmartPtr<Top>
+    ```
+
+- 解决办法之一
+
+  - ```cpp
+    template<typename T>
+    class SmartPtr{
+        public:
+        	template<typename U>
+        	SmartPtr(const SmartPtr<U>& other);//不是explicit，可以用于隐式转换
+        //表示对任何类型T和任何类型U，这里可以根据SmartPtr<U>生成一个SmartPtr<T>
+    };
+    ```
+
+  - 在class内声明泛化copy构造函数并不会阻止编译器生成它们自己的copy构造函数
+
+- 请记住
+  - 请使用member function templates（成员函数模板）生成”可接受所有兼容类型“的函数
+  - 如果你声明member templates用于”泛化copy构造“或”泛化assignment操作“，你还是需要声明政策的copy构造函数和copy assignment操作符
+
+
+
+###### 条款46：需要类型转换时请为模板定义非成员函数
+
+- 背景
+
+  - ```cpp
+    template<class T>
+    class Rational{
+        public:
+        	Rational (const T& numerator = 0, const T& denominator = 1);
+        	const T numerator() const;
+        	const T denominator() const;
+    };
+    
+    template<class T>
+    const Rational<T> operator* (const Rational<T>& lhs, const Rational<T>& rhs){}
+    
+    Rational<int> oneHalf(1, 2);
+    Rational<int> result = onHalf * 2;//这里的2不能隐式转换为Rational
+    ```
+
+  - 原因：template实参推导的时候从不将隐式类型转换函数考虑在内（但是可以将数组转换为数组指针之类的，都可以）
+
+  - 解决办法：
+
+    - ```cpp
+      template<class T>
+      class Rational{
+          public:
+          	friend const Rational<T> operator* (const Rational<T>& lhs, const Rational<T>& rhs);//把乘号设为friend函数
+          	Rational (const T& numerator = 0, const T& denominator = 1);
+          	const T numerator() const;
+          	const T denominator() const;
+      };
+      
+      template<class T>
+      const Rational<T> operator* (const Rational<T>& lhs, const Rational<T>& rhs){}
+      ```
+
+    - 上述的代码可以过编译，但是无法执行：乘号函数被声明在类内，在类内没有被定义出来
+
+    - 解决办法
+
+      - ```cpp
+        template<class T>
+        class Rational{
+            public:
+            	//把乘号设为friend函数
+            	friend const Rational<T> operator* (const Rational<T>& lhs, const Rational<T>& rhs){
+                    return Rational(lhs.numerator() * rhs.numerator(), lhs.denominator() * rhs.denominator());
+                }
+            	Rational (const T& numerator = 0, const T& denominator = 1);
+            	const T numerator() const;
+            	const T denominator() const;
+        };
+        
+        template<class T>
+        const Rational<T> operator* (const Rational<T>& lhs, const Rational<T>& rhs){}
+        ```
+
+- 一路走来的奇怪的过程
+
+  - 为了让类型转化可能发生于所有实参身上，我们需要一个non-member函数
+  - 为了令这个函数被自动具现化，我们需要将它声明在class内部
+  - 而在class内部声明non-member函数的唯一方法就是：令他成为一个friend
+
+- 请记住
+  - 当我们编写一个class template，而它所提供的“与此temlate相关的”函数支持“所有参数的隐式类型转换”时，请将那些函数定义为“class template内部的friend函数“
+
+
+
 ###### 条款48：认识template元编程
 
 - template metaprogramming（TMP）是编写template-based C++程序并执行于编译期的过程
@@ -1430,3 +1725,51 @@
 
   - Template metaprogramming（TMP，模板元编程）可将工作由运行期移往编译期，因而得以实现早期错误侦测和更高的执行效率
   - TMP可被用来生成“基于政策选择组合”的客户定制代码，也可用来避免生成对某些特殊类型并不适合的代码
+
+
+
+###### 条款53：不要轻忽编译器的警告
+
+- 不同编译器的警告内容和警告标准都是不一样的
+- 所以要好好学语法，否则有些错误导致的编译器的警告提示不匹配都很难debug的
+- 请记住
+  - 严肃对待编译器发出的警告信息。努力在你的编译器的最高（最严苛）警告级别下争取“无任何警告”的荣誉
+  - 不要过度依赖编译器的报警能力，因为不同的编译器对待事情的态度并不相同。一旦移植到另一个编译器上，你原本依赖的警告信息有可能消失
+
+
+
+###### 条款54：让自己熟悉包括TR1在内的标准程序库
+
+- 其实，这就是cpp11的雏形
+  - tuple
+  - hash tables
+  - array
+  - smart pointers
+  - traits
+  - bing
+- 请记住
+  - cpp标准库的主要机能由STL，iostreams，locales组成，并包括c99标准程序库
+  - TR1添加了智能指针（例如：tr1::shared_ptr）、一般化函数指针，hash-based容器，正则表达式以及另外10个组件的支持
+  - TR1自身只是一份规范，为获得TR1提供的好处，你需要一份实物，一个好的实物来源是Boost
+
+
+
+###### 条款55：让自己熟悉Boost
+
+- Boost由委员会成员创设（目标：作为一个“可被加入标准c++之各种功能”的测试场）
+- Boost接纳程序库的过程，它以公开进行的同僚复审为基础
+- Boost包含的类目：
+  - 字符串于文本处理
+  - 容器：bitsets以及多维数组
+  - 函数对象和高级编程
+  - 泛型编程
+  - 模板元编程
+  - 数学和数值
+  - 正确与测试
+  - 数据结构
+  - 语言间的支持
+  - 内存
+  - 杂项
+- 请记住
+  - Boost是一个社群，也是一个网站，致力于免费，源码开放，同僚复审的cpp程序库开发，Boost在cpp标准化过程中扮演深具有影响力的角色
+  - Boost提供许多TR1组件实现品，以及其他许多程序库
