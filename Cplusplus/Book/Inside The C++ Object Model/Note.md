@@ -1,4 +1,4 @@
-### 前言
+# 前言
 
 - 介于cpp编译器对代码进行了更加深层次的优化，以致于书中的代码与实际操作不符，所以：
   - 首先是要坚信实际操作得到的结果，因为这就是现在的标准，书本上的就是老一套的，落后的代码
@@ -6,19 +6,24 @@
 
 
 
-### 名词解释
+
+
+# 名词解释
 
 - 本书是中英文混合翻译的，所以有些名词光从翻译上来看无法窥知其中实意
 - memberwise和bitwise
   - memberwise可以理解为平常的深拷贝，即对对象中的每一个元素都进行复制，如果对象的成员中有class object的话，也会直接复制一个对象出来
   - 而bitwise即为浅拷贝，就是逐位逐位的复制对象，如果对象的成员中有class object的话，那么就会直接把他的指针进行复制，而不会复制对象
   - 所以，浅拷贝会造成两个对象都指向同一个member的情况
+- data segment：数据段
 
 
 
-### 第一章 关于对象
 
-#### 1.1 对象模式
+
+# 第一章 关于对象
+
+## 1.1 对象模式
 
 - 加上封装后的布局成本
   - c++在布局以及存取时间上的主要额外负担是由virtual引起的
@@ -43,11 +48,23 @@
 - 对象模型如何影响程序
   - 这里后续肯定要放一张图片在这里的
 
-#### 1.2 关键词所带来的差异
+
+
+
+
+
+
+## 1.2 关键词所带来的差异
 
 - 
 
-#### 1.3 对象的差异
+
+
+
+
+
+
+## 1.3 对象的差异
 
 - cpp支持三种程序设计范式
   - 程序模型（和C一样，以面向过程为主）
@@ -59,9 +76,9 @@
 
 
 
-### 第二章 构造函数语意学
+# 第二章 构造函数语意学
 
-#### 2.1 Default Constructor 的构造操作
+## 2.1 Default Constructor 的构造操作
 
 - 分清楚是编译器的需要还是程序的需要
 - 带有 default constructor 的 member class object 
@@ -78,7 +95,7 @@
 
 
 
-#### 2.3 程序转化语意学
+## 2.3 程序转化语意学
 
 - 显式的初始化
 
@@ -190,7 +207,7 @@
 
 
 
-#### 2.4 成员们的初始化队伍
+## 2.4 成员们的初始化队伍
 
 - 为了使程序顺利编译，以下四种情况必须使用member initialization list：
 
@@ -246,35 +263,168 @@
 
 
 
-### 第三章 Data 语意学
-
-#### 3.1 Data Member 的绑定
+# 第三章 Data 语意学
 
 - 影响对象大小的三个因素
   - 语言本身所造成的额外负担（如virtual带来的）
   - 编辑器对代码的优化（有些编译器会优化对象的模型和大小）
-  - Alignment的限制（结构对齐，将数值调整到某个数的整数倍）
+  - Alignment的限制（结构对齐，将数值调整到某个数的整数倍，padding）
 - 编译器的优化
   - 对于一个空类，一般的编译器会认为它的大小为1，里面只有一个char大小的类型
   - 而一些编译器则对其进行了优化，认为它的大小为0
   - 编译器之间的差异说明cpp对象模型的演化
-- 
-
-#### 3.2 Data Member 的布局
-
-#### 3.3 Data Member 的存取
-
-#### 3.4 ”继承“与Data Member
-
-#### 3.5 对象成员的效率
-
-#### 3.6 指向 Data Members 的指针
+- 影响每个class object的大小的原因：
+  - 由编译器自动加上的额外data members，用以支持某些语言特性（主要是各种virtual特性）
+  - alignment（边界调整）需要
 
 
 
-### 第四章 Funciton 语意学
+## 3.1 Data Member 的绑定
 
-#### 4.1 Member 的各种调用方式
+- 早期cpp的两种防御性程序设计风格
+
+  - ```cpp
+    /*把所有的data members放在class声明起头处，以确保正确的绑定*/
+    class Point3d{
+        float x, y, z;
+        public:
+        	float X() const {return x;}
+    };
+    ```
+
+  - ```cpp
+    /*把所有的inline functions，不管大小都放在class声明之外*/
+    class Point3d{
+        public:
+        	Point3d();
+        	float X() const;
+        	void X(float) const;
+    };
+    
+    inline float Point3d::X() const{
+        return x;
+    }
+    ```
+
+  - 背景：书上有写
+
+
+
+
+
+
+
+## 3.2 Data Member 的布局
+
+- 在class object中的排列中，nonstatic data members的排列顺序和声明顺序一致（不受static等member的影响）
+
+- 注：static member不属于class object的
+
+- 编译器还可能会合成一些内部使用的data members以支持整个对象模型，如vptr（有些编译器会放到最前面，有些会放到最后面）
+
+- ```cpp
+  class Point3d{
+      public:
+      //...
+      private:
+      	float x;
+      private:
+      	float y;
+  };
+  
+  /*对于该class的布局，各家编译器是把一个以上的access sections连锁在一起，依照声明的顺序称为一个连续区块*/
+  ```
+
+
+
+
+
+## 3.3 Data Member 的存取
+
+### Static Data Members
+
+- 可以视为一个global变量（但只在class生命范围内可见）
+- 每个static data member只有一个实例，存放在程序的data segment
+- 无论多复杂的继承结构，static member只有一个实例
+- 如果取一个static data member的地址，会得到一个指向其数据类型的指针，而不是指向其class member的指针
+- 对于不同对象的同名static值，编译器会对每一个static data member编码（name-mangling）
+
+
+
+### Nonstatic Data Members
+
+- nonstatic data members直接存放在每一个class object中
+
+- ```cpp
+  Point3d Point3d::translate(const Point3d &pt) {
+      x += pt.x;
+      y += pt.y;
+  }
+  
+  /*实际上的内部转化*/
+  Point3d Point3d::translate(Point3d* const this, const Point3d &pt) {
+      this -> x += pt.x;
+      this -> y += pt.y;
+  }
+  ```
+
+- 对于以下两个存取数据的方法
+
+  - origin.x = 0.0;和pt->x = 0.0;
+  - 一般是没有区别的，但是如果是虚拟继承的话，pt->x = 0.0;就要到执行期才能够执行
+
+- 注意：获取object中的data member的时候，地址会比平常的时候要少一位（即要-1，3.6节会说的）
+
+  - 获取data member的偏移量在编译时期可知
+
+
+
+
+
+## 3.4 ”继承“与Data Member
+
+### 只要继承不要多态
+
+- 出现的问题：
+  - 会重复设计一些相同操作的函数
+  - 把一个class分解为两层或多层，可能为了“表现class体系之抽象化”而膨胀所需的空间
+- 因为继承是把整个对象都继承下来
+
+
+
+### 加上多态
+
+
+
+### 多重继承
+
+
+
+### 虚拟继承
+
+
+
+
+
+## 3.5 对象成员的效率
+
+
+
+
+
+
+
+## 3.6 指向 Data Members 的指针
+
+
+
+
+
+
+
+# 第四章 Funciton 语意学
+
+## 4.1 Member 的各种调用方式
 
 - Nonstatic Member Functions（非静态成员函数）
 
