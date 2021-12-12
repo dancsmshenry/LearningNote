@@ -454,3 +454,44 @@
 - 初始化指针的时候将其置为nullptr
 - 释放指针的时候将其置为nullptr
 - ps：在cpp里面不要写NULL，参考modern effective cpp；在c里面写NULL
+
+
+
+# 31、规范定义一个MAX宏
+
+- ```cpp
+  //加上括号，避免展开出错
+  #define MAX(A, B) ((A)>(B)? (A):(B))
+  
+  //避免自增问题，如MAX(i++,j++）
+  #define MAX(A, B) ({	\
+  	int a = A; 	\
+  	int b = B;	\
+  	a > b ? a : b;	\
+  })
+  
+  // 兼容不同数据类型，且不用显式指定类型
+  #define MAX(A, B) ({	\
+  	typeof(A) a = A; 	\
+  	typeof(B) b = B;	\
+  	(void) (&a == &b);	\
+  	a > b ? a : b;		\
+  })
+  ```
+
+
+
+# 32、c与cpp接口间互相调用
+
+- https://blog.csdn.net/lincoln_2012/article/details/50801080
+
+
+
+# 33、使用memcmp判断结构体是否相等的隐患
+
+- memcmp是将两个变量在底层按字节进行比较，相等返回0，不等返回非0
+- memcmp函数是逐个字节进行比较的，而struct存在字节对齐，字节对齐时补的字节内容是随机的，会产生垃圾值，所以无法比较
+
+
+
+# 34、内存对齐
