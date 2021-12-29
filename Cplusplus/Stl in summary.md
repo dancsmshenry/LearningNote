@@ -301,3 +301,14 @@
 
 
 # priority queue（优先队列）
+
+
+
+# 一些其他函数
+
+- ```cpp
+  max_element;//q
+  accumulate;//累积求和
+  ```
+
+- 
