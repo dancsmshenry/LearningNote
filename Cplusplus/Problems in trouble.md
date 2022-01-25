@@ -39,3 +39,29 @@
 - `int (&b)[10] = a;`是什么？`int a[10];`又是什么？（mark:https://blog.csdn.net/qq_34988341/article/details/106452518）
 
 - 为什么构造函数不能作为虚函数
+
+- 在群里面看到的代码：
+
+  - ```cpp
+    static char_type* copy(char_type* dst, const char_type* src, size_t n){//拷贝的过程要注意内存重叠的问题
+        assert(src + n <= dst || dst + n <= src);
+        char_type* r = dst;
+        for (; n != 0; -- n, ++ dst, ++ src){
+            *dst = *src;
+        }
+        
+        return r;
+    }
+    ```
+
+  - 内存拷贝的四种情况：
+
+  - 第一种：dst  空格空格  src
+
+  - 第二种：src 空格空格 dst
+
+  - 第三种：dst src（src的有一部分是和dst重合的），那么，此时从前往后复制的时候，也不会影响
+
+  - 第四种：src dst（dst的有一部分是和src重合的），那么，此时从前往后复制，就会把src后面的一部分给覆盖掉，导致两个内存的内容不同
+
+  - 参考c的库函数memmove()
