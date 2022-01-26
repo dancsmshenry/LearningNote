@@ -178,7 +178,6 @@
 
 - git commit --amend
   - 进入界面修改message，快捷键和vim一样
-  - 这是对最近的message进行变更
 
 
 
