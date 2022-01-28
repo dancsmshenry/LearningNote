@@ -307,8 +307,9 @@
 # 一些其他函数
 
 - ```cpp
-  max_element;//q
+  max_element;//返回容器的最大值
   accumulate;//累积求和
+  lower_bound;//二分查找
   ```
-
-- 
+  
+- https://blog.csdn.net/qq_40160605/article/details/80150252
