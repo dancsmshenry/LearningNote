@@ -796,3 +796,9 @@ std::shared_ptr<int> ptr_2 (ptr_1);
   ```
 
 - 
+
+
+
+
+
+12、智能指针，手撕shared_ptr，实现shared_ptr该井以实现线程安全
