@@ -675,6 +675,12 @@ std::shared_ptr<int> ptr_2 (ptr_1);
 
 
 
+
+
+# Auto_ptr
+
+
+
 # 手写shared_ptr
 
 - ```cpp

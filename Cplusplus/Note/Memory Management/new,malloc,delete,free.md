@@ -1,4 +1,4 @@
-## 4、new 和 delete 的实现原理
+## new 和 delete 的实现原理
 
 - new 的实现：
   - 如果是简单类型，就直接调用 operator new 分配内存
@@ -9,7 +9,11 @@
   - 首先对指针指向的对象运行适当的析构函数
   - 然后通过调用名为 operator delete 的标准库函数释放该对象所用内存
 
-## 5、new/delete 与 malloc/free 的异同
+
+
+
+
+## new/delete 与 malloc/free 的异同
 
 - 相同点：
 
@@ -36,4 +40,16 @@
 
 
 
-- 有了malloc为什么还需要new
+
+
+# 有了malloc为什么还需要new
+
+
+
+
+
+# 多次delete
+
+- 经过一次delete之后，指针就变成了悬空指针或者野指针，也就是说它执行的地方是随机的
+- 所以如果再一次delete的话，就可能删除了其他进程的重要数据，使得其他进程codedown
+- 我认为吧，为了防止意外发生，最好还是在指针被delete之后让他指向nullptr，防止使用者乱用.....

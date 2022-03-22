@@ -1,0 +1,1 @@
+- 不能对vector之类的容器使用memset
