@@ -31,3 +31,7 @@
 *.out
 *.app
 *.class
+
+build/
+.vscode/
+/test.cpp

@@ -94,4 +94,37 @@ const指针
 - 底层const：表示指针所指的对象是一个常量（int const * p1）
 - 用于声明引用的const都是底层const
 - 当执行对象的拷贝操作时，拷入和拷出的对象必须具有相同的底层的const资格
-  - 比如说一个int*的，不能指向一个const类型的对象
+  - 比如说一个int*的，不能指向一个const类型的对象\
+
+
+
+
+
+
+
+- ```cpp
+  #include <iostream>
+  
+  using namespace std;
+  
+  class A {
+  public:
+      void func() const { 
+          cout << "func const" << endl;
+      }
+  
+      void func() {
+          cout << "func none const" << endl;
+      }
+  };
+  
+  int main() {
+      A a1;
+      a1.func();//func none const
+  
+      const A a2;
+      a2.func();//func const
+  }
+  ```
+
+- 

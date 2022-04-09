@@ -286,3 +286,73 @@
 - mov dword ptr [ebp-8],eax 这条语句将eax的值放入b的地址
 
 - ebp-8中上面两条汇编的作用即：将x的地址存入变量b中，这不和将某个变量的地址存入指针变量是一样 的吗？所以从汇编层次来看，的确引用是通过指针来实现的
+
+
+
+# 有了指针为啥还用引用
+
+- 少一次判空
+
+  - ```cpp
+    #include <stddef.h>
+    
+    void f(int & x, int i)
+    {
+        x = i;
+    }
+    
+    void g(int * p, int i)
+    {
+        if (p == NULL) {
+            return;
+        }
+        *p = i;
+    }
+    ```
+
+- 指针降维
+
+  - ```cpp
+    #include <stdio.h>
+    #include <string.h>
+    
+    void cmp_and_swap_ref(char * & p1, char * & p2)
+    {
+        if (strcmp(p1, p2) > 0) {
+            char * t = p1;
+            p1 = p2;
+            p2 = t;
+        }
+    }
+    
+    void cmp_and_swap_ptr(char ** p1, char ** p2)
+    {
+        if (strcmp(*p1, *p2) > 0) {
+            char * t = *p1;
+            *p1 = *p2;
+            *p2 = t;
+        }
+    }
+    
+    int main()
+    {
+        char c1[] = "xyz";
+        char c2[] = "abc";
+    
+        char * p1 = c1;
+        char * p2 = c2;
+        
+        cmp_and_swap_ref(p1, p2);
+        // cmp_and_swap_ptr(&p1, &p2);
+    
+        printf("%s\n%s\n", p1, p2);
+    }
+    ```
+
+
+
+
+
+# 参考
+
+- https://www.zhihu.com/question/512123383/answer/2316997922

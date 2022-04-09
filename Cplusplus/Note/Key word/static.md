@@ -70,6 +70,86 @@
 
 
 
+# 模板和static变量
+
+- ```cpp
+  #include <iostream>
+  #include <cstdio>
+  #include <string>
+  
+  using namespace std;
+  
+  template <typename T>
+  class A
+  {
+  public:
+      static T a1;
+  };
+  
+  template<> int A<int>::a1 = 1;//这里前面一定要加上template<>才能运行
+  
+  int main()
+  {
+      A<int> a2;
+  }
+  ```
+
+- ```cpp
+  #include<iostream>
+  
+  using namespace std;
+  
+  template <typename T>
+  class Test {
+  public:
+      static int a;
+  };
+  
+  template <> int Test<int>::a = 1;
+  template <> int Test<char>::a = 2;
+  int main(){
+      cout << Test<int>::a <<endl;
+      cout << Test<char>::a <<endl;
+      Test<int> obj1, obj2;
+      cout << obj1.a <<endl;
+      cout << obj2.a <<endl;
+      obj1.a = 10;
+      cout << obj1.a <<endl;
+      cout << obj2.a <<endl;
+      
+      cout << &obj1.a <<endl;
+      cout << &obj2.a <<endl;
+  
+  	cout << &obj1 <<endl;
+      cout << &obj2 <<endl;
+  
+      Test<char> b1;
+      cout << "b1::" << &b1.a << endl;
+  
+      return 0;
+  }
+  /*
+  1
+  2
+  1
+  1
+  10
+  10
+  0x601070
+  0x601070
+  
+  0x7fff93e1605e
+  0x7fff93e1605f
+  */
+  
+  ```
+
+- 事实证明，对于每个静态变量，每个模板类都会为其单独的写一个静态变量
+
+
+
+
+
 # 其他
 
 - 在静态方法里面创建静态变量，那这个静态变量一开始会初始化吗
