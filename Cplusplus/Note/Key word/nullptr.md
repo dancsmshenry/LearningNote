@@ -19,6 +19,8 @@
   #endif
   ```
 
+- 因为cpp是强类型语言，void*是无法隐式转换为别的指针类型的，而c语言可以
+
 
 
 
@@ -135,4 +137,5 @@ nullptr的缺点
 - effective modern cpp一书
 - https://www.zhihu.com/question/55936870/answer/147640578
 - https://zhuanlan.zhihu.com/p/270390408
+- https://www.zhihu.com/question/55936870/answer/2263354839
 

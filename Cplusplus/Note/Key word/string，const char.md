@@ -63,3 +63,27 @@
 - char*是常量，编译器会对它进行优化，只要内容相同的话，都会指向同一块内存（默认是const）
 
 - 而char[]不是常量，是字符串数组，是可以改变的
+
+
+
+
+
+- 不借助swap函数，实现交换两个string的值
+
+- ```cpp
+  void swap(string& a, string&ｂ) {
+      string tmp(move(a));
+      a = move(b);
+      b = move(tmp);
+  }
+  ```
+
+
+
+string能否被继承
+
+
+
+# string的大坑
+
+- string的析构函数不是virtual的，所以多态会造成内存泄漏的......

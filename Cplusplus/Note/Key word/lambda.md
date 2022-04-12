@@ -32,3 +32,7 @@ https://blog.csdn.net/qq_35587463/article/details/105054277
 
 
 - 每当定义一个lambda表达式后，编译器
+
+
+
+std::thread使用lambda做回调，有没有什么注意事项？
