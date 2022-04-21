@@ -55,7 +55,7 @@
 
 # 7.4 可重定位目标文件
 
-- <img src="典型的ELF可重定位目标文件.png" style="zoom:150%;" />
+- <img src="images/典型的ELF可重定位目标文件.png" style="zoom:150%;" />
 - **ELF头**以一个16字节的序列开始，这个序列描述了生成该文件的系统的字的大小和字节顺序
 - ELF头部剩下的部分包含帮助链接器语法分析和解释目标文件的信息
   - 其中包括ELF 头的大小、目标文件的类型（如可重定位、可执行或者共享的）、机器类型（如 x86-64) 、节头部表 (section header table) 的文件偏移，以及节头部表中条目的大小和数量
@@ -200,7 +200,7 @@ Linux下链接器的规则
 
 # 7.8 可执行目标文件
 
-- <img src="ELF可执行目标文件.png" style="zoom:150%;" />
+- <img src="images/ELF可执行目标文件.png" style="zoom:150%;" />
 - 因为可执行文件是完全链接的，所以不需要.rel节
 
 
@@ -221,7 +221,7 @@ Linux下链接器的规则
 
 - 每个linux程序都有一个运行时内存映像，代码段总时从地址0x400000处开始，后面是数据段
 
-  - <img src="内存映像.png" style="zoom:150%;" />
+  - <img src="images/内存映像.png" style="zoom:150%;" />
 
 
 
@@ -261,7 +261,7 @@ Linux下链接器的规则
 
 
 
-- <img src="动态链接共享库.png" style="zoom:150%;" />
+- <img src="images/动态链接共享库.png" style="zoom:150%;" />
 
 
 
