@@ -18,13 +18,13 @@
 
 
 
-- <img src="基本TCP客户服务器程序的套接字函数.png" style="zoom:200%;" />
+- <img src="images/基本TCP客户服务器程序的套接字函数.png" style="zoom:200%;" />
 
 
 
-- <img src="socket函数的family常值.png" style="zoom:150%;" />
-- <img src="socket函数的type常值.PNG" style="zoom:150%;" />
-- <img src="socket函数的protocol常值.png" style="zoom:150%;" />
+- <img src="images/socket函数的family常值.png" style="zoom:150%;" />
+- <img src="images/socket函数的type常值.png" style="zoom:150%;" />
+- <img src="images/socket函数的protocol常值.png" style="zoom:150%;" />
 
 
 
@@ -121,9 +121,9 @@
 
 
 
-- <img src="TCP为监听套接字维护的两个队列.png" style="zoom:150%;" />
+- <img src="images/TCP为监听套接字维护的两个队列.png" style="zoom:150%;" />
 - 每当在未完成连接队列中创建一项时，来自监听套接字的参数就复制到即将建立的连接中，连接的创建机制时完全自动的，无需服务器进程插手
-- ![](TCP三路握手和监听套接字的两个队列.png)
+- ![](images/TCP三路握手和监听套接字的两个队列.png)
 
 
 
@@ -230,7 +230,7 @@
 - 有个坑：对一个TCP套接字调用close会导致发送一个FIN，随后是正常的TCP连接终止序列，那为什么并发服务器里面父进程对子进程的connfd调用close没有终止它与客户的连接
 - 每个文件或套接字都有一个引用记数，引用计数在文件表项中芜湖，它是当前打开着的引用该文件或套接字的描述符的个数
 - 所以fork后，上述的connfd就有两个引用计数了
-- <img src="4.8并发服务器.png" style="zoom:150%;" />
+- <img src="images/4.8并发服务器.png" style="zoom:150%;" />
 - 最终状态：子进程处理与客户的连接，父进程则可以在监听套接字上再次调用accept来处理下一个客户连接
 - 其实这里我有点没想明白，就是fork中是copy on write，即一开始父进程和子进程的listenfd和connfd都是同一个东西（猜测：有可能是fork会触发fd中的引用计数，导致引用计数增加），然后当父进程close描述符connfd，子进程close描述符listenfd的时候，这两个listenfd和connfd才会不同，才会被真正的复制出来
 
