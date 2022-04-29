@@ -262,3 +262,11 @@
 ### 初始化版本库
 
 - git init（将当前的目录作为可使用的版本库）
+
+
+
+
+
+# to do list
+
+- git rebase
