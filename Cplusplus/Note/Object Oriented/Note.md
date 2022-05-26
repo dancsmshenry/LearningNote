@@ -248,3 +248,62 @@
     ```
 
   - 是否可以参照侯捷之前说的，如果两个函数const版本和非const版本同时存在，const只能调用const的版本，非const版本只能调用非const的版本呢？
+
+
+
+
+
+# 定义一个不能够被继承的类
+
+方法一
+
+- ```cpp
+  class B;
+  //设计一个不能被继承的类
+  class A
+  {
+         friend B;
+  private:
+         A() {}
+  };
+  class B :virtual public A
+  {
+  public:
+         B() {}
+  };
+  ```
+
+- 我们可以声明一个辅助的类A，把类A的构造函数声明为私有的，并使得B是A的友元类，且B虚继承A。让B是A的友元类的目的在于能够让B访问A的私有构造函数，这样继承自A的B才可以被实例化
+
+- 假设现在有一个类D继承B，在D初始化的时候会先调用B类的构造函数，但是由于B虚继承A，所以为了防止产生二义性，D必须先调用A的构造函数，由于A的构造函数是私有的不可访问，所以会产生错误，继承会失败
+
+
+
+方法二
+
+- ```cpp
+  class CParent
+  {
+  private:
+      CParent(int v){m_v = v;}
+      ~CParent(){}
+  
+      int m_v;
+      static CParent * m_instance;
+  public:
+      static CParent * getInstance(int v);
+  };
+  
+  CParent *CParent::getInstance(int v)
+  {
+      return new CParent(v);
+  }
+  ```
+
+- 相当于写一个单例模式吧
+
+
+
+方法三
+
+- final修饰符，cpp11得到的
