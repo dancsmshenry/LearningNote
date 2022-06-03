@@ -1,3 +1,12 @@
+# PS
+
+- IO多路复用本质上还是阻塞的，进程或线程还是会阻塞在调用select/poll/epoll函数上，真正的非阻塞还得是异步io（也就是proctor），或者是把epoll等函数包装成reactor
+- select，poll需要每次把感兴趣的事件全量传入select或者poll方法中，内核每次都需要复制解析一边，浪费系统资源，而epoll维护了一个全局的rbt，不需要每次全量解析
+
+
+
+
+
 epoll_wait函数
 
 - 格式：`int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);`
@@ -146,6 +155,62 @@ epoll_wait函数
 
 
 
+# ET,LT
+
+Level Triggered (LT) 水平触发
+
+- socket接收缓冲区不为空 有数据可读 读事件一直触发
+- socket发送缓冲区不满 可以继续写入数据 写事件一直触发
+- 符合思维习惯，epoll_wait返回的事件就是socket的状态
+
+
+
+Edge Triggered (ET) 边沿触发
+
+- socket的接收缓冲区状态变化时触发读事件，即空的接收缓冲区刚接收到数据时触发读事件
+- socket的发送缓冲区状态变化时触发写事件，即满的缓冲区刚空出空间时触发读事件
+- 仅在状态变化时触发事件
+
+
+
+LT的处理过程：
+
+- accept一个连接，添加到epoll中监听EPOLLIN事件
+- 当EPOLLIN事件到达时，read fd中的数据并处理
+- 当需要写出数据时，把数据write到fd中；如果数据较大，无法一次性写出，那么在epoll中监听EPOLLOUT事件
+- 当EPOLLOUT事件到达时，继续把数据write到fd中；如果数据写出完毕，那么在epoll中关闭EPOLLOUT事件
+
+
+
+ET的处理过程：
+
+- accept一个一个连接，添加到epoll中监听EPOLLIN|EPOLLOUT事件
+- 当EPOLLIN事件到达时，read fd中的数据并处理，read需要一直读，直到返回EAGAIN为止
+- 当需要写出数据时，把数据write到fd中，直到数据全部写完，或者write返回EAGAIN
+- 当EPOLLOUT事件到达时，继续把数据write到fd中，直到数据全部写完，或者write返回EAGAIN
+
+
+
+从ET的处理过程中可以看到，ET的要求是需要一直读写，直到返回EAGAIN，否则就会遗漏事件。而LT的处理过程中，直到返回EAGAIN不是硬性要求，但通常的处理过程都会读写直到返回EAGAIN，但LT比ET多了一个开关EPOLLOUT事件的步骤
+
+
+
+LT的编程与poll/select接近，符合一直以来的习惯，不易出错
+
+ET的编程可以做到更加简洁，某些场景下更加高效，但另一方面容易遗漏事件，容易产生bug
+
+这里有两个简单的例子演示了LT与ET的用法(其中epoll-et的代码比epoll要少10行)：
+
+https://github.com/yedf/handy/blob/master/raw-examples/epoll.cc
+
+https://github.com/yedf/handy/blob/master/raw-examples/epoll-et.cc
+
+
+
+对于nginx这种高性能服务器，ET模式是很好的，而其他的通用网络库，更多是使用LT，避免使用的过程中出现bug
+
+
+
 
 
 # 为什么epoll的ET模式必须要用非阻塞IO，而LT模式可以选择不用
@@ -167,12 +232,58 @@ epoll_wait函数
 
 
 
+
+
+# 为什么IO多路复用必须使用非阻塞IO
+
+原因一：
+
+- https://www.zhihu.com/question/37271342/answer/81808421
+- 数据就算不被别人读走，也可能被内核丢弃
+- 在Linux上，select（）可能会将套接字文件描述符报告为“ready for reading”，而随后的读取会阻塞。例如，当数据已到达但检查时校验和错误并被丢弃时，可能会发生这种情况。在其他情况下，文件描述符可能会被错误地报告为就绪。因此，在不应该阻塞的套接字上使用非阻塞可能更安全。
+
+
+
+原因二：
+
+- IO多路复用只会告诉你socket可读，但是不会告诉你有多少数据可读
+- 所以server端只能一直读socket，一旦后续没有数据的话，就会阻塞在read上面（而非阻塞的read的话，没有数据就会返回错误，而不是阻塞）
+- 所以，如果是io多路复用+阻塞io，coding的时候，每次读只能由loop告诉你有没有数据（而不是有多少数据），然后只能接着读一次（不一定能读完所有的数据），在是实现会非常的麻烦
+- 接上，因此阻塞socket使用就必须read/write一次后就转到epoll_wait上，这对于网络流量较大的应用效率是相当低的
+
+
+
+原因三：
+
+- io多路复用只能告诉你能读，但不会说能读多少（和原因二很像）
+
+
+
+原因四：
+
+- 惊群效应：
+  - 就是一个典型场景，多个进程或者线程通过 select 或者 epoll 监听一个 listen socket，当有一个新连接完成三次握手之后，所有进程都会通过 select 或者 epoll 被唤醒，但是最终只有一个进程或者线程 accept 到这个新连接，若是采用了阻塞 I/O，没有accept 到连接的进程或者线程就 block 住了
+
+
+
+参考：
+
+- epoll的ET模式必须使用非阻塞io
+- ET模式指的是当数据从无到有时，才通知该fd。数据读不完，也不会再次通知，所以read时一定要采用循环的方式一直读到read函数返回-1为止。此时采用阻塞的read，那么就阻塞了整个线程。
+
+
+
+summary
+
+- 调用io多路复用只能是可能知道有数据可读，但是不知道有多少数据可读（即可能会循环多次的调用read，所以不能用阻塞io），也不知道当read真正去读的时候是否真的有数据（参考原因一，可能数据校验和不对，直接被loss了）
+- 如果是非阻塞socket，read()不到的话会返回一个EAGAIN是嘛，然后就退出read循环了？然后就等下一次epoll
+
+
+
 # Q&A
 
 - epoll是在linux内核版本2.544才被引入的
-
 - 双向链表从内核空间到用户空间是直接拷贝的，没有用上mmap
-
 - 为什么epoll支持百万句柄
   - 背景：此前的select和poll都是能支持上千上万的fd，但是再多就不行了
   - 相比select和poll，不用重复传递fd（调用epoll_wait时相当于以往调用），同时返回的直接就是有事件的fd
@@ -183,3 +294,16 @@ epoll_wait函数
   - 同时kernel中有已经实现好的rbtree，没必要重复造轮子
   - 能够实现fd的快速查找，插入和删除（rbtree下上述操作能在O(logn)下完成）
   - 可以参考一下jdk中hashmap的实现，在hash冲突太多的时候，也变为了红黑树来实现了
+
+
+
+
+
+
+
+# 参考
+
+- https://rebootcat.com/2020/09/26/epoll_cookbook/
+- https://www.cnblogs.com/charlesblc/p/6242479.html
+- https://blog.csdn.net/wteruiycbqqvwt/article/details/90299610
+- https://zhuanlan.zhihu.com/p/392988660
