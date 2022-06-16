@@ -77,4 +77,52 @@
           return lo;
   ```
 
+
+
+
+
+sort的实现
+
+- ```cpp
+  #include <algorithm>
+  #include <iterator>
+  #include <forward_list>
+   
+  template <class ForwardIt>
+  void quicksort(ForwardIt first, ForwardIt last)
+  {
+      if(first == last) return;
+      auto pivot = *std::next(first, std::distance(first,last)/2);
+      ForwardIt middle1 = std::partition(first, last, 
+                           [pivot](const auto& em){ return em < pivot; });
+      ForwardIt middle2 = std::partition(middle1, last, 
+                           [pivot](const auto& em){ return !(pivot < em); });
+      quicksort(first, middle1);
+      quicksort(middle2, last);
+  }
+  ```
+
+- https://zhuanlan.zhihu.com/p/364361964
+
+
+
+
+
+tie函数
+
+```cpp
+tie(t1, t2) = t2, t1; // 不能够交换t1和t2的值（这里最后都会变成t1）
+// 因为左边其实本质上是左值引用，他会先给t1f
+```
+
+- 但是适合批量的赋值
+
+- ```cpp
+  dp1 = dp2;
+  dp2 = dp3;
+  
+  // 等价于
+  tie(dp1, dp2) = {dp2, dp3};
+  ```
+
 - 

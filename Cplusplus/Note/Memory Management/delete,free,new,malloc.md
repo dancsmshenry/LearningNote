@@ -231,3 +231,15 @@ placement new
 
   - palcement new的主要用途就是反复使用一块较大的动态分配的内存来构造不同类型的对象或者他们的 数组
   - placement new构造起来的对象数组，要显式的调用他们的析构函数来销毁（析构函数并不释放对象的内存），千万不要使用delete，这是因为placement new构造起来的对象或数组大小并不一定等于原来 分配的内存大小，使用delete会造成内存泄漏或者之后释放内存时出现运行时错误。
+
+
+
+https://blog.csdn.net/TABE_/article/details/123098479
+
+https://www.zhihu.com/question/33979489
+
+
+
+malloc分配空间时，小于128k的用brk
+
+大于的用mmap
