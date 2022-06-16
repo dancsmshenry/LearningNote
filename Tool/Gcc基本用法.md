@@ -51,6 +51,10 @@
 
 
 
+在语句的最后面加上-std=c++17
+
+
+
 # 参考
 
 - https://www.runoob.com/w3cnote/gcc-parameter-detail.html
