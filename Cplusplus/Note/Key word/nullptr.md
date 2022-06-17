@@ -1,6 +1,6 @@
 # NULL 和 nullptr 的区别
 
-只有NULL的时候
+背景：（没有nullptr的时候）
 
 - 在C中只有 NULL ，用来表示空指针
 
@@ -9,7 +9,7 @@
 
   - 这里钻了语法中指针地址不会为0的空子，人为规定当指针为0时就是空指针。但无论怎么说0就是0，他就是个int而不是ptr，在类型推导时会出问题
 
-- ```cpp
+- ```c
   #ifndef NULL
       #ifdef __cplusplus
           #define NULL 0
@@ -25,7 +25,7 @@
 
 
 
-nullptr出现的背景
+# nullptr出现的原因
 
 - 背景一
 
@@ -58,29 +58,26 @@ nullptr出现的背景
 
 
 
-nullptr的实现方式
+# nullptr的实现方式
 
 - 一种可能的实现方式（所以nullptr可以转为int*）
 
 - ```cpp
-  struct nullptr_t
-  {
+  struct nullptr_t {
       void operator&() const = delete;  // Can't take address of nullptr
   
       template <class T>
-      inline operator T*() const
-      {
+      inline operator T*() const {
           return 0;
       }
   
       template <class C, class T>
-      inline operator T C::*() const
-      {
+      inline operator T C::*() const {
           return 0;
       }
   };
   ```
-
+  
 - nullptr还可以抛出异常
 
 - 同时nullptr是指针类型，不会与整形变量相混淆
@@ -89,25 +86,22 @@ nullptr的实现方式
 
 
 
-nullptr的缺点
+# nullptr的缺点
 
 - ```cpp
-  void fun(char* p)
-  {
+  void fun(char* p) {
    cout<< "char* p" <<endl;
   }
-  void fun(int* p)
-  {
+  
+  void fun(int* p) {
    cout<< "int* p" <<endl;
   }
-  void fun(int p)
-  {
+  void fun(int p) {
    cout<< "int p" <<endl;
   }
-  int main()
-  {
+  int main() {
    fun((char*)nullptr);//语句1（char* p）
-   fun(nullptr);//语句2(不知道用呢一个)
+   fun(nullptr);//不知道用那一个
    fun(NULL);//语句3（int p）
    return 0;
   }
@@ -134,8 +128,8 @@ nullptr的缺点
 # 参考
 
 - https://blog.csdn.net/qq_18108083/article/details/84346655
-- effective modern cpp一书
 - https://www.zhihu.com/question/55936870/answer/147640578
 - https://zhuanlan.zhihu.com/p/270390408
-- https://www.zhihu.com/question/55936870/answer/2263354839
+
+- effective modern cpp一书
 
