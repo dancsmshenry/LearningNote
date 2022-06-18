@@ -1,148 +1,185 @@
-# 其他
+# noexcept
 
-记录一些比较常见，但却无关紧要的小知识
+作用
 
-
-
-
-
-### noexcept
-
-
-
-### ifdef
-
-ifdef和endif
-
-- 背景1；
-
-  - 一般，源程序中所有的行都参加编译，但是有时希望对其中一部分内容只在满足一定条件下进行编译，也就是对一部分内容指定编译条件，这就是条件编译
-
-- 形式：
-
-  - ```cpp
-    #ifdef
-    //程序段1
-    #else
-    //程序段2
-    #endif
-    ```
-
-  - 当标识符已经被定义过，则对段1进行编译，否则就对段2进行编译
-
-- 背景2：
-
-  - 在一个大的软件工程里面，可能会有多个文件同时包含一个头文件，当这些文件编译链接成一个可 执行文件上时，就会出现大量“重定义”错误
-  - 在头文件中使用#define、#ifndef、#ifdef、#endif能避免头文件重定义
-
-
-
-### extern
-
-- extern可以置于变量或者函数前，以表示变量或者函数定义在别的文件中，提示编译器遇到此变量和函数时在其他模块中寻找其定义
+- 表示其修饰的函数不会抛出异常
+- 预先知道函数不会抛出异常有助于简化调用该函数的代码，而且编译器确认函数不会抛出异常，它就能执行某些特殊的优化操作
+- 如果noexcept修饰的函数抛出了异常，编译器可以选择直接调用std::terminate()函数来终止程序的运行（以确保遵守不在运行时抛出异常的承诺），这比基于异常机制的throw()在效率上会高一些
+  - 因为异常机制会带来一些额外开销，比如函数抛出异常，会导致函数栈被依次地展开（unwind），并依帧调用在本帧中已构造的自动变量的析构函数等
 
 - ```cpp
-  #include "my.h"
+  void func(int x) throw();// 没有noexcept之前
+  ```
+
+- 还有一点，有些函数本身就是不会出现异常的，所以调用的时候要注意（stl中有，后续找找）
+
+
+
+
+
+用法
+
+- noexcept说明出现在函数的所有声明语句和定义语句中
+- 可以在函数指针的声明和定义中指定noexcept
+- 在typedef和类型别名中不可以出现noexcept
+- 在成员函数中，noexcept需要跟在const以及引用限定符之后，在final、override或虚函数=0之前
+
+```cpp
+void func(int x) noexcept(true);  //不抛出异常
+void func(int x) noexcept(false); //抛出异常
+```
+
+
+
+noexcept运算符
+
+- 返回值是一个bool类型的右值常量表达式，用于表示给定的表达式是否会抛出异常
+
+- ```cpp
+  noexcept(f());   //如果f()不抛出异常则结果为true，否则为false
+  noexcept(e);     //当e调用的所有函数都做了步抛出说明且e本身不含有throw语句时，表达式为true，否则返回false
+  ```
+
+
+
+
+
+
+
+# ifdef
+
+作用一
+
+- 一般，源程序中所有的行都参加编译，但是有时希望对其中一部分内容只在满足一定条件下进行编译，也就是对一部分内容指定编译条件，这就是条件编译
+- 有时，希望当满足某条件时对一 组语句进行编译，而当条件不满足时则编译另一组语句
+
+- ```cpp
+  #ifdef
+  //	程序段1
+  #else // else也可以没有的
+  //	程序段2
+  #endif
+  //	当标识符已经被定义过，则对段1进行编译，否则就对段2进行编译
+  ```
+
+
+
+
+
+作用2
+
+- 在一个大的软件工程里面，可能会有多个文件同时包含一个头文件，当这些文件编译链接成一个可执行文件上时，就会出现大量“重定义”错误
+- 在头文件中使用#define、#ifndef、#ifdef、#endif能避免头文件重定义
+- 侯捷的课里就说过头文件一定要用其包住
+
+
+
+
+
+
+
+# extern
+
+### 作用一
+
+- 是C/C++语言中表明函数和全局变量作用范围的关键字，作用是告诉编译器其声明的函数和变量可以在本模块或其他模块中使用
+
+
+
+- 如果一个变量的定义是在main函数的后面的话，那么在main中用到它之前就要加上extern
+
+  - 这里一个坑爹的地方就是，int i;就代表已经定义了
+  - 如果在变量定义之前要使用该变量，则应在使用之前加 extern 声明变量，使作用域扩展到从声明开始到本文件结束
+
+- ```c
+  #include <iostream>
   
-  CMyWinApp theApp; // 声明和定义了一个全局变量
+  extern int i; 
+  // 如果不加上这一句的话，过不了编译的（链接是指多个文件，这里是只有一个文件，所以是编译错误）
+  // int i; // 这相当于定义了
   
-  //------------------------------------------------------------------
-  // main
-  //------------------------------------------------------------------
-  int main()
+  int main() {
+      std::cout << i << std::endl;
+  }
+  
+  int i = 10;
+  ```
+
+
+
+- 或者说，在A文件中想要用B文件中的变量，就要在我的前面事先声明
+
+- ```c
+  /****max.c****/
+  #include <stdio.h>
+  /*外部变量声明*/
+  extern int g_X;
+  extern int g_Y;
+  int max()
   {
+      return (g_X > g_Y ? g_X : g_Y);
+  }
   
-      CWinApp* pApp = AfxGetApp();
-  
+  /***main.c****/
+  #include <stdio.h>
+  /*定义两个全局变量*/
+  int g_X = 10;
+  int g_Y = 20;
+  int max();
+  int main(void)
+  {
+      int result;
+      result = max();
+      printf("the max value is %d\n", result);
       return 0;
-  
   }
-  //------------------------------------------------------------------
-  //My.cpp
   ```
+
+- 总结：在c/cpp中，使用extern对变量事先声明，方便后使用或链接
+
+
+
+
+
+### extern "c"
+
+- 被extern "C"修饰的代码部分会按照C语言方式编译和链接的
+
+- **挖坑**：看下面两篇文章
+
+  - https://www.jianshu.com/p/5d2eeeb93590
+
+  - https://www.cnblogs.com/TenosDoIt/p/3163621.html
+
+
+
+
+
+
+
+# enum
+
+- 枚举类型
 
 - ```cpp
-  #include "my.h"  // it should be mfc.h, but for CMyWinApp definition, so...
+  enum week{ Mon, Tues, Wed, Thurs, Fri, Sat, Sun };
+  // 默认对应的数字是从0-6
+  enum week{ Mon = 1, Tues = 2, Wed = 3, Thurs = 4, Fri = 5, Sat = 6, Sun = 7 };
+  // 也可以自定义开始数字
   
-  extern CMyWinApp theApp; // 提示编译器此变量定义在其他文件中，遇到这个变量时到其他模块中去寻找
+  #include <iostream>
   
-  CWinApp* AfxGetApp()
-  {
-    return theApp.m_pCurrentWinApp;
+  enum test{a, aa, aaa};
+  
+  int main() {
+      enum test a1 = aa;
+      std::cout << sizeof(a1) << std::endl; // 4
   }
-  //MFC.cpp
   ```
 
+- 其中的值都是常量，不可赋值
 
-
-extern关键字
-
-- extern是C/C++语言中表明函数和全局变量作用范围的关键字，该关键字高速编译器，其声明的函数和变量可以在本模块或其他模块中使用
-- 与extern对应的关键字是static，被它修饰的全局变量和函数只能在本模块中使用。因此，一个函数或变量只可能被本模块使用时，其不可能被extern “C”修饰
-
-
-
-extern "c"
-
-- 被extern "C"修饰的变量和函数是按照C语言方式编译和链接的
-
-- cpp代码调用C语言代码，在cpp的头文件中使用
-
-  - ```cpp
-    /* c语言头文件：cExample.h */
-    #ifndef C_EXAMPLE_H
-    #define C_EXAMPLE_H
-    extern int add(int x,int y);     //注:写成extern "C" int add(int , int ); 也可以
-    #endif
-    
-    /* c语言实现文件：cExample.c */
-    #include "cExample.h"
-    int add( int x, int y )
-    {
-    　return x + y;
-    }
-    
-    // c++实现文件，调用add：cppFile.cpp
-    extern "C"
-    {
-    　#include "cExample.h"        
-        //注：此处不妥，如果这样编译通不过，换成 extern "C" int add(int , int ); 可以通过
-    }
-    
-    int main(int argc, char* argv[])
-    {
-    　add(2,3);
-    　return 0;
-    }
-    ```
-
-- 在C中引用C++语言中的函数和变量时，C++的头文件需添加extern "C"，但是在C语言中不能直接引用声明了extern "C"的该头文件，应该仅将C文件中将C++中定义的extern "C"函数声明为extern类型
-
-  - ```cpp
-    //C++头文件 cppExample.h
-    #ifndef CPP_EXAMPLE_H
-    #define CPP_EXAMPLE_H
-    extern "C" int add( int x, int y );
-    #endif
-    
-    //C++实现文件 cppExample.cpp
-    #include "cppExample.h"
-    int add( int x, int y )
-    {
-    　return x + y;
-    }
-    
-    /* C实现文件 cFile.c
-    /* 这样会编译出错：#include "cExample.h" */
-    extern int add( int x, int y );
-    int main( int argc, char* argv[] )
-    {
-    　add( 2, 3 );
-    　return 0;
-    }
-    ```
-
-- https://www.jianshu.com/p/5d2eeeb93590
+- 存放的一般是一个int，sizeof得到的是4
 
 
 
@@ -150,16 +187,111 @@ extern "c"
 
 
 
-### enum
+# union
+
+- union数据结构中的数据是共用内存地址的
+
+- ```cpp
+  #include <iostream>
+  
+  union myun {
+      struct {
+          int x;
+          int y;
+          int z;
+      } u;
+      int k;
+  } a;
+  int main() {
+      a.u.x = 4;
+      a.u.y = 5;
+      a.u.z = 6;
+      a.k = 0;
+      printf("%d %d %d\n", a.u.x, a.u.y, a.u.z);
+      // 0 5 6
+      // 首先，union会按照最大的结构对象来确立地址空间
+      // 其次，后面给k赋值的时候，会把k的值赋到原来x的位置
+      // 所以就是0 5 6
+      return 0;
+  }
+  ```
+
+- 不能具有定义了构造函数、析构函数或赋值操作符的类类型的成员
+
+- 不能具有静态数据成员或引用成员
+
+- 不能作为基类使用，所以成员函数不能为虚函数
+
+- 共用体占用的内存等于最长的成员占用的内存
+
+  - 共用体使用了内存覆盖技术，同一时刻只能保存一个成员的值，如果对新的成员赋值，就会把原来成员的值覆盖掉
 
 
 
-### union
 
 
 
-### RAII
+
+# RAII
 
 - 如果一个函数有多处return，我想每个return都加一些相同的处理，最好怎么实现？
 - 这里最好的写法就是RAII模式的应用。不过很多时候我们也不必每次新建一个RAII模式的类。可以使用用unique_ptr来完成
 
+
+
+
+
+
+
+# 函数指针和函数类型
+
+- https://www.jianshu.com/p/6ecfd541ec04
+
+- 函数指针指向的是函数而非对象，和其他指针类型一样，函数指针指向某种特定类型
+
+- 函数类型由它的返回值和参数类型决定，与函数名无关
+
+- ```cpp
+  bool length_compare(const string &, const string &); // 函数类型
+  bool (*pf)(const string &, const string &); // 函数指针
+  
+  pf = length_compare;
+  // 当把函数名作为一个值使用时，该函数自动的转换成指针
+  
+  typedef bool Func(const string &, const string &) // Func是函数类型
+  typedef bool (*FuncP)(const string &, const string &) // FuncP是函数指针类型
+  
+  typedef decltype(length_compare) Func2  // Func2是函数类型
+  typedef decltype(length_compare) *Func2P // Func2是函数指针类型
+  ```
+
+
+
+- 函数类型传参后会被隐式的转化为函数指针
+
+- ```cpp
+  using FTtype = int(int,int); //函数类型
+  typedef int (*pf)(int, int); //函数指针
+  
+  int func(int a, int b){return a+b;}
+  void print(int a, int b, FTtype fn){
+      // 编译器将其隐式转化成函数指针
+      // 等价于void print(int a, int b, pf fn);
+      // 但是平常用的时候只能直接用函数指针
+      cout << fn(a,b) << endl;
+  }
+  
+  int main() {
+      print(1,2,func);
+      cout << typeid(FTtype).name() << endl;  // FiiiE
+      cout << typeid(func).name() << endl;    // FiiiE
+      cout << typeid(decltype(func)).name() << endl;  // FiiiE
+      cout << typeid(pf).name() << endl;  // PFiiiE
+      return 0;
+  }
+  
+  using F = int(int*, int);
+  using PF = int(*)(int*,int);
+  F  f1(int);    //错误： F是函数类型
+  PF  f1(int);   //正确： PF是函数指针类型
+  ```
