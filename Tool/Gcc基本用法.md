@@ -1,65 +1,111 @@
-- ```shell
-  gcc -c hello.c//只激活预处理，编译，和汇编，也就是他只把程序做成obj文件
-  ```
+# 编译链接全过程
 
-- 这一步只是生成了.o的obj文件（为啥我这里表示它是生成了可执行文件）
+原料：源文件.cpp，.h文件
 
+源文件.cpp，.h文件经过了**预编译**，得到.i文件
 
+.i文件经过了**编译**，得到了.s文件
 
-- ```shell
-  gcc -s hello.c//只激活预处理和编译，就是指把文件编译成为汇编代码（这一步就相当于只编译不链接）
-  ```
+.s文件经过了**汇编**，得到了.o文件
 
-- 这一步是生成.o的汇编代码
+.o文件经过了**链接**，得到了.exe文件
 
 
 
-- ```shell
-  gcc -o hello hello.o
-  ```
-
-- 把汇编代码进行链接，生成可执行代码
 
 
+# Gcc命令
+
+##### 源文件->预编译
 
 - ```shell
-  gcc -o hello.out hello.c//把文件编译为可执行文件
+  g++ -E test.cpp -o test.i // 将源代码cpp预编译为.i文件（这里必须要是-E）
   ```
 
-- 如果不指定输出的话，默认输出的是a.out文件
+
+
+##### 预编译文件->编译
+
+- ```shell
+  g++ -S -o  test.s test.i // 预编译文件编译后得到.s文件
+  ```
 
 
 
-- 注意，gcc会将cpp和c的代码都当作c的代码执行
+##### 编译后的代码->汇编
 
-- 如果要用到linux下的pthread的话，就需要加上--ipthread
-
-  - ```shell
-    gcc h.c -o thread -lpthread
-    ```
+- ```shell
+  g++ -c -o test.o test.s // 编译后的代码汇编后得到.o文件
+  ```
 
 
 
-- `g++ --version`查询gcc编译器的版本
-- `g++ test.cpp -o test`将源程序编译为`test`文件，这里的-o表示要输出一个文件
-- `./test`执行编译好的文件
-- `gdb test`对test文件进行gdb调试
-  - `q`，退出调试
-  - `r`，运行程序
-- g++和gcc的区别
-  - 对于c文件，只能用g++，而cpp两个都可以用
+##### 汇编后的代码->链接
+
+- ```shell
+  gcc -o test test.o // 生成可执行文件hello.exe
+  g++ test.o -o test // 或者这样
+  ```
 
 
 
-注意一下gcc和g++的用法上的差别
+##### 执行程序
 
-- gcc和g++都是GNU(组织)的一个编译器。
-- 后缀名为.c的程序和.cpp的程序g++都会当成是c++的源程序来处理。而gcc不然，gcc会把.c的程序处理成c程序。
-- 对于.cpp的程序，编译可以用gcc/g++，而链接可以用g++或者gcc -lstdc++。（个人觉得这条是最重要的）
+- ```shell
+  ./test
+  ```
 
 
 
-在语句的最后面加上-std=c++17
+##### 编译链接一条龙
+
+- ```shell
+  gcc -o hello.out hello.c
+  gcc test.c -o test // 或者这样，生成名为test.exe的可执行文件
+  gcc test.c // 默认生成名为a.exe的可执行文件
+  ```
+
+
+
+##### 编译时添加linux线程库
+
+- ```shell
+  g++ test.cpp -o test -pthread
+  ```
+
+
+
+##### 查询gcc编译器版本
+
+- ```shell
+  g++ --version
+  ```
+
+
+
+##### 指定版本编译
+
+- ```shell
+  g++ test.cpp -o test -std=c++17
+  ```
+
+
+
+##### gcc和g++的区别
+
+- 编译器本身是什么就编译什么
+  - 例如.c文件给g++，那就当作c++编译
+  - 例如.cpp文件给gcc，那就当作c编译（但默认不能链接cpp的库）
+- 对于.cpp的程序，编译可以用gcc/g++，而链接可以用g++或者gcc -lstdc++
+
+
+
+`gdb test`对test文件进行gdb调试
+
+- `q`，退出调试
+- `r`，运行程序
+
+
 
 
 
