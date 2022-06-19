@@ -1,0 +1,150 @@
+## list
+
+### 用法
+
+- ```cpp
+  //四种构造函数
+  list<string> list1{"why", "always", "me", "!"};
+  list<string> list2(list1.begin(), list1.end());
+  list<string> list3(list1);
+  list<string> list4(4, "you");
+  
+  //operator=
+  list<string> list5 = list1;
+  
+  //assign将值赋给容器（会覆盖掉原来的值）
+  list1.assign({1,2,3,4,5});//插入initializer_list
+  list1.assign(10, 1111);//第一个是数量，第二个是value
+  list7.assign(list1.begin(), list1.end());//放入一个容器
+  
+  //front返回第一个元素，back返回最后一个元素
+  
+  //iterator和revers_iterator，正向迭代器和反向迭代器
+  for (list<string>::iterator it = list1.begin(); it != list1.end(); it++) {
+  	cout << *it << " ";
+  }
+  for (list<string>::reverse_iterator it = list1.rbegin(); it != list1.rend(); it++) {
+  	cout << *it << " "; 
+  }
+  
+  //empty判断容器是否为空，size返回大小，max_size返回容器的最大的容量
+  
+  //clear清除所有内容
+  
+  //insert插入元素
+  list7.insert(list7.begin(), "hello");//指定位置插入元素
+  list7.insert(list7.begin(), 2, "no");//指定位置插入一定数量的元素
+  list7.insert(list7.begin(), list6.begin(), list6.end());//指定位置插入容器元素
+  
+  //erase删除指定位置的元素，ps：advance(range_begin, 2)使得迭代器向后移动数个位置
+  list.erese(list.begin());//删除指定位置的元素
+  list.erase(list.begin() + 2, list.begin() + 5);//删除区域间的元素
+  
+  //push_back，pop_back，push_front,pop_front
+  
+  //resize重新设定链表的大小，swap交换链表元素，sort排序，merge合并两个链表
+  list9.merge(list8);
+  
+  //splice分割链表
+  auto it = list11.begin();
+  advance(it, 2);
+  list11.splice(it, list12);//把链表的前两个给删除掉
+  
+  //remove移除满足特定标准的元素
+  list12.remove(5);
+  
+  //reverse将该链表的所有元素的顺序反转
+  list12.reverse();
+  
+  //unique删除连续的重复的元素
+  list11.unique();
+  
+  //emplace_back在容器末尾就地构造元素
+  ```
+
+
+
+### 实现
+
+- 节约空间，对于任何位置的元素插入或删除，都是常数时间
+- list节点
+  - 两个指针（一个指向前面的节点，一个指向后面的节点），一个数据
+  - ![](image\list的节点.png)
+- list迭代器
+  - 一个指针（指向listnode节点）
+  - ![](image\list迭代器.png)
+- list
+  - 一个指针（指向链表的第一个节点）
+  - ![](image\list.png)
+- list是一个环形链表
+  - ![](image\list环形链表.png)
+- 产生一个空链表
+  - ![](image\空链表.png)
+
+
+
+
+
+
+
+### 与queue的区别
+
+- list不再能够像vector一样以普通指针作为迭代器，因为其节点不保证在存储空间中连续存在
+- list插入操作和结合才做都不会造成原有的list迭代器失效
+- list不仅是一个双向链表，而且还是一个环状双向链表，所以它只需要一个指针
+- list不像vector那样有可能在空间不足时做重新配置、数据移动的操作，所以插入前的所有迭代器在插 入操作之后都仍然有效
+- deque是一种双向开口的连续线性空间，所谓双向开口，意思是可以在头尾两端分别做元素的插入和 删除操作；可以在头尾两端分别做元素的插入和删除操作
+- deque和vector最大的差异，一在于deque允许常数时间内对起头端进行元素的插入或移除操作，二在 于deque没有所谓容量概念，因为它是动态地以分段连续空间组合而成，随时可以增加一段新的空间并链接起来，deque没有所谓的空间保留功能
+
+
+
+
+
+
+
+### size
+
+- list在早期的版本中，size的时间复杂度是o(n)
+
+- ```cpp
+  /* stl_list.h */
+  template <typename _Tp, typename _Alloc = std::allocator<_Tp>>
+      class list : protected _List_base<_Tp, _Alloc> {
+      ...
+      /**  Returns the number of elements in the %list.  */
+      size_type size() const _GLIBCXX_NOEXCEPT { 
+          return std::distance(begin(), end()); 
+      }
+      ...
+  }
+  
+  /* bits/stl_iterator_base_funcs.h */
+  template<typename _InputIterator>
+  inline typename iterator_traits<_InputIterator>::difference_type
+  distance(_InputIterator __first, _InputIterator __last) {
+      // concept requirements -- taken care of in __distance
+      return std::__distance(__first, __last, std::__iterator_category(__first));
+  }
+  
+  /* bits/stl_iterator_base_funcs.h */
+  template <typename _InputIterator>
+  inline typename iterator_traits<_InputIterator>::difference_type
+  __distance(_InputIterator __first, _InputIterator __last, input_iterator_tag) {
+      // concept requirements
+      __glibcxx_function_requires(_InputIteratorConcept<_InputIterator>)
+  
+      /* 遍历列表获取 __n。*/
+      typename iterator_traits<_InputIterator>::difference_type __n = 0;
+      while (__first != __last) {
+          ++__first;
+          ++__n;
+      }
+      return __n;
+  }
+  ```
+
+- 在cpp11后保证了是o1
+
+- 原因：
+
+  - STL中的链表是支持splice方法的。在做splice的时候我们无法预先知道被插入的链表会变大多少，被移除的链表会减少多少，除非循环遍历被splice的区间。但是一般来讲我们希望splice的时间复杂度是常数时间的，所以老版本的实现size()时选择了每次循环遍历。新版本改成常数时间是有代价的，就是splice这个方法每次都要循环遍历区间来维护两个链表的大小，这个方法就废掉了
