@@ -490,7 +490,6 @@ sequenceDiagram
   \equiv,\approx
 
 $$
-  
 - ```html
   \neq, \leq, \geq\\
   \equiv,\approx

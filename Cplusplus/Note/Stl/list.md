@@ -9,92 +9,98 @@
   list<string> list3(list1);
   list<string> list4(4, "you");
   
-  //operator=
+  // operator=
   list<string> list5 = list1;
   
-  //assign将值赋给容器（会覆盖掉原来的值）
-  list1.assign({1,2,3,4,5});//插入initializer_list
-  list1.assign(10, 1111);//第一个是数量，第二个是value
-  list7.assign(list1.begin(), list1.end());//放入一个容器
+  // assign将值赋给容器（会覆盖掉原来的值）
+  list1.assign({1, 2, 3, 4, 5});            //插入initializer_list
+  list1.assign(10, 1111);                   //第一个是数量，第二个是value
+  list7.assign(list1.begin(), list1.end()); //放入一个容器
   
-  //front返回第一个元素，back返回最后一个元素
+  // front返回第一个元素，back返回最后一个元素
   
-  //iterator和revers_iterator，正向迭代器和反向迭代器
-  for (list<string>::iterator it = list1.begin(); it != list1.end(); it++) {
-  	cout << *it << " ";
+  // iterator和revers_iterator，正向迭代器和反向迭代器
+  for (list<string>::iterator it = list1.begin(); it != list1.end(); it++)
+  {
+      cout << *it << " ";
   }
-  for (list<string>::reverse_iterator it = list1.rbegin(); it != list1.rend(); it++) {
-  	cout << *it << " "; 
+  for (list<string>::reverse_iterator it = list1.rbegin(); it != list1.rend(); it++)
+  {
+      cout << *it << " ";
   }
   
-  //empty判断容器是否为空，size返回大小，max_size返回容器的最大的容量
+  // empty判断容器是否为空，size返回大小，max_size返回容器的最大的容量
   
-  //clear清除所有内容
+  // clear清除所有内容
   
-  //insert插入元素
-  list7.insert(list7.begin(), "hello");//指定位置插入元素
-  list7.insert(list7.begin(), 2, "no");//指定位置插入一定数量的元素
-  list7.insert(list7.begin(), list6.begin(), list6.end());//指定位置插入容器元素
+  // insert插入元素
+  list7.insert(list7.begin(), "hello");                    //指定位置插入元素
+  list7.insert(list7.begin(), 2, "no");                    //指定位置插入一定数量的元素
+  list7.insert(list7.begin(), list6.begin(), list6.end()); //指定位置插入容器元素
   
-  //erase删除指定位置的元素，ps：advance(range_begin, 2)使得迭代器向后移动数个位置
-  list.erese(list.begin());//删除指定位置的元素
-  list.erase(list.begin() + 2, list.begin() + 5);//删除区域间的元素
+  // erase删除指定位置的元素，ps：advance(range_begin, 2)使得迭代器向后移动数个位置
+  list.erese(list.begin());                       //删除指定位置的元素
+  list.erase(list.begin() + 2, list.begin() + 5); //删除区域间的元素
   
-  //push_back，pop_back，push_front,pop_front
+  // push_back，pop_back，push_front,pop_front
   
-  //resize重新设定链表的大小，swap交换链表元素，sort排序，merge合并两个链表
+  // resize重新设定链表的大小，swap交换链表元素，sort排序，merge合并两个链表
   list9.merge(list8);
   
-  //splice分割链表
+  // splice分割链表
   auto it = list11.begin();
   advance(it, 2);
-  list11.splice(it, list12);//把链表的前两个给删除掉
+  list11.splice(it, list12); //把链表的前两个给删除掉
   
-  //remove移除满足特定标准的元素
+  // remove移除满足特定标准的元素
   list12.remove(5);
   
-  //reverse将该链表的所有元素的顺序反转
+  // reverse将该链表的所有元素的顺序反转
   list12.reverse();
   
-  //unique删除连续的重复的元素
+  // unique删除连续的重复的元素
   list11.unique();
   
-  //emplace_back在容器末尾就地构造元素
+  // emplace_back在容器末尾就地构造元素
   ```
 
 
 
 ### 实现
 
-- 节约空间，对于任何位置的元素插入或删除，都是常数时间
-- list节点
-  - 两个指针（一个指向前面的节点，一个指向后面的节点），一个数据
-  - ![](image\list的节点.png)
-- list迭代器
-  - 一个指针（指向listnode节点）
-  - ![](image\list迭代器.png)
-- list
-  - 一个指针（指向链表的第一个节点）
-  - ![](image\list.png)
-- list是一个环形链表
+#### list节点
+
+- 三个指针（一个指向前面节点的指针，一个指向后面节点的指针和一个指向数据的指针）
+- ![](image\list的节点.png)
+
+
+
+#### list迭代器
+
+- 一个指针（指向listnode节点）
+- ![](image\list迭代器.png)
+
+
+
+#### list
+
+- 一个指针（指向链表的第一个节点）
+- <img src="image\list.png" style="zoom:150%;" />
+
+- 是结点组成的环形链表
   - ![](image\list环形链表.png)
-- 产生一个空链表
+- 空链表的情况
   - ![](image\空链表.png)
 
 
 
 
 
+#### 在当前的编译器中的大小
 
-
-### 与queue的区别
-
-- list不再能够像vector一样以普通指针作为迭代器，因为其节点不保证在存储空间中连续存在
-- list插入操作和结合才做都不会造成原有的list迭代器失效
-- list不仅是一个双向链表，而且还是一个环状双向链表，所以它只需要一个指针
-- list不像vector那样有可能在空间不足时做重新配置、数据移动的操作，所以插入前的所有迭代器在插 入操作之后都仍然有效
-- deque是一种双向开口的连续线性空间，所谓双向开口，意思是可以在头尾两端分别做元素的插入和 删除操作；可以在头尾两端分别做元素的插入和删除操作
-- deque和vector最大的差异，一在于deque允许常数时间内对起头端进行元素的插入或移除操作，二在 于deque没有所谓容量概念，因为它是动态地以分段连续空间组合而成，随时可以增加一段新的空间并链接起来，deque没有所谓的空间保留功能
+- 在现在的编译器中，list已经是24（3*8，即三个指针了）,list_node不变
+- ![](image\list_1.png)\
+- ![](image\list_2.png)
 
 
 
@@ -143,7 +149,7 @@
   }
   ```
 
-- 在cpp11后保证了是o1
+- 在cpp11后保证了是O（1）
 
 - 原因：
 
