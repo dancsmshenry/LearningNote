@@ -139,7 +139,7 @@
       // concept requirements
       __glibcxx_function_requires(_InputIteratorConcept<_InputIterator>)
   
-      /* 遍历列表获取 __n。*/
+      /* 遍历列表获取 __n*/
       typename iterator_traits<_InputIterator>::difference_type __n = 0;
       while (__first != __last) {
           ++__first;
