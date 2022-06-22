@@ -32,6 +32,8 @@
 *.app
 *.class
 
+# 这里忽略了一些不必要上传的文件及文件夹，如果需要复制该gitignore的话需要注意
 build/
 .vscode/
 /test.cpp
+Makefile

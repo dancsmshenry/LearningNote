@@ -231,37 +231,107 @@
 
 ### 从编译的角度看引用
 
-- 先看汇编代码
+- 背景：因时间有限，来不及把汇编系统的学习一遍，所以只能出此下策，以证明引用的本质就是指针，即实际上引用还是要占用部分内存的，即引用只是cpp的一个语法糖，方便用户更加好的使用指针
+
+
 
 - ```cpp
-  9: int x = 1;
-  00401048 mov dword ptr [ebp-4],1
-  10: int &b = x;
-  0040104F lea eax,[ebp-4]
-  00401052 mov dword ptr [ebp-8],eax
+  int main() {
+  	int i = 23847;
+  	int &ky = i; // g++ -S -o test_ref.s test.cpp   
+  	// int *kx = &i; // g++ -S -o test_pointer_ref.s test.cpp
+  }
   ```
 
-- x的地址为ebp-4，b的地址为ebp-8，因为栈内的变量内存是从高往低进行分配的，所以b的地址比x的低
+- ```assembly
+  	.file	"test.cpp"
+  	.text
+  	.def	__main;	.scl	2;	.type	32;	.endef
+  	.globl	main
+  	.def	main;	.scl	2;	.type	32;	.endef
+  	.seh_proc	main
+  main:
+  .LFB0:
+  	pushq	%rbp
+  	.seh_pushreg	%rbp
+  	movq	%rsp, %rbp
+  	.seh_setframe	%rbp, 0
+  	subq	$48, %rsp
+  	.seh_stackalloc	48
+  	.seh_endprologue
+  	call	__main
+  	movl	$23847, -12(%rbp)
+  	leaq	-12(%rbp), %rax
+  	movq	%rax, -8(%rbp)
+  	movl	$0, %eax
+  	addq	$48, %rsp
+  	popq	%rbp
+  	ret
+  	.seh_endproc
+  	.ident	"GCC: (tdm64-1) 10.3.0"
+  ```
 
-- mov dword ptr [ebp-8],eax 这条语句将eax的值放入b的地址
+- 上述是只有引用的代码得到的汇编代码
 
-- lea eax,[ebp-4] 这条语句将x的地址ebp-4放入eax寄存器
 
-- ebp-8中上面两条汇编的作用
 
-  - 将x的地址存入变量b中
-  - 这不和将某个变量的地址存入指针变量是一样的吗？所以从汇编层次来看，引用的确是通过指针来实现的
+- ```cpp
+  int main() {
+  	int i = 23847;
+  	int &ky = i; // g++ -S -o test_ref.s test.cpp   
+  	int *kx = &i; // g++ -S -o test_pointer_ref.s test.cpp
+  }
+  ```
 
+- ```assembly
+  	.file	"test.cpp"
+  	.text
+  	.def	__main;	.scl	2;	.type	32;	.endef
+  	.globl	main
+  	.def	main;	.scl	2;	.type	32;	.endef
+  	.seh_proc	main
+  main:
+  .LFB0:
+  	pushq	%rbp
+  	.seh_pushreg	%rbp
+  	movq	%rsp, %rbp
+  	.seh_setframe	%rbp, 0
+  	subq	$64, %rsp
+  	.seh_stackalloc	64
+  	.seh_endprologue
+  	call	__main
+  	movl	$23847, -20(%rbp)
+  	leaq	-20(%rbp), %rax
+  	movq	%rax, -8(%rbp)
+  	leaq	-20(%rbp), %rax
+  	movq	%rax, -16(%rbp)
+  	movl	$0, %eax
+  	addq	$64, %rsp
+  	popq	%rbp
+  	ret
+  	.seh_endproc
+  	.ident	"GCC: (tdm64-1) 10.3.0"
+  ```
 
 
 
 简述
 
-- 程序在编译时分别将指针和引用添加到符号表上，符号表中记录的是变量名及变量所对应地址
+- 可以很明显的看到的是，本质上多出的代码（即指针部分的）和引用部分的代码几乎一模一样，只是地址不同而已
+- 所以可以证明引用的本质就是指针，语法糖罢了
+
+
+
+
+
+### 从符号表的角度看引用
+
+- 程序在编译时分别将指针和引用添加到符号表上，符号表上记录的是变量名及变量所对应地址
 - 指针变量在符号表上对应的地址值为指针变量的地址值
-- 引用在符号表上对应的地址值为引用对象的地址值（与实参名字不同，地址相同）
-- 符号表生成之后不能修改，因此指针可以改变指向的对象（指针变量中的值可以修改），而引用对象不可修改（因为其地址固定到了符号表上）
-- 所以可以理解为，是编译器为了让使用者更好的使用指针，所以添加了像引用这样的语法糖，而它还是用指针实现的，所以还是会有内存占用
+- 引用在符号表上对应的地址值为引用对象的地址值
+- 符号表生成后就不会再改，因此指针可以改变其指向的对象（指针变量中的值可以改），而引用对象则不能修改
+
+
 
 
 
