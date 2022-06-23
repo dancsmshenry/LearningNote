@@ -292,7 +292,7 @@ const和shared_ptr踩坑
 
 
 
-- unique_ptr是不可复制的，但是可以移动...
+- unique_ptr是不可复制的，但是可以移动...（所以它不能用于函数参数的值传递，只能用引用传递）
 
 - ```cpp
   std::unique_ptr<Task> taskPtr3 = taskPtr2; // Compile error
@@ -322,6 +322,14 @@ std::unique_ptr<Task> taskPtr = std::make_unique<Task>(34);//std::make_unique<>(
 std::unique_ptr<int> ptr1;//创建空指针
 
 std::unique_ptr<Task> taskPtr2 = new Task(); // 编译错误，不能通过赋值的方法创建对象（其构造函数是explicit）
+
+//	拥有一组堆对象
+std::unique_ptr<int[]> sp1(new int[10]);
+
+std::unique_ptr<int[]> sp2;
+sp2.reset(new int[10]);
+
+std::unique_ptr<int[]> sp3(std::make_unique<int[]>(10));
 ```
 
 
@@ -398,6 +406,38 @@ if (taskPtr4 != nullptr)
 // 会输出55
 std::cout << taskPtr4->mId << std::endl;
 ```
+
+
+
+- 再或者函数值返回一个unique_ptr指针，或者move一个指针
+
+- ```cpp
+  #include <memory>
+  
+  //	函数返回指针
+  std::unique_ptr<int> func(int val)
+  {
+      std::unique_ptr<int> up(new int(val));
+      return up;
+  }
+  
+  int main()
+  {
+      std::unique_ptr<int> sp4 = func(123);
+      
+      //	move指针
+      std::unique_ptr<int> sp1(std::make_unique<int>(123));
+  
+      std::unique_ptr<int> sp2(std::move(sp1));
+  
+      std::unique_ptr<int> sp3;
+      sp3 = std::move(sp2);
+  }
+  ```
+
+- 
+
+
 
 
 
@@ -521,14 +561,227 @@ unique_ptr对象的析构函数中会delete其关联指针，这样就相当于�
   | `swap(x)`     | 其中`x`表示一个同类型的`weak_ptr`类型指针，该函数可以互换2个共同类型`weak_ptr`指针的内容。 |
   | `reset()`     | 将当前`weak_ptr`指针置为空指针。                             |
   | `use_count()` | 查看指向和当前`weak_ptr`指针相同的`shared_ptr`指针的数量。   |
-  | `expired()`   | 判断当前`weak_ptr`指针是否过期（指针为空，或者指向的堆内存已经被释放）。 |
-  | `lock()`      | 如果当前`weak_ptr`已经过期，则该函数会返回一个空的`shared_ptr`指针；反之，该函数返回一个和当前`weak_ptr`指针指向相同的`shared_ptr`指针。 |
+  | `expired()`   | 判断当前`weak_ptr`指针是否过期（指针为空，或者指向的堆内存已经被释放，返回true表示资源不存在了，返回false表示资源依然存在） |
+  | `lock()`      | 如果当前`weak_ptr`已经过期，则该函数会返回一个空的`shared_ptr`指针；反之，该函数返回一个和当前`weak_ptr`指针指向相同的`shared_ptr`指针。`std::shared_ptr<TcpConnection> conn = tmpConn_.lock();`如果过期了，则conn就是一个空指针，否则就不是空指针 |
+
+- 因为没有重载*或->等符号，所以不能用当作指针的方式`if (!ptr)`去判断是否为空指针，就必须用expitrd()
+
+
 
 
 
 
 
 # Auto_ptr
+
+### 背景
+
+- ```cpp
+  #include <iostream>
+  #include <memory>
+  
+  int main()
+  {
+    //测试拷贝构造
+    std::auto_ptr<int> sp1(new int(8));
+    std::auto_ptr<int> sp2(sp1);
+    if (sp1.get() != NULL)
+    {
+      std::cout << "sp1 is not empty." << std::endl;
+    }
+    else
+    {
+      std::cout << "sp1 is empty." << std::endl;
+    }
+  
+    if (sp2.get() != NULL)
+    {
+      std::cout << "sp2 is not empty." << std::endl;
+    }
+    else
+    {
+      std::cout << "sp2 is empty." << std::endl;
+    }
+  
+    //测试赋值构造
+    std::auto_ptr<int> sp3(new int(8));
+    std::auto_ptr<int> sp4;
+    sp4 = sp3;
+    if (sp3.get() != NULL)
+    {
+      std::cout << "sp3 is not empty." << std::endl;
+    }
+    else
+    {
+      std::cout << "sp3 is empty." << std::endl;
+    }
+  
+    if (sp4.get() != NULL)
+    {
+      std::cout << "sp4 is not empty." << std::endl;
+    }
+    else
+    {
+      std::cout << "sp4 is empty." << std::endl;
+    }
+  
+    return 0;
+  }
+  /**
+  sp1 is empty.    
+  sp2 is not empty.
+  sp3 is empty.    
+  sp4 is not empty.
+  **/
+  ```
+
+- auto_ptr的缺点便是拷贝构造或者赋值的时候，auto_ptr会把原有的指针赋给对方，导致自身变为空指针，从而出现问题
+
+  - 比如说在容器中，很难避免不对容器中的元素实现赋值传递，这样便会使容器中多个元素被置为空指针
+  - 再或者说，auto_ptr作为值传递的时候，auto_ptr就会把值传给函数，使得本身变为空指针，然后作为函数参数的指针就会在函数的周期中消失，不仅使得auto_ptr始终是一个空指针，还使得原来的对象被销毁
+
+- 由此引发了两种类型的指针：
+
+  - shared_ptr（值传递的时候会创建新的指针指向原来的值，而不会使得原来的指针变为空指针）
+  - unique_ptr（不能用于值传递，只能用引用传递和move）
+
+
+
+
+
+
+# enable_shared_from_this
+
+### 背景
+
+- 在实际开发中，有时需要在类中返回包裹当前对象的shared_ptr指针给外部使用
+
+- ```cpp
+  #include <iostream>
+  #include <memory>
+  
+  class A : public std::enable_shared_from_this<A> {
+  public:
+      A() {
+          std::cout << "A constructor" << std::endl;
+      }
+  
+      ~A() {
+          std::cout << "A destructor" << std::endl;
+      }
+  
+      std::shared_ptr<A> getSelf() {
+          return shared_from_this(); // 调用该函数可以返回一个包裹A对象的shared_ptr
+      }
+  };
+  
+  int main() {
+      std::shared_ptr<A> sp1(new A());
+      std::shared_ptr<A> sp2 = sp1->getSelf();
+      std::cout << "use count: " << sp1.use_count() << std::endl;
+      return 0;
+  }
+  ```
+
+
+
+### 陷阱
+
+- 不应该共享栈对象的 this 给智能指针对象
+
+- ```cpp
+  int main(){
+      A a;
+      std::shared_ptr<A> sp2 = a.getSelf();
+      std::cout << "use count: " << sp2.use_count() << std::endl;
+      return 0;
+  }
+  //	这里会崩溃，因为smart pointer默认对象是存储在堆上的，而这里的a是在栈上存储的
+  ```
+
+
+
+- 小心循环引用
+
+- ```cpp
+  #include <iostream>
+  #include <memory>
+  
+  class A : public std::enable_shared_from_this<A>
+  {
+  public:
+      A()
+      {
+          m_i = 9;
+          //注意:
+          //比较好的做法是在构造函数里面调用shared_from_this()给m_SelfPtr赋值
+          //但是很遗憾不能这么做,如果写在构造函数里面程序会直接崩溃
+  
+          std::cout << "A constructor" << std::endl;
+      }
+  
+      ~A()
+      {
+          m_i = 0;
+  
+          std::cout << "A destructor" << std::endl;
+      }
+  
+      void func()
+      {
+          m_SelfPtr = shared_from_this();
+      }
+  
+  public:
+      int                 m_i;
+      std::shared_ptr<A>  m_SelfPtr;
+  
+  };
+  
+  int main()
+  {
+      {
+          std::shared_ptr<A> spa(new A());
+          spa->func();
+      }
+      // 这里出界的时候，spa指向的对象的引用计数由2变为1，导致的情况就是A的引用计数是因为A里面有一个指针指向自身，而里面指针要销毁就需要把A给销毁，造成了死锁
+  
+      return 0;
+  }
+  ```
+
+
+
+
+
+# 指针的大小
+
+- ```cpp
+  #include <iostream>
+  #include <memory>
+  
+  int main() {
+    std::cout << "size of shared_ptr：" <<  sizeof(std::shared_ptr<int>) << std::endl;
+    std::cout << "size of unique_ptr：" <<  sizeof(std::unique_ptr<int>) << std::endl;
+    std::cout << "size of weak_ptr：" <<  sizeof(std::weak_ptr<int>) << std::endl;
+    std::cout << "size of auto_ptr：" <<  sizeof(std::auto_ptr<int>) << std::endl;
+  }
+  /*
+  size of shared_ptr：16
+  size of unique_ptr：8
+  size of weak_ptr：16
+  size of auto_ptr：8
+  */
+  ```
+
+
+
+
+
+# 注意
+
+- 一旦一个对象使用智能指针管理后，就不该再使用原始裸指针去操作
+- 
 
 
 
@@ -663,3 +916,5 @@ unique_ptr对象的析构函数中会delete其关联指针，这样就相当于�
 # 参考
 
 - https://zhuanlan.zhihu.com/p/150555165
+- https://www.zhihu.com/question/319277442/answer/1517987598
+- https://zhuanlan.zhihu.com/p/532215950
