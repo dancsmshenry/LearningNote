@@ -89,3 +89,38 @@
 
 
 
+
+
+# 对friend封装性的理解
+
+- ```cpp
+  class A1 {
+      // ...
+  public:
+      void SetXXX(int x) { xxx = x; }
+      int GetXXX() const { return xxx; }
+  private:
+      int xxx;
+      int yyy;
+      int zzz;
+  };
+  
+  class A2 {
+      // ...
+  private:
+      friend B;
+      int xxx;
+      int yyy;
+      int zzz;
+  };
+  ```
+
+- 说到封装性，就必须要和具体的场景作比较，比如说这里的set/get和friend
+
+- 如果需要的是只有B可以对对象的属性进行修改的话，那显然友元比set/get组合拳更好一点
+
+- 但是如果说是要对XXX属性进行查看修改的话，那显然get/set具有更加好的鲁棒性
+
+- 采用一个我喜欢的博主所说的话
+
+  - C++比其它的语言提供了更多的特性，其实就是提供了更多的选择，给程序员更精细的控制粒度。代价无非就是多付出点学习时间而已，我自己的体验，我觉得获得更好的控制粒度是非常值得的，这也是写C++的时候最好的体验之一

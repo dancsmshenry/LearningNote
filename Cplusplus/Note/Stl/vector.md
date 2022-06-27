@@ -442,3 +442,45 @@ push_back和move
       cout << f1.size() << endl;
   }
   ```
+
+
+
+
+
+
+
+### push_back和emplace_back的一个大坑
+
+- 参考一段代码
+
+- ```cpp
+  #include <iostream>
+  #include <vector>
+  
+  int main()
+  {
+  	std::vector<std::vector<int>> a;
+  	a.push_back({1, 2});
+  	a.emplace_back(std::vector<int>{1, 2});
+  
+  	a.emplace_back(std::initializer_list<int>{1, 2});
+  
+  	auto x = {1, 2};
+  	a.emplace_back(x);
+  	a.emplace_back({1,2,3,4,5,6,7}); //	这里会报错
+  }
+  ```
+
+- 解释：
+
+  - 因为对于push_back来说，查看源代码发现它接收的是一个具体的value_type，即是固定的类型
+  - 再看看有关vector的构造，它没有写explicit，所以{1,2}可以隐式转换为vector<int>
+  - 而对于emplace_back，它的源代码是一个模板函数，造成的结果就是所提供的参数{1,2}会做模板参数类型匹配，不会主动强转std::initializer_list<int>，需要你显式构造，或者用auto先推导一遍
+  - 但是这里模板推到不出来类型，所以就会报错
+  - ![](image/push和emplace_back_01.png)
+  - ![](image/push和emplace_back_02.png)
+  - 这里的value_type是typeof，即为T，可以理解为已经固定了的类型
+
+- 参考：https://www.zhihu.com/question/438004429
+
+- 所以根本原因是，模板无法推导类型{1,2}，这就是cpp-c唯为

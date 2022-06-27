@@ -116,7 +116,7 @@
 
 - 通常指将要被移动的对象、T&&函数的返回值、std::move函数的返回值、转换为T&&类型转换函数的返回值
 - 将亡值可以理解为即将要销毁的值，通过“盗取”其它变量内存空间方式获取的值，在确保其它变量不再被使用或者即将被销毁时，可以避免内存空间的释放和分配，延长变量值的生命周期，常用来完成移动构造或者移动赋值的特殊任务
-- 我的理解：将要被销毁的值（说是将要，是因为后面有人将他收走了XD）
+- 我的理解：将要被销毁的值（说是将要，是因为后面有人一定要把他收走）
 
 
 
@@ -130,6 +130,8 @@
 
   - move仅仅是类型擦除，实际上发生移动是move通过强制类型转换，触发了类对象的 operator = (T&& a)函数或Object(Object&& o)，才会有数据和所有权的转移
   
+- 而从语义上来说，对于一个左值使用move，就意味着你不再需要这个变量上的值了，即你要将它的值移走（这也导致了很多人会误认为就是move将值移走的）
+
 - 总结：**std::move的变更所有权其实是通过移动构造函数或者移动赋值函数实现的**
 
 - ```cpp
@@ -144,8 +146,27 @@
   constexpr typename std::remove_reference<_Tp>::type&& move(_Tp&& __t) noexcept {
       return static_cast<typename std::remove_reference<_Tp>::type&&>(__t);
   }
+  
+  // STRUCT TEMPLATE remove_reference
+  template <class _Ty>
+  struct remove_reference {
+      using type                 = _Ty;
+      using _Const_thru_ref_type = const _Ty;
+  };
+  
+  template <class _Ty>
+  struct remove_reference<_Ty&> {
+      using type                 = _Ty;
+      using _Const_thru_ref_type = const _Ty&;
+  };
+  
+  template <class _Ty>
+  struct remove_reference<_Ty&&> {
+      using type                 = _Ty;
+      using _Const_thru_ref_type = const _Ty&&;
+  };
   ```
-
+  
 - 举例
   - `bb` 的类型是 `Foo&`，`move` 之后变为 `Foo&&`，会调用移动赋值函数
   - `cc` 的类型是 `const Foo`，`move` 之后变为 `const Foo&&`，会调用拷贝赋值函数
@@ -265,7 +286,38 @@
   for(auto&& x : range)
   
   for(const auto& x: range) // 只读range中的元素
+      
+  vector<ElementType> arr;
+  for(auto ele : arr) {
+    // auto, 意味着下边的代码需要修改并使用 ele，但并不影响 arr
+    // ...
+  }
+  
+  for(auto& ele : arr) {
+    // auto&，意味着下边的代码需要修改 arr 中的 ele
+    // ...
+  }
+  
+  for(const auto& ele : arr) {
+    // const auto&，意味着下边的代码无需改动 ele
+  }
+  
+  auto&& result = foo(); // auto&& 意味着后边要转发
+  
   ```
+
+- 关于auto的用法总结
+  - `auto` ：拷贝
+  - `auto&` ：左值引用，只能接左值（和常量右值）
+  - `auto&&` ：万能引用，能接左值和右值
+  - `const auto&` ：const 万能引用，能接左值和右值
+  - `const auto&&` ：常量右值引用，只能接右值
+- 具体的场景
+  - `auto`：用于你想修改右值的情形
+  - `auto&`：用于你想修改左值的情形
+  - `auto&&`：用于泛型编程中的转发
+  - `const auto&`：用于只读
+  - `const auto&&`：**基本没用**，基本可被 `const auto&` 替代（比 `const auto&` 多一个语义：一定得是右值。然而这没什么用，因为你都不对其进行修改，是左还是右没什么影响）
 
 
 
@@ -414,6 +466,8 @@
 - https://zhuanlan.zhihu.com/p/137662465
 - https://zhuanlan.zhihu.com/p/402251966
 - https://mp.weixin.qq.com/s/_9-0iNUw6KHTF3a-vSMCmg
+- https://zhuanlan.zhihu.com/p/99524127
+- https://www.jianshu.com/p/4538483a1d8a
 
 
 

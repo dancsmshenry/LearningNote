@@ -202,11 +202,11 @@ int main()
 
 
 
-- NULL检测
+NULL检测
 
-  - 当我们创建 shared_ptr 对象而不分配任何值时，它就是空的
+- 当我们创建 shared_ptr 对象而不分配任何值时，它就是空的
 
-  - 普通指针不分配空间的时候相当于一个野指针，指向垃圾空间，且无法判断指向的是否是有用数据
+- 普通指针不分配空间的时候相当于一个野指针，指向垃圾空间，且无法判断指向的是否是有用数据
 
 ```cpp
 std::shared_ptr<Sample> ptr3;
@@ -214,6 +214,83 @@ if (!ptr3) std::cout << "Yes, ptr3 is empty" << std::endl;
 if (ptr3 == NULL) std::cout << "ptr3 is empty" << std::endl;
 if (ptr3 == nullptr) std::cout << "ptr3 is empty" << std::endl;
 ```
+
+
+
+#### 缺点
+
+- 使用不当导致死锁，从而出现内存泄漏
+
+  - ```cpp
+    // 一段内存泄露的代码
+    struct Son;
+    struct Father　{
+        shared_ptr<Son> son_;
+    };
+    struct Son {
+        shared_ptr<Father> father_;
+    };
+    int main() 
+    {
+        auto father = make_shared<Father>();
+        auto son = make_shared<Son>();
+        father->son_ = son;
+        son->father_ = father;
+      
+        return 0;
+    }
+    ```
+
+  - 解决办法：使用weak_ptr防止死锁
+
+- 使用raw pointer构建smart pointer
+
+  - 如果有一个对象被置空的话，那么另一个指针将会出现意想不到的结果
+
+  - ```cpp
+    int main()
+    {
+    	int *p = new int{10};
+    	std::shared_ptr<int> ptr1{p};
+    	std::shared_ptr<int> ptr2{p};
+    	std::cout << "count ptr1:" << ptr1.use_count() << std::endl; // 1
+    	std::cout << "count ptr2:" << ptr2.use_count() << std::endl; // 1
+    }
+    
+    //	再或者说，也是同样的将raw pointer放入了smart pointer中
+    class Student
+    {
+    public:
+        Student( const string &name ) : name_( name ) { }
+        void addToGroup( vector<shared_ptr<Student>> &group ) {
+            group.push_back( shared_ptr<Student>(this) );          // ERROR
+        }
+    private:
+        string name_;
+    };
+    ```
+
+  - 解决办法：杜绝使用raw pointer的做法；使用enable_shared_from_this解决类指针this放入smart pointer的问题
+
+  - ```cpp
+    class Student : public std::enable_shared_from_this<Student>
+    {
+    public:
+        Student( const string &name ) : name_( name ) { }
+        void addToGroup( vector<shared_ptr<Student>> &group ) {
+            group.push_back( shared_from_this() );              
+        }
+    private:
+        string name_;
+    };
+    ```
+
+- 少使用get函数
+
+  - 不要保存sp.get()的返回值，无论是保存为裸指针还是shared_ptr都是错误的，保存为裸指针不知什么时候就会变成空悬指针，保存为shared_ptr则产生了独立指针
+  - 不要delete sp.get()的返回值，会导致对一块内存delete两次的错误
+
+
 
 
 

@@ -88,4 +88,38 @@
   }
   ```
 
-- 
+
+
+
+
+# 取消字节对齐
+
+取消全体数据的字节对齐
+
+- ```cpp
+  #pragma pack (n)  // 编译器将按照n个字节对齐；
+  #pragma pack()   // 恢复先前的pack设置,取消设置的字节对齐方式
+  #pragma  pack(pop)// 恢复先前的pack设置,取消设置的字节对齐方式
+  #pragma  pack(1)  // 按1字节进行对齐 即：不行进行对齐
+  ```
+
+
+
+取消结构体的字节对齐
+
+- ```cpp
+  typedef struct {
+      double x;
+      double y;
+  } __attribute__((packed)) position_t;
+  
+  struct __attribute__ ((__packed__)) sdshdr8 {
+  uint8_t len; /* 数据⻓度 */
+  uint8_t alloc; /* 去掉头和null结束符，有效⻓度+数据⻓度*/
+  unsigned char flags; /* 3 lsb of type, 5 unused bits，⼩端*/
+  //变⻓数据
+  char buf[];
+  };
+  ```
+
+- 在结构体定义的最后或者前面加上这一串，可以避免结构体发生字节对齐的情况

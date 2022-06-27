@@ -123,6 +123,24 @@
       __typeof(b) _b = b;\
       _a > _b ? _a : _b;\
   })
+  
+  //加上括号，避免展开出错
+  #define MAX(A, B) ((A)>(B)? (A):(B))
+  
+  //避免自增问题，如MAX(i++,j++）
+  #define MAX(A, B) ({	\
+  	int a = A; 	\
+  	int b = B;	\
+  	a > b ? a : b;	\
+  })
+  
+  // 兼容不同数据类型，且不用显式指定类型
+  #define MAX(A, B) ({	\
+  	typeof(A) a = A; 	\
+  	typeof(B) b = B;	\
+  	(void) (&a == &b);	\
+  	a > b ? a : b;		\
+  })
   ```
-
+  
 - https://blog.csdn.net/u011386173/article/details/119918556
