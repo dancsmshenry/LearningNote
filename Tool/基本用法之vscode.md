@@ -1,7 +1,3 @@
-[toc]
-
-
-
 ##### Vscode-icons
 
 - 可以控制vscode中的文件管理的树目录显示图标，即改变文件显示的图标
@@ -88,7 +84,7 @@
 
 
 
-# vscode下配置cpp编译器gcc
+##### vscode下配置cpp编译器gcc
 
 创建一个.vscode的文件夹，里面放两个文件一个是task.json，另一个是launch.json
 
@@ -173,3 +169,49 @@ launch.json
     ]
 }
 ```
+
+
+
+
+
+##### 复制上一行的数据
+
+- alt + shift + 上或下键，复制当前行的数据到下一行
+
+
+
+##### 切换到终端
+
+- ctrl + `
+
+
+
+##### 查找文件
+
+- ctrl + p
+
+
+
+##### 查找字符
+
+- ctrl + f
+
+
+
+##### 运行代码
+
+- ctrl + alt + n
+
+
+
+
+
+to do list
+
+https://blog.csdn.net/m0_46548070/article/details/105116420
+
+https://blog.csdn.net/weixin_44263973/article/details/120998615
+
+https://www.baidu.com/s?ie=UTF-8&wd=The%20authenticity%20of%20host%20%27github.com%20(20.205.243.166)%27%20can%27t%20be%20established
+
+https://blog.csdn.net/m0_56257585/article/details/125322437

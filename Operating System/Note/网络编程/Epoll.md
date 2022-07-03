@@ -299,6 +299,23 @@ summary
 
 
 
+# 对于ET和LT的理解
+
+- ET下一般来说在epoll返回后需要循环把数据读完（否则剩余的数据要一直等到下一次epoll返回才能读了，而下一次返回的时候就不知啥时候了），因此肯定是要设置非阻塞的，否则循环read的时候就会阻塞在read上了
+- LT模式可以不读完数据，随便你读几个字节数据都无所谓
+
+
+
+et下的坑爹
+
+- 第一次放入的是数据abcdefg
+- et的读数据方式设置为每次只读两个字符，那么此时读到的数据就是ab
+- 如果此时再来一次数据123456
+- 那么此时读到的就是cd，新来的数据是会接到fg后面
+- 所以读数据其实都是从socket的内核缓冲区中的读的
+
+
+
 
 
 # 参考
@@ -307,4 +324,5 @@ summary
 - https://www.cnblogs.com/charlesblc/p/6242479.html
 - https://blog.csdn.net/wteruiycbqqvwt/article/details/90299610
 - https://zhuanlan.zhihu.com/p/392988660
+- https://www.zhihu.com/question/23614342/answer/2274377104
 - epoll_ctl_mod

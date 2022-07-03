@@ -88,6 +88,43 @@ inline命名空间
 
 
 
+
+
+# 内联函数和虚函数
+
+- 当非多态调用虚函数的时候，编译器会选择内联
+
+- ```cpp
+  #include <cstdio>
+  
+  struct Base {
+      virtual ~Base() {}
+      virtual void Foo() { printf("Base::Foo()\n"); }
+  };
+  
+  struct Derived : Base {
+      virtual void Foo() { printf("Derived::Foo()\n"); }
+  };
+  
+  Base* b = new Derived; // 非 static 令编译器不能在编译期知道 b 指向那个类型的对像
+  
+  int main() {
+      b->Foo();       // 不可能内联
+      b->Base::Foo(); // 非多态调用，可以内联（但具体是否内联由编译器决定）
+      delete b;
+  }
+  ```
+
+- 其实内不内联是一个很八股（没有实际意义）的问题，因为吧，首先，内联只是cpp标准提供的一种解释，具体的实现其实都是看编译器如何去优化的（比如说看到一个函数很简单，而且用了很多次，也能够确定到底调用的是哪一个版本，那肯定要选择内联的啊），所以我觉得内联其实知道就行，没必要深究
+
+- reference：https://www.zhihu.com/question/45894112
+
+
+
+
+
+
+
 # 参考
 
 - https://www.zhihu.com/question/24185638/answer/2404153835

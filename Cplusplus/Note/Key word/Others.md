@@ -312,3 +312,20 @@ noexcept运算符
   F  f1(int);    //错误： F是函数类型
   PF  f1(int);   //正确： PF是函数指针类型
   ```
+
+
+
+
+
+# size_t
+
+- ```cpp
+  int main() {
+      std::vector<int> f(0, 0);
+      for (int i = 0; i < f.size() - 1; i++) {
+          std::cout << "i = " << i << std::endl;
+      }
+  }
+  ```
+
+- 因为f.size()得到的是一个size_t无符号整数，就会导致f.size()-1变成一个很大的正数，就会出现意想不到的结果

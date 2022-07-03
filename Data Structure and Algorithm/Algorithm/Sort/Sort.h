@@ -97,7 +97,7 @@ void shell_sort(std::vector<int> &arr) {
 }
 
 
-void HeapAdjust(std::vector<int> &arr, int x, int n) {
+void create_heap(std::vector<int> &arr, int x, int n) {
     int l = x * 2 + 1, r = x * 2 + 2;
     int max = x;
 
@@ -106,17 +106,18 @@ void HeapAdjust(std::vector<int> &arr, int x, int n) {
 
     if (max != x){
         std::swap(arr[x], arr[max]);
-        HeapAdjust(arr, max, n);
+        create_heap(arr, max, n);
     }
 }
 
 void heap_sort(std::vector<int> &arr) {
+	// 这里构建的大顶堆，每次把最大值交换到最后面
 	int n = arr.size();
-	for (int i = n / 2 - 1; i >= 0; -- i) HeapAdjust(arr, i, n);
+	for (int i = n / 2 - 1; i >= 0; -- i) create_heap(arr, i, n);
 
     for (int i = n - 1; i > 0; -- i) {
         std::swap(arr[0], arr[i]);
-        HeapAdjust(arr, 0, i);
+        create_heap(arr, 0, i);
     }
 }
 

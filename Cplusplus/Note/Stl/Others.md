@@ -208,6 +208,24 @@
 
 
 
+# auto代替手写类型
+
+- ```cpp
+  std::unordered_map<std::string, int> m;
+  for (const std::pair<std::string, int>& p: m) {
+    ... 
+  }//	这样写会产生临时对象，有拷贝的开销
+  
+  //	所以需要这样写
+  for (auto&& p: m) {
+      
+  }
+  ```
+
+
+
+
+
 
 
 # 其他
