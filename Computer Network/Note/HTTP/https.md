@@ -98,7 +98,13 @@ SSL/TLS协议作用：认证用户和服务，加密数据，维护数据的完�
 # HTTPS采用的加密方式有哪些
 
 - HTTPS采用混合的加密机制，使用非对称密钥加密用于传输对称密钥来保证传输过程的安全性，之后使用对称密钥加密进行通信来保证通信过程的效率
-- 确保传输安全过程（其实就是rsa原理）：1.Client给出协议版本号、一个客户端生成的随机数（Clientrandom），以及客户端支持的加密方法。2.Server确认双方使用的加密方法，并给出数字证书、以及一个服务器生成的随机数（Serverrandom）。3.Client确认数字证书有效，然后生成呀一个新的随机数（Premastersecret），并使用数字证书中的公钥，加密这个随机数，发给Server。4.Server使用自己的私钥，获取Client发来的随机数（Premastersecret）。5.Client和Server根据约定的加密方法，使用前面的三个随机数，生成”对话密钥”（sessionkey），用来加密接下来的整个对话过程。
+- 确保传输安全过程（其实就是rsa原理）
+  - 1.Client给出协议版本号、一个客户端生成的随机数（Clientrandom），以及客户端支持的加密方法
+  - 2.Server确认双方使用的加密方法，并给出数字证书、以及一个服务器生成的随机数（Serverrandom）
+  - 3.Client确认数字证书有效，然后生成呀一个新的随机数（Premastersecret），并使用数字证书中的公钥，加密这个随机数，发给Server
+  - 4.Server使用自己的私钥，获取Client发来的随机数（Premastersecret）
+  - 5.Client和Server根据约定的加密方法，使用前面的三个随机数，生成”对话密钥”（sessionkey），用来加密接下来的整个对话过程。
+
 
 
 
