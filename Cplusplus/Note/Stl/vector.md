@@ -149,7 +149,7 @@
 - 设每次扩容**m**个元素，总的元素个数是n，则需要扩容**n/m**次
 
 - $$
-  \sum^{n/m}_{i = 1}m * i=\frac{(n+m)*n}{2*m}\\
+  \sum^{n/m}_{i = 1}m * i=\frac{(n + m)*n}{2*m}\\
   $$
 
 - 即平摊到每个元素身上就是O(n)的了
@@ -490,3 +490,18 @@ push_back和move
 - 参考：https://www.zhihu.com/question/438004429
 
 - 所以根本原因是，模板无法推导类型{1,2}，这就是cpp-c唯为
+
+
+
+
+
+# vector的小trick
+
+### 删除第一个元素
+
+- ```cpp
+  vector<int> v1(10, 100);
+  v1.erase(v1.begin());
+  ```
+
+- 

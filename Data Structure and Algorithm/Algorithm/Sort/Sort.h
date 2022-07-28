@@ -64,20 +64,22 @@ void select_sort(std::vector<int> &arr, int n) {
 void merge_sort(std::vector<int> &arr, int left, int right) {
 	if (left >= right) return;
 
-	int mid = left + (right - left) / 2;
+	int mid = (left + right) >> 1;
 	merge_sort(arr, left, mid);
 	merge_sort(arr, mid + 1, right);
 	
-	int tmp[right - left + 1];
-	int k = 0, i = left, j = mid + 1;
+	int i = left, j = mid + 1;
+    std::vector<int> tmp{};
 	while (i <= mid && j <= right) {
-		if (arr[i] <= arr[j]) tmp[k ++ ] = arr[i ++ ];
-		else tmp[k ++ ] = arr[j ++ ];
+		if (arr[i] <= arr[j]) tmp.push_back(arr[i ++ ]);   
+		else tmp.push_back(arr[j ++ ]);
 	}
-	while (i <= mid) tmp[k ++ ] = arr[i ++ ];
-	while (j <= right) tmp[k ++ ] = arr[j ++ ];
-	
-	for (i = left, j = 0; i <= right; ++ i, ++ j) arr[i] = tmp[j];
+
+	while (i <= mid) tmp.push_back(arr[i ++ ]);
+	while (j <= right) tmp.push_back(arr[j ++ ]);
+
+	int k = left;
+    for (auto& t: tmp) arr[k ++] = t;
 }
 
 
@@ -104,7 +106,7 @@ void create_heap(std::vector<int> &arr, int x, int n) {
     if (l < n && arr[l] > arr[max]) max = l;
     if (r < n && arr[r] > arr[max]) max = r;
 
-    if (max != x){
+    if (max != x) {
         std::swap(arr[x], arr[max]);
         create_heap(arr, max, n);
     }

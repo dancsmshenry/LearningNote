@@ -71,7 +71,15 @@
 
 - https://zhuanlan.zhihu.com/p/364361964
 
+- https://blog.csdn.net/qq_34039018/article/details/100781444
+
 - sort对数据进行排序，存在数据拷贝的过程，所以最好给它加上一个移动拷贝构造，或者在容器中存储指针
+
+- 八股规则：
+
+  - 当返回值是true的时候，第一个参数会放在前面的位置，第二个参数会放在后面的位置；false则反之
+  - 当a=b的时候，必须要返回false
+
 
 
 
@@ -115,6 +123,18 @@ tie(t1, t2) = t2, t1; // 不能够交换t1和t2的值（这里最后都会变成
 # accumulate
 
 - 累积求和
+
+
+
+
+
+
+
+# nth_element
+
+- 求解区间中第k小的元素
+- https://zh.cppreference.com/w/cpp/algorithm/nth_element
+- https://sugar.blog.csdn.net/article/details/88050145
 
 
 

@@ -8,6 +8,125 @@
 
 
 
+先看一下两份代码的运行时间
+
+- ```cpp
+  #include <cmath>
+  // #include "timer.h"
+  #include <iostream>
+  
+  using namespace std;
+  
+  struct Base {
+     public:
+      virtual int f(double i1, int i2) { return static_cast<int>(i1 * log(i1)) * i2; }
+  };
+  
+  int main() {
+      // TimerLog t("timer");
+      Base *a = new Base();
+      int ai = 0;
+      for (int i = 0; i < 1000000000; i++) {
+          ai += a->f(i, 10);
+      }
+      cout << ai << endl;
+  }
+  
+  
+  #include <cmath>
+  #include "timer.h"
+  struct Base {
+     public:
+      int f(double i1, int i2) { return static_cast<int>(i1 * log(i1)) * i2; }
+  };
+  
+  int main() {
+      TimerLog t("timer");
+      Base *a = new Base();
+      int ai = 0;
+      for (int i = 0; i < 1000000000; i++) {
+          ai += a->f(i, 10);
+      }
+      cout << ai << endl;
+  }
+  
+  ```
+
+- 上面两份代码的运行时间都差不多（都是12、13s的样子）
+
+- 由此可以证明虚函数表的重定向基本上不影响程序的性能
+
+
+
+再看下面的代码
+
+- ```cpp
+  #include <cmath>
+  #include "timer.h"
+  struct Base {
+     public:
+      virtual int f(double i1, int i2) { return static_cast<int>(i1 * log(i1)) * i2; }
+  };
+  
+  int main() {
+      TimerLog t("timer");
+      Base *a = new Base();
+      int ai = 0;
+      for (int i = 0; i < 1000000000; i++) {
+          ai += a->f(10, i); // 这里有改动
+      }
+      cout << ai << endl;
+  }
+  
+  
+  #include <cmath>
+  #include "timer.h"
+  struct Base {
+     public:
+      int f(double i1, int i2) { return static_cast<int>(i1 * log(i1)) * i2; }
+  };
+  
+  int main() {
+      TimerLog t("timer");
+      Base *a = new Base();
+      int ai = 0;
+      for (int i = 0; i < 1000000000; i++) {
+          ai += a->f(10, i); // 这里有改动
+      }
+      cout << ai << endl;
+  }
+  ```
+
+- 第一个代码运行时间为436ms，而第二个代码运行时间为154ms，相差数倍
+
+
+
+总结
+
+- 通过第一二个代码的对比，实际开销的时间几乎一样，所以发现虚函数表导致的那一次函数间接调用并不浪费时间，所以虚函数的开销并不在重定向上，即虚函数的重定向并不影响性能
+- 而通过第三四个代码的对比，实际开销的时间相差3倍，发现实际上的性能开销在于虚函数阻碍了编译器内联函数和各种级别函数的优化，导致性能开销过大（即在普通函数中log(10)会被优化掉，它就只会被计算一次，而如果使用虚函数，log(10)不会被编译器优化，它就会被计算多次）
+- 所以虽然查虚函数表固然需要不少的时间，但是主要的开销还是因为编译器没能对函数进行优化
+  - 真正原因是编译器在编译时通常并不知道它将要调用哪个函数，所以它不能被内联优化和其它很多优化，因此就会增加很多无意义的指令（准备寄存器、调用函数、保存状态等），而且如果虚函数有很多实现方法，那分支预测的成功率也会降低很多，分支预测错误也会导致程序性能下降
+
+
+
+正常的函数调用
+
+- 复制栈上的一些寄存器，以允许被调用的函数使用这些寄存器；
+- 将参数复制到预定义的位置，这样被调用的函数可以找到对应参数；
+- 入栈返回地址；
+- 跳转到函数的代码，这是一个编译时地址，因为编译器/链接器硬编码为二进制
+  - 但是如果是虚函数调用的话，就要先从对象那里得到虚表指针，根据虚表（一个存放函数地址的数组）找到对于的函数地址，最后再放到寄存器中，接着再跳转到该函数中
+- 从预定义的位置获取返回值，并恢复想要使用的寄存器
+
+
+
+参考
+
+- https://mp.weixin.qq.com/s?__biz=MzkyODE5NjU2Mw==&mid=2247485056&idx=1&sn=5a3e5b93f6d8872aa5fdfeee4e509a9f&chksm=c21d343cf56abd2a6abfaef8caff16dd6fb835bdaf3d4901f55e26eea45a059411c1d1bd94ea&mpshare=1&scene=1&srcid=0218A758oDsFaQngFjuWy7zZ&sharer_sharetime=1613619319357&sharer_shareid=054214e3287ede8cff93de9018c6d7da#rd
+
+
+
 
 
 # 对虚函数表的理解

@@ -12,14 +12,30 @@
 
 
 
+
+
+
+
 # git基本配置
 
-- vscode配置git
-  - https://blog.csdn.net/m0_46548070/article/details/105116420
+## vscode和git的配置
+
+- 背景：
+  - git，vscode已安装
+  - 密钥都已配置
+  - github上的仓库已建立
+- 首先在本地找一个要用的文件夹，输入指令`git init`（初始化一个git管理的仓库）
+- 然后输入`git remote add origin 仓库的ssh链接`（将本地仓库和远端仓库建立关系）
+- 接着输入`git pull origin main`（将远端仓库的内容拉下来）
+- 其实到这一步，就算是完成了，但vscode有一个比较坑的就是，它默认的分支是master（而前几年github因为某种原因改为了main分支），所以要记得把本地的master分支给删掉（如果项目本身有master分支的话就当我没说）
+- vscode的细则
   - vscode改不了已经提交了的分支的名字
   - vscode左下角切换分支
-  - 要先删掉本地的master分支（因为vscode默认分之十master，而github因为某种原因改为了main分支了）
   - 带origin的是远程仓库（github上的）分支，其他的是本地的分支
+
+
+
+
 
 
 
