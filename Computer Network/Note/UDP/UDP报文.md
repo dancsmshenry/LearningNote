@@ -1,0 +1,5 @@
+### UDP头部报文
+
+- ![](F:\Code\LearningNote\Computer Network\Note\TCP\image\UDP头部报文.png)
+- 为什么会有包长度
+  - 因为为了网络设备硬件设计和处理方便，首部长度需要是4字节的长度（有点类似字节对齐的缘故）

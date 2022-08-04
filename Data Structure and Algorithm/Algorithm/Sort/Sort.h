@@ -2,7 +2,7 @@
 #include <vector>
 #include <cstring>
 
-void quick_sort(std::vector<int> &arr, int left, int right) {
+void quick_sort_unstable(std::vector<int> &arr, int left, int right) {
 	if (left >= right) return;
 	
 	int temp = arr[left], i = left - 1, j = right + 1;
@@ -12,8 +12,45 @@ void quick_sort(std::vector<int> &arr, int left, int right) {
 		if (i < j) std::swap(arr[i], arr[j]);
 	}
 		
-	quick_sort(arr, left, j);
-	quick_sort(arr, j + 1, right);
+	quick_sort_unstable(arr, left, j);
+	quick_sort_unstable(arr, j + 1, right);
+}
+
+void quick_sort_stable(std::vector<int>& nums, int left, int right) {
+    if (left >= right) {
+        return ;
+    }
+
+    int a = left, b = right;
+    std::vector<int> temp(right - left + 1, 0); //  用于拷贝的数组
+    int start = 0, end = temp.size() - 1;
+    int e = right, s = left;
+    int privot = nums[left];
+
+    while (left <= right) {
+        while (left <= right && nums[right] >= privot) {    //  从右往左移动
+            nums[e--] = nums[right--];
+        }
+
+        while (left <= right && nums[left] < privot) {  //  从左往右移动
+            nums[s++] = nums[left++];
+        }
+        if (left < right) {
+            temp[start++] = nums[left++];// 大的移到temp数组左段
+            temp[end--] = nums[right--];// 小的移到temp数组的右段
+        }
+    }
+
+    for (int i = end + 1; i < temp.size(); ++ i) {
+        nums[s++] = temp[i];
+    }
+
+    for (int i = start - 1; i >= 0; -- i) {
+        nums[e--] = temp[i];
+    }
+
+    quick_sort_stable(nums, a, s - 1);
+    quick_sort_stable(nums, s + 1, b);
 }
 
 

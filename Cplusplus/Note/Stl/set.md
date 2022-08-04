@@ -39,3 +39,10 @@
 
 
 
+# 坑
+
+- https://leetcode.cn/problems/permutations-ii/solution/c-hui-su-setqu-zhong-by-zhang-jian-qi-sh-d3zu/
+- 说是对于vector<int>，unordered_set无法实现去重的功能，而set才可以，后续要研究一下
+
+
+
