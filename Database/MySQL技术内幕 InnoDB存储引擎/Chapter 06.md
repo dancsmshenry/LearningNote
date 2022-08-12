@@ -1,21 +1,27 @@
 # 6.2 lock与latch
 
-latch
+## latch
 
 - latch一般称为门锁（轻量级的锁），因为其要求锁定的事件必须非常短，若连续的时间长，则应用的性能会非常差
 - 在InnoDB中latch分为mutex（互斥量）和rwlock（读写锁）
 - 目的是用来保证并发线程操作临界资源的正确，并且通常没有死锁检测的机制
+- 一般这类锁的对象都是数据库的底层数据结构，例如说B+树，hash表
+- 可以这么理解，下面的lock的底层实现，大多是依赖于latch的，所以只要数据结构支持了并发，对于使用数据结构的一方来说，就相当于黑盒，可以借此实现更高层面的锁
 
 
 
-lock
+## lock
 
 - 对象是事务，用来锁定的是数据库中的对象，如表、页、行
-- 并且一般lock的对象仅在事务commit或rollback后进行释放
+- 并且一般lock的对象仅在事务commit或rollback后进行释放（不同的隔离级别释放的时间会有所不同）
 
 
 
-- <img src="images/lock与latch的比较.png" style="zoom:150%;" />
+## 二者的比较
+
+- <img src="images/lock与latch的比较.png" style="zoom: 200%;" />
+
+
 
 
 
