@@ -182,9 +182,50 @@ summary
   - 为什么bloom filter可以优化，因为filter只是用一个小的数据就可以看数据是否存在，而hash的匹配，是存在IO的情况的（比如说hash的值是1，那么就要把对应的页读取，可如果没有的话，就匹配失败了，就浪费了一次IO）
   - 不过bloom filter还是会出现假阳性，但没事，最后还是会去查表得
 - 这里的问题是，内存不够，会导致hash难以构建，那该怎么办？
+  - 需要把一些hash表的数据放到硬盘中
 
 
 
 
 
-44min
+
+# grace hash join
+
+- 解决hash join的过程中，hash表无法全部放到内存的问题
+- phase1：把R表和S表都各做一个hash表‘
+- phase2：把R表的hash表1和S表的hash表2，各取一个分区的数据，进行nested loop join
+  - 这里的原理就是，都是用的同一种hash算法，能够join的元素必然是在同一个分区当中的
+
+
+
+## recursive partitioning
+
+- 问题又来了，如果一个分区的元素都非常多，都放不到内存中，该怎么办
+- 解决办法：对这个非常大的分区，对两边的数据表，再用一个新的hash函数进行hash，直到能够分到足够小的块
+- <img src="image/recursive partitioning.png" style="zoom:200%;" />
+
+
+
+cost
+
+- partitioninh phase：2（M + N） IO
+  - 一次是要把数据从硬盘读到内存中，另一次是要把数据写入到hash表中
+  - 这里假设hash表的页数也是和原来的数据表同页
+- probing phase：M + N IO
+  - 两边分别把hash表的数据都读入到内存，所以就是M + N
+  - 读到内存的数据再进行nested loop join
+- 所以，总共的cost就是3 * （M + N）次的IO
+
+
+
+- 如果提前知道外表的大小，就可以用静态的hash表对数据操作，而不是使用动态扩容的hash表
+
+
+
+# summary
+
+- <img src="image/join algorithms summary.png" style="zoom:200%;" />
+- 如果是两个大表做join的话，最好就是做hash join
+- 但，如果需要数据是倾斜的，即发生hash冲突的概率较大（会导致算法退化），那么最好还是选择sort-merge
+- 或者，输出结果需要被排序的时候，会选择sort-merge
+- 一般，比较好的DBMS会选择hash join和sort-merge join
