@@ -16,7 +16,7 @@
 
 ## operator output
 
-## data
+### data
 
 - early materialization：提前物化
 - 向上输出两个表连接后得到的数据
@@ -25,7 +25,7 @@
 
 
 
-## record ids
+### record ids
 
 - late materialization：延迟物化
 - 向上输出的数据，不是记录本身，而是记录id
@@ -43,7 +43,7 @@
 笛卡尔积
 
 - 笛卡尔积是解决join最基础的办法，但它是非常的低效的
-- 为了降低连表开销，想到了一下算法
+- 为了降低连表开销，想到了以下算法
   - nested loop join（鸟巢，嵌套循环）（simple，stupid，block，index）
   - sort-merge join
   - hash join
@@ -87,19 +87,18 @@ cost
 
 
 
-
-
-
-
-
+## block nested loop join
 
 - 一种优化的思路：按照数据页进行遍历
 - 先读入R数据的数据页A，然后再依次的读取S数据的数据页B，依次的寻找是否有数据页A的数据
 - 这样的cost就是 M + M * N，即数据页的读取次数相对上面就减少了（注意这里的cost是根据IO的次数来决定的）
 
+- ![](image/block nested loop join_01.png)
+- ![](image/block nested loop join_02.png)
 
 
 
+继续优化一下
 
 - 给一个页作为输出缓存，给一个页作为内表缓存（及上图的S表），其他的页全部给R表的数据缓存
 - 假设内存池中有B个缓存页
@@ -108,6 +107,8 @@ cost
 - 其实，这里很难理解的一个原因就是，我们要减少的应该是**磁盘的IO次数**，但总是和数据的比较次数搞混淆
 - 所以就相当于利用了缓存，提高性能
 - PS：如果B > M + 2，那就相当于只需要M + N次，非常的高效
+- ![](image/block nested loop join_03.png)
+- ![](image/block nested loop join_04.png)
 
 
 
@@ -116,14 +117,14 @@ cost
 
 
 
-index nested loop join
+## index nested loop join
 
 - 走索引查询内表的数据
 - 所以cost：M + (m * C)，其中C是指每次查询所有需要的页数（不好估计，因为树的层数和结点不清楚）
 
 
 
-summary
+## summary
 
 - 尽量让小表放左边，因为这样就可以让左边的大表遍历的次数减少
 - 尽量缓存多一点外表的数据，这样可以减少内表的遍历次数
@@ -164,9 +165,11 @@ summary
 
 
 
+# hash join
 
 
-# basic hash join algoritham
+
+## basic hash join algoritham
 
 - 阶段一：build
   - 扫描外表从而构建hash表
@@ -189,7 +192,7 @@ summary
 
 
 
-# grace hash join
+## grace hash join
 
 - 解决hash join的过程中，hash表无法全部放到内存的问题
 - phase1：把R表和S表都各做一个hash表‘

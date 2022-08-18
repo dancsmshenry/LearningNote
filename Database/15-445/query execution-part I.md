@@ -70,9 +70,9 @@
   - 向量执行模型（avx-512）
 
 
- 
 
-## plan processing direction
+
+# plan processing direction
 
 - 方法一：top to bottom
   - 从上往下执行，从根节点去下面拉去数据
@@ -86,8 +86,7 @@
 
 # access methods
 
-- 选取数据，接受数据的方法
-- 读取表中的数据有哪些方法
+- 从磁盘读取数据的方式有哪些
 
 
 
