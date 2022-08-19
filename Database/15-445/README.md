@@ -6,3 +6,15 @@
 - 并发控制（Concurrency Control）
 - 恢复（Recovery）
 - 分布式数据库（Distributed Databases）
+
+
+
+
+
+
+
+# to do list
+
+- 后续三章的分布式数据库暂时不看
+- 还需要补上的第1、2、4、14章的视频和ppt
+- 后续多review
