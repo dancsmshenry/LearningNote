@@ -150,23 +150,28 @@ tie(t1, t2) = t2, t1; // 不能够交换t1和t2的值（这里最后都会变成
 
 - std::lower_bound二分查找的话，是通过std::distance确定中间点的，显然时间复杂度很高，所以容器有特化版本时，一定要使用特化版本
 
+- 说白了，lower_bound就是在模拟我们的二分模板
+
 - ```cpp
-  template <class ForwardIterator, class T>
-    ForwardIterator lower_bound (ForwardIterator first, ForwardIterator last, const T& val)
+  template<class ForwardIt, class T>
+  ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
   {
-    ForwardIterator it;
-    iterator_traits<ForwardIterator>::difference_type count, step;
-    count = distance(first,last);
-    while (count>0)
-    {
-      it = first; step=count/2; advance (it,step);
-      if (*it < val) {                 // or: if (comp(*it,val)), for version (2)
-        first  = ++it;
-        count -= step+1;
+      ForwardIt it;
+      typename std::iterator_traits<ForwardIt>::difference_type count, step;
+      count = std::distance(first, last); //	返回两个迭代器之间的距离（左闭右开），表明左边的迭代器要加多少才能到右边的迭代器
+   
+      while (count > 0) {
+          it = first; 
+          step = count / 2; 
+          std::advance(it, step); //	将迭代器往后移动n位
+          if (*it < value) {
+              first = ++it; 
+              count -= step + 1; 
+          }
+          else
+              count = step;
       }
-      else count = step;
-    }
-    return first;
+      return first;
   }
   
   //简化版
