@@ -1,7 +1,7 @@
 ### 数据表示
 
 - 使用原生cpp的数据类型，通常比任意精度数字块，但是会存在舍入误差的情况
-- ![](F:\Code\LearningNote\Database\15-445\image\variable precision numbers.png)
+- ![](\variable precision numbers.png)
 - 小数之类的通常存储在一个精确的、可变长度的二进制表示中，并带有额外的元数据
 - 类似于VARCHAR，但是不存储string
 - Demo：Postgres, SQL Server, Oracle
@@ -60,7 +60,7 @@ OLAP（列存储）
 
 
 
-![](F:\Code\LearningNote\Database\15-445\image\workload characterization.png)
+![](image\workload characterization.png)
 
 
 
@@ -69,7 +69,7 @@ OLAP（列存储）
 - DBMS将一个元组的所有属性连续地存储在一个页面中（适合OLTP）
 - 在这种情况下，查询往往只对单个实体进行操作
 - DBMS将一个元组的所有属性连续地存储在一个页面中
-- ![](F:\Code\LearningNote\Database\15-445\image\NSM.png)
+- ![](image\NSM.png)
 - 优点
   - 快速插入，更新和删除
   - 适合需要整个元组的查询
@@ -79,11 +79,11 @@ OLAP（列存储）
 
 
 - DBMS存储一个页面中连续的所有元组的单个属性的值（适合OLAP）
-- ![](F:\Code\LearningNote\Database\15-445\image\DSM.png)
+- ![](\DSM.png)
 - 列式存储的两种方式：
   - 一种是固定长度的偏移，每个值对于一个属性来说都是相同的长度
   - 另一种是对于还有每个属性的列，都加上该元组的id
-- ![](F:\Code\LearningNote\Database\15-445\image\tuple identification.png)
+- ![](\tuple identification.png)
 - 优点
   - 减少浪费的I/O量，因为DBMS只读取它需要的数据
   - 更好的查询处理和数据压缩

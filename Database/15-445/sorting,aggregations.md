@@ -59,7 +59,7 @@
 - 阶段二：递归的将数据页成对成对合并（使用三个缓冲页，2个输入页，1个输出页）
 - 总共的阶段数：1+log2n
 - io总成本：2n * 总次数
-- <img src="F:\Code\LearningNote\Database\15-445\image\2-way external merge sort.png" style="zoom:150%;" />
+- <img src="image\2-way external merge sort.png" style="zoom:150%;" />
 
 
 
@@ -139,7 +139,7 @@
 ## sort aggregation
 
 - 将数据过滤后，对数据进行排序，然后聚合去重
-- <img src="F:\Code\LearningNote\Database\15-445\image\sorting aggregation.png" style="zoom:200%;" />
+- <img src="image\sorting aggregation.png" style="zoom:200%;" />
 - 如果sql语句的结果其实是不需要对原数据进行排序，那么上述排序的方法就会很耗费时间
   - 比如说group by分组，不需要特定顺序
   - 比如说distinct中的重复项（不需要顺序）
@@ -165,7 +165,7 @@
   - 使用散列函数h1将元组拆分为磁盘上的分区（h1是用于将数据分隔开来的）
   - 把所有相同hash值都位于同一分区中
   - 按照分区将数据放到磁盘中
-  - <img src="F:\Code\LearningNote\Database\15-445\image\hash_partition.png" style="zoom:200%;" />
+  - <img src="image\hash_partition.png" style="zoom:200%;" />
 
 
 
@@ -176,7 +176,7 @@
   - 把每个分区得数据都读到内存中，再进行以此rehash，就可以把第一次发生碰撞的值给找出来
   - 对于磁盘上的每个分区，将其读入内存并构建内存哈希表（基于第二个哈希函数h2，h2适用于将数据按照指定条件分割）
   - 然后遍历该hash的bucket以匹配元组
-  - <img src="F:\Code\LearningNote\Database\15-445\image\hash_rehash.png" style="zoom:200%;" />
+  - <img src="image\hash_rehash.png" style="zoom:200%;" />
 
 
 
@@ -184,7 +184,7 @@
 
 - 存在一些场景，需要对数据进行求和，max，min，或avg的运算
 - 所以hash2函数（第二个hash函数）就应该存入的是一个kv对
-- <img src="F:\Code\LearningNote\Database\15-445\image\hash summarization.png" style="zoom:200%;" />
+- <img src="image\hash summarization.png" style="zoom:200%;" />
 
 
 
