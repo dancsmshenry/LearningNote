@@ -36,3 +36,8 @@ https://blog.csdn.net/qq_35587463/article/details/105054277
 
 
 std::thread使用lambda做回调，有没有什么注意事项？
+
+
+
+- 主要由捕获列表，函数参数列表和函数体组成
+- 捕获列表有按值捕获和按引用捕获两种

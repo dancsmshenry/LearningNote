@@ -165,8 +165,33 @@ noexcept运算符
 - **挖坑**：看下面两篇文章
 
   - https://www.jianshu.com/p/5d2eeeb93590
-
   - https://www.cnblogs.com/TenosDoIt/p/3163621.html
+  
+- 想要在C++编译器下编译部分C语言写的代码
+
+  - ```cpp
+    extern "C" {
+        void sum() {}
+        void sum(int i) {}
+    }//	PS：在cpp下会报错
+    ```
+
+- 一段代码，在cpp中是cpp编译，在c中是c编译
+
+  - ```cpp
+    #ifdef _cplusplus
+    extern "C" {
+    #endif
+        int sum(int a, int b) {
+            return a + b;
+        }
+    #ifdef _cplusplus
+    }
+    #endif
+    ```
+
+  - 因为c语言中没有_cplusplus这个宏
+
 
 
 
@@ -329,3 +354,11 @@ noexcept运算符
   ```
 
 - 因为f.size()得到的是一个size_t无符号整数，就会导致f.size()-1变成一个很大的正数，就会出现意想不到的结果
+
+
+
+
+
+# 如何把对象只分配到栈上
+
+- 将new operator函数定义为private，或者定义为delete函数
