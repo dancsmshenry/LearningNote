@@ -99,3 +99,21 @@ https://zhuanlan.zhihu.com/p/54102723
 - 每个红色节点的两个子节点都是黑色（每个叶子到根的所有路径上不能有两个连续的红色节点）
 - 从任一节点到每个叶子节点的所有路径都包含相同树木的黑色节点
 - 红黑树的具体操作实现（http://www.akathink.com/2016/08/08/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E7%BA%A2%E9%BB%91%E6%A0%91/）
+- [红黑树](https://www.nowcoder.com/jump/super-jump/word?word=红黑树)的红节点表示的是节点与其子节点有一个左倾红链接
+  [红黑树](https://www.nowcoder.com/jump/super-jump/word?word=红黑树)的是2-3-4树的一种实现。2-3-4树是阶数为4的B树
+  2-3-4树种的2节点对应[红黑树](https://www.nowcoder.com/jump/super-jump/word?word=红黑树)中的黑色节点，非2节点以红节点加黑节点的方式存在，红节点的意义是与黑色父节点结合，表达着2-3-4树中的3，4节点
+  2-3树到[红黑树](https://www.nowcoder.com/jump/super-jump/word?word=红黑树)的转化
+  2节点转换为黑节点、3节点转换为左倾[红黑树](https://www.nowcoder.com/jump/super-jump/word?word=红黑树)，且红节点为子结点
+  定义：
+  1、节点颜色有红色和黑***r /> 2、根节点一定是黑***r /> 3、叶子节点一定是黑***r /> 4、不会有连续的红色节点
+  5、是一棵二叉查找树
+  [红黑树](https://www.nowcoder.com/jump/super-jump/word?word=红黑树)的左旋可以将右倾转换为左倾
+  [红黑树](https://www.nowcoder.com/jump/super-jump/word?word=红黑树)的颜色反转，将4节点降为三个2节点
+
+
+
+
+
+# 为什么有了avl树，还有红黑树
+
+- AVL树实现比较复杂，而且删除和插入性能差，AVL树每次插入和删除都需要计算每个节点左右子树的高度差，调整时需要进行很多的左旋或者右旋操作，而红黑树只需要通过判断颜色匹配规则然后进行简单的调整即可达到整棵树的平衡
