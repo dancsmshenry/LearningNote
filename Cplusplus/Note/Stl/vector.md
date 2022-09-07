@@ -1,6 +1,10 @@
 # vector
 
-### 用法
+- 高效的随机存取,不在乎插入和删除 用的居然是vector
+
+
+
+## 用法
 
 - ```cpp
   //构造函数的四种方式
@@ -10,6 +14,7 @@
   vector<stirng> i4(i3);
   
   vector<int> f(4); // 保证得到的元素都是0
+  vector<int> f(4, 0); // 等价于这个
   
   // operator= 赋值运算符
   i4 = i3;
@@ -90,8 +95,6 @@
   // emplace_back在容器末尾就地构造元素（在末尾添加元素）
   i6.emplace_back(10);
   ```
-
-
 
 
 
@@ -269,6 +272,41 @@ push_back和move
 - 删除指定迭代器的内容，或者指定迭代器范围的内容
 
 - 只能删除内容，不能改变容量大小（size发生变化，capacity不变）
+
+- 有些比较坑的地方：
+
+  - **erase会返回被删除元素后一个元素的迭代器**（经过实验，**被删除元素的迭代器其实不会失效，而还是指向当前被删除元素的下一个位置**）
+
+  - `iterator erase(  iterator _Where);`删除指定位置的元素，返回值是一个迭代器，指向删除元素的下一个元素
+
+  - `iterator erase(  iterator _First,  iterator _Last);`删除从 _First开始到 _Lsat位置的元素，返回值也是一个迭代器，指向最后一个删除元素的下一个位置
+
+  - 所以如果你想要删除一个vector中所有等于2的数字，应该这样做
+
+  - ```cpp
+    vector<int> count = {0,1,2,2,2,2,2,3,4};
+    for(auto iter=count.begin();iter!=count.end();)
+    {
+        if(2 == *iter)
+        {
+            iter = count.erase(iter);
+        }
+        else
+        {
+            iter++;
+        }
+    }
+    for(auto const & v : count)
+    {
+        cout<<v<<",";
+    }
+    cout<<endl;
+    ```
+
+  - erase实质是将迭代器后面的元素全部复制一遍，接着往前移动一个位置，因此当前位置的迭代器会指向原iter的后一位数字（所以其实是将后一部分的元素覆盖了前面部分的元素，比如说长为9的数组，删除掉前面5个数字，但当前下标为7和8位置的数据是不变的）
+
+  - 看了一下源码实现，如果是删除最后一个元素的话，就只会移动最后一个迭代器而已
+
 
 
 

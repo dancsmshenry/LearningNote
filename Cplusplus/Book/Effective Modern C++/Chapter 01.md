@@ -38,11 +38,12 @@
   
   template<typename T>
   void f(T* param);
+  int 
   const int *px = 28;
   f(&x); // T是int，param是int*
   f(px); // T是const int，param是const int*
   ```
-
+  
 - 总结：
 
   - 凡是以引用或指针来接收参数的，都直接忽略原来是否是引用

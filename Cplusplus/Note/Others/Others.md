@@ -339,3 +339,66 @@ C++用析构函数回收垃圾，写C和C++程序时一定要注意内存的申�
   - 第四种：src dst（dst的有一部分是和src重合的），那么，此时从前往后复制，就会把src后面的一部分给覆盖掉，导致两个内存的内容不同
 
   - 参考c的库函数memmove()
+
+
+
+# 重载类加号的写法
+
+- ```cpp
+  class Person
+  {
+  public:
+  	int m_a;
+  	int m_b;
+   
+  	//成员函数的加号重载；
+  	Person operator+(Person& p)
+  	{
+  		Person pt;
+  		pt.m_a = m_a + p.m_a;
+  		pt.m_b = m_b + p.m_b;
+  		return pt;
+          //	等价于p3 = p1.operator+(p2);
+  	}
+  };
+  
+  int operator+(Person& p1, Person& p2) {
+      //	全局函数实现+号的重载
+      //	等价于p3 = operator+(p1 ,p2);
+  }
+  
+  class point
+  {
+  public:
+      point(int a, int b):x(a), y(b){}
+      point& operator++()   // 前置++
+      {
+          x++;
+          y++;
+          return *this;
+      }
+      point operator++(int) //后置++ 
+      {
+          point a = *this;
+          // 或者++a;
+          a.x++;
+          a.y++;
+          return a;
+      }
+  
+  private:
+      int x;
+      int y;
+  };
+  
+  Person p1, p2, p3 = p1 + p2;
+  ```
+
+
+
+
+
+# 大小写转换
+
+- tolower，toupper
+

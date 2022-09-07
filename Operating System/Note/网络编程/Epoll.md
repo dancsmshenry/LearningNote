@@ -5,6 +5,13 @@
 
 
 
+- epoll到底有没有用mmap，能不能少一次用户态内核态的拷贝
+  fd少的时候用select吗？
+  epoll和select的选用
+- linux上的epoll的man page,
+
+
+
 
 
 epoll_wait函数

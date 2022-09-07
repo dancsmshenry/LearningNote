@@ -1,3 +1,9 @@
+# 4.1 概述
+
+- <img src="images/基本TCP客户服务器程序的套接字函数.png" style="zoom:200%;" />
+
+
+
 # 4.2 socket函数
 
 - 为了执行网络I/O，一个进程必须做的第一件事情就是调用socket函数，指定期望的通信协议类型（使用IPV4的TCP，使用IPV6的UDP、UNIX域字节流协议等）
@@ -8,23 +14,21 @@
   int socket(int family, int type, int protocal);//若成功则为负描述符，若出错则为-1
   ```
 
-- family参数指明协议族
+- family参数指明协议族（比如说是IPV4，还是IPV6）
 
-- type参数指明套接字类型
+  - <img src="images/socket函数的family常值.png" style="zoom:150%;" />
 
-- protocol参数设为某个协议类型常值，或者为0
+- type参数指明套接字类型（是字节流套接字还是数据报套接字）
+
+  - <img src="images/socket函数的type常值.png" style="zoom:150%;" />
+
+- protocol参数设为某个协议类型常值，或者为0（比如说是tcp，还是udp）
+
+  - <img src="images/socket函数的protocol常值.png" style="zoom:150%;" />
 
 - socket函数在成功时返回一个效得非负整数值，它与文件描述符类似，称为套接字描述符，简称sockfd
 
 
-
-- <img src="images/基本TCP客户服务器程序的套接字函数.png" style="zoom:200%;" />
-
-
-
-- <img src="images/socket函数的family常值.png" style="zoom:150%;" />
-- <img src="images/socket函数的type常值.png" style="zoom:150%;" />
-- <img src="images/socket函数的protocol常值.png" style="zoom:150%;" />
 
 
 
@@ -32,15 +36,14 @@
 
 # 4.3 connect函数
 
-- TCP客户用connect函数来建立与TCP服务器的连接
+- TCP客户端用connect函数来建立与TCP服务器的连接
 
 - ```cpp
   #include <sys/socket.h>
   
-  int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
-  //若成功返回0，出错则返回-1
+  int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);//若成功返回0，出错则返回-1
   ```
-
+  
 - sockfd是由socket函数返回的套接字描述符，第二个、第三个参数分别是一个指向套接字地址结构的指针和该结构的大小
 
 - 如果是TCP套接字，调用connect函数将激发TCP的三路握手过程，而且仅在连接建立成功或者出错时才返回

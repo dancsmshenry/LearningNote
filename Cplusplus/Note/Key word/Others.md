@@ -342,19 +342,6 @@ noexcept运算符
 
 
 
-# size_t
-
-- ```cpp
-  int main() {
-      std::vector<int> f(0, 0);
-      for (int i = 0; i < f.size() - 1; i++) {
-          std::cout << "i = " << i << std::endl;
-      }
-  }
-  ```
-
-- 因为f.size()得到的是一个size_t无符号整数，就会导致f.size()-1变成一个很大的正数，就会出现意想不到的结果
-
 
 
 
