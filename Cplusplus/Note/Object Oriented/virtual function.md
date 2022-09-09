@@ -175,6 +175,36 @@
 
 # 虚函数为什么不能和缺省参数一起调用
 
+- ```cpp
+  #include <iostream>
+  #include <string>
+  #include <cstdio>
+  
+  using namespace std;
+  
+  class A {
+  public:
+      virtual void func(int i = 1) {
+          cout << "A" << " " << i << endl;
+      }
+      void test() {func();}
+  };
+  
+  class B: public A{
+  public:
+      void func(int i = 0) {
+          cout << "B" << " " << i << endl;
+      }
+  };
+  
+  int main() {
+      A* a1 = new B();
+      a1 -> test();// B 1
+  }
+  ```
+
+- 函数的缺省参数和类是静态绑定的，所以就会导致如果通过动态绑定的虚函数调用，就会造成缺省参数的错乱
+
 
 
 

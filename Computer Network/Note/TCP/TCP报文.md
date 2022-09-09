@@ -1,6 +1,6 @@
 # TCP头部报文
 
-- ![](image/TCP头部报文.png)
+- ![](../image/TCP头部报文.png)
 
 
 
