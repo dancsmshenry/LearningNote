@@ -1,3 +1,13 @@
+# excve
+
+- 得到的子进程中，与父进程一同指向的fd是不会改变的
+
+
+
+
+
+# fork
+
 参考
 
 - https://blog.csdn.net/zhizhengguan/article/details/110130844
@@ -106,3 +116,9 @@ fork的实现
   - 虚拟内存池
   - 页表
 - 第二步：执行该进程
+
+
+
+
+
+# wait

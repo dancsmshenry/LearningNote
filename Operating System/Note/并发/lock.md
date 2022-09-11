@@ -1,18 +1,16 @@
-# 锁的种类
+# 阻塞型同步
 
-## 阻塞型同步
-
-### Spin lock
+## Spin lock
 
 - 作用：为了解决某项资源的互斥使用，因为自旋锁不会引起调用者睡眠，所以自旋锁的效率远高于互斥锁
   - 自旋锁适用于锁使用者保持锁时间比较短的情况下，自旋锁的效率远高于互斥锁 
 
-- spin lock（自旋锁）属于busy-waiting类型的锁
-  - 如果有线程去抢锁，那么该线程就会进行忙等待不停的进行锁请求，直到得到这把锁
+- spin lock属于busy-waiting类型的锁
+  - 如果有线程去抢锁，那么该线程就需要一直自旋进行锁请求，直到得到这把锁
 
 
 
-api的使用
+linux下的api
 
 - ```cpp
   pthread_spin_lock(pthread_spinlock_t *lock);
@@ -36,7 +34,7 @@ api的使用
 
 
 
-实现
+实现（test and swap   https://www.baidu.com/s?ie=UTF-8&wd=test%20and%20swap%20spin%20lock  这才是吧，cas是实现lock free的..）
 
 - cpu通过cas（compare and swap）函数实现自旋锁，在用户态完成加锁和解锁操作，不会主动产生线程上下文切换
 - 两个步骤
@@ -61,7 +59,7 @@ api的使用
 
 
 
-### Mutex
+## Mutex
 
 - mutex（互斥锁）属于sleep-waiting类型的锁
   - 如果有人要抢别人的锁的话，那么该线程就会被阻塞，cpu就可以先去执行其他的任务而不是忙等待
@@ -144,22 +142,22 @@ futex的背景
 
 
 
-### Read/Write Lock
+## Read/Write Lock
 
 - 读写锁
 - 分为读优先锁和写优先锁
   - 读优先锁
-  - ![](读优先锁.png)
+  - ![](../image/读优先锁.png)
   - 写优先锁
-  - ![](写优先锁.png)
+  - ![](../image/写优先锁.png)
 
 
 
 
 
-## 非阻塞型同步
+# 非阻塞型同步
 
-### Lock-Free
+## Lock-Free
 
 rcu
 
@@ -170,6 +168,10 @@ rcu
   - 在有大量读操作，少量写操作的情况下效率非常高。【读多写少】
 
 
+
+
+
+实现无锁队列
 
 https://zhuanlan.zhihu.com/p/53012280
 
@@ -190,6 +192,8 @@ https://zhuanlan.zhihu.com/p/53012280
 
 
 
+
+
 # 其他
 
 - js中的并发事件较少，比如我想要把一个图标移动到另一个位置，后台就需要计算坐标移动的距离，然后可视化
@@ -197,18 +201,3 @@ https://zhuanlan.zhihu.com/p/53012280
 - 而对于耗时的api（比如网络请求数据），js首先会立即返回（然后后台再默默的执行），相当于是异步编程了吧
 - 单线程模型，无锁
 - 不过异步编程容易造成回调地狱，屎山
-
-https://www.zhihu.com/question/332113890/answer/1052024052
-
-
-
-# 参考
-
-- https://www.zhihu.com/question/66733477/answer/1267625567
-- https://baijiahao.baidu.com/s?id=1678252166115910894
-- https://blog.csdn.net/lianhunqianr1/article/details/118215624
-- https://blog.csdn.net/Zerore/article/details/120223681
-- https://www.jianshu.com/p/d534f6c1fc5d
-- https://hardcore.feishu.cn/docs/doccn9Ld4O9tGh7DenRv3GOj7Uh
-- https://www.bilibili.com/video/BV1d54y1a76e
-- https://www.baidu.com/s?ie=UTF-8&wd=futex
