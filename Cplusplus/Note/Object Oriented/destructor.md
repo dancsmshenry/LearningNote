@@ -39,3 +39,50 @@
 
     那么这时候  ~ B()还有没有机会执行呢，有的，析构函数的机制就是子类的析构会自动调用父类的析构函数，~B()实际是被 ~A()调用的，这就形成一个完美的析构链条
 
+
+
+
+
+# 析构函数的调用顺序
+
+- 先析构自身，然后是成员对象，最后是父类对象
+
+- ```cpp
+  #include <iostream>
+  #include <vector>
+  #include <stack>
+  #include <deque>
+  
+  class Test {
+  public:
+      Test() {std::cout << "Test" << std::endl;}
+      ~Test() {std::cout << "~Test" << std::endl;}
+      Test(const Test &p) {std::cout << "Test copy" << std::endl;}
+      Test(const Test &&p) {std::cout << "Test move" << std::endl;}
+      Test(int age) {std::cout << "Test age" << std::endl;}
+  };
+  
+  class A{
+  public:
+      A() {std::cout << "A()" << std::endl;}
+      ~A() {std::cout << "~A()" << std::endl;}
+  };
+  
+  class C{
+  public:
+      C() {std::cout << "C()" << std::endl;}
+      ~C() {std::cout << "~C()" << std::endl;}
+  };
+  
+  class B: public A{
+  public:
+      C c1;
+      B() {std::cout << "B()" << std::endl;}
+      ~B() {std::cout << "~B()" << std::endl;}
+  };
+  
+  int main() {
+      B b1;
+  }
+  ```
+

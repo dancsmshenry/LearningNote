@@ -78,7 +78,7 @@
 - 八股规则：
 
   - 当返回值是true的时候，第一个参数会放在前面的位置，第二个参数会放在后面的位置；false则反之
-  - 当a=b的时候，必须要返回false
+  - **当a=b的时候，必须要返回false**
 
 
 
@@ -197,9 +197,7 @@ tie(t1, t2) = t2, t1; // 不能够交换t1和t2的值（这里最后都会变成
 
 # remove
 
-- std::remove(first,last,val)
-- 移除[first, last)范围内等于val的元素
-- 在vector里面用就类似于
-- iter = std::remove(vec.begin(), vec.end(), val)
-- 但这个函数只是把val移到vec的末尾，并不真正删除
+- std::remove(first,last,val)，移除[first, last)范围内等于val的元素
+- 在vector里面用就类似于：iter = std::remove(vec.begin(), vec.end(), val)
+  - 但这个函数只是把val移到vec的末尾，并不真正删除
 - 真正删除还是要调用一次erase函数

@@ -7,3 +7,11 @@
 - 我的一个问题是为什么进入内核态的消耗会很大
   - 感觉int 0x80的陷入系统调用确实很慢，增大了消耗，但是现在用的sysenter陷入系统调用速度高很多了，感觉主要消耗不在态的切换了
   - 用户态到内核态，要刷新tlb，更换pagetable
+
+
+
+对epoll和coroutine的理解
+
+- epoll需要在kernel thread上阻塞2s，但是有可能阻塞到一半的时候（1s），就有很多fd可以读读写了，但是，epoll必须阻塞2s以后才能干活
+- 而且，epoll会有很多的回调调用（fd有事件触发就是通过回调实现的）
+- 而coroutine有自己的schedule，当前coroutine没事就切到下一个有事的coroutine干活，能够让当前线程几乎一直处于干活的状态

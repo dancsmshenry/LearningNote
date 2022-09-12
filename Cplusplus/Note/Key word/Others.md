@@ -349,3 +349,11 @@ noexcept运算符
 # 如何把对象只分配到栈上
 
 - 将new operator函数定义为private，或者定义为delete函数
+
+
+
+
+
+
+
+# enable_shared_from_this

@@ -76,3 +76,48 @@
 - 函数以值传参的形式时
 - 函数以值形式作为返回值时（返回局部对象时）
 - 以已有的class构造对象时
+
+
+
+# 构造函数的调用顺序
+
+- 先调用父类的，再调用成员类的，最后调用自己的
+
+- ```cpp
+  #include <iostream>
+  #include <vector>
+  #include <stack>
+  #include <deque>
+  
+  class Test {
+  public:
+      Test() {std::cout << "Test" << std::endl;}
+      ~Test() {std::cout << "~Test" << std::endl;}
+      Test(const Test &p) {std::cout << "Test copy" << std::endl;}
+      Test(const Test &&p) {std::cout << "Test move" << std::endl;}
+      Test(int age) {std::cout << "Test age" << std::endl;}
+  };
+  
+  class A{
+  public:
+      A() {std::cout << "A()" << std::endl;}
+      ~A() {std::cout << "~A()" << std::endl;}
+  };
+  
+  class C{
+  public:
+      C() {std::cout << "C()" << std::endl;}
+      ~C() {std::cout << "~C()" << std::endl;}
+  };
+  
+  class B: public A{
+  public:
+      C c1;
+      B() {std::cout << "B()" << std::endl;}
+      ~B() {std::cout << "~B()" << std::endl;}
+  };
+  
+  int main() {
+      B b1;
+  }
+  ```

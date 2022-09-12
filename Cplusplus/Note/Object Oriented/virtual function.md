@@ -257,4 +257,46 @@
   }
   ```
 
-- 
+
+
+
+
+
+
+# 关于虚指针的问题
+
+- ```cpp
+  #include <algorithm>
+  #include <iostream>
+  #include <vector>
+  
+  class C {
+  public:
+      C() {std::cout << "c" << std::endl;}
+      virtual ~C() {std::cout << "~C" << std::endl;} 
+  };
+  
+  class D:public C {
+  public:
+      D() {std::cout << "d" << std::endl;}
+      virtual ~D() {std::cout << "~d" << std::endl;}
+  };
+  
+  int main() {
+      C* d = new D();
+      d -> ~C();
+      std::cout << "----" << std::endl;
+      delete d;
+  }
+  
+  /*
+  c
+  d
+  ~d
+  ~C
+  ----
+  ~C
+  */
+  ```
+
+- 为什么通过父指针调用父函数的析构函数，会造成指针的移动（后面delete都不会调用d的析构函数了...）
