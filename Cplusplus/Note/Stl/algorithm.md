@@ -188,3 +188,18 @@ tie(t1, t2) = t2, t1; // 不能够交换t1和t2的值（这里最后都会变成
   }
   return first;
   ```
+
+
+
+
+
+
+
+# remove
+
+- std::remove(first,last,val)
+- 移除[first, last)范围内等于val的元素
+- 在vector里面用就类似于
+- iter = std::remove(vec.begin(), vec.end(), val)
+- 但这个函数只是把val移到vec的末尾，并不真正删除
+- 真正删除还是要调用一次erase函数
