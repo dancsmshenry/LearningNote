@@ -26,7 +26,7 @@
 
 
 
-# strncpy
+# strncpy   
 
 - 用来复制源字符串的前n个字符，src 和 dest 所指的内存区域不能重叠，且 dest 必须有足够的空间放置n个字符
 

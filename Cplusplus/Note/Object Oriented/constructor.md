@@ -1,4 +1,144 @@
-# 移动构造函数
+# construct的种类
+
+- 默认构造函数（没有参数）
+
+- 初始化构造函数（带有参数，可以是A& A）
+
+  - ```cpp
+    class A{
+        public:
+            A(){}
+            A(A &a){cout << "A &a" << endl;}
+            A(const A &a){cout << "const A &a" << endl;}
+    };
+    
+    int main(){
+        const A a;
+        A a1(a);//调用A(const A &a){cout << "const A &a" << endl;}
+        
+        A a;
+        A a2(a);//调用A(A &a){cout << "A &a" << endl;}
+    } // 如果两个函数const版本和非const版本同时存在，const只能调用const的版本，非const版本只能调用非const的版本
+    ```
+
+- 拷贝构造函数（参数是const& A）
+
+- 移动构造函数（参数是const&& A，也叫做转移构造函数）
+
+- 委托构造函数（在参数列表里面调用其他class的constructor）
+
+- 转换构造函数（返回值是一个类型，比如int，double等等）
+
+
+
+
+
+
+
+# constructor的调用顺序
+
+- 先调用virtual父类的构造constructor（多个虚拟基类则按照继承的顺序执行构造函数）
+
+- 接着普通父类的constructor（多个普通基类也按照继承的顺序执行构造函数）
+
+- 再调用成员类的constructor（按照成员类的init顺序）
+
+- 最后调用本身的constructor
+
+- 附上实验代码：
+
+  - ```cpp
+    #include <iostream>
+    #include <vector>
+    #include <stack>
+    #include <deque>
+    
+    class Test {
+    public:
+        Test() {std::cout << "Test" << std::endl;}
+        ~Test() {std::cout << "~Test" << std::endl;}
+        Test(const Test &p) {std::cout << "Test copy" << std::endl;}
+        Test(const Test &&p) {std::cout << "Test move" << std::endl;}
+        Test(int age) {std::cout << "Test age" << std::endl;}
+    };
+    
+    class A{
+    public:
+        A() {std::cout << "A()" << std::endl;}
+        ~A() {std::cout << "~A()" << std::endl;}
+    };
+    
+    class C{
+    public:
+        C() {std::cout << "C()" << std::endl;}
+        ~C() {std::cout << "~C()" << std::endl;}
+    };
+    
+    class B: public A{
+    public:
+        C c1;
+        B() {std::cout << "B()" << std::endl;}
+        ~B() {std::cout << "~B()" << std::endl;}
+    };
+    
+    int main() {
+        B b1;
+    }
+    ```
+
+
+
+
+
+
+
+# copy constructor的调用时机
+
+- 函数以值传参的形式时（非引用传递）
+- 函数以值形式作为返回值时
+  - 背景：（Named return Value）NRV优化
+  - g++下开优化，值返回和局部对象的引用都不会调用发生拷贝构造函数（gcc关闭优化后，就会调用拷贝构造函数）
+  - 而Windows + VS2019在值返回的情况下发生拷贝构造函数，引用返回方式则不发生拷贝构造函数
+
+- 用已有的class构造对象时（但如果对象是普通对象的话，会直接值拷贝，而不会调用copy constructor）
+
+
+
+
+
+
+
+# copy constructor的构造时机
+
+- 传统上，大家认为如果我们没有定义一个自己的拷贝构造函数，编译器会帮助我们合成一个拷贝构造函数
+
+- 这个合成的拷贝构造函数，也是在 **必要**的时候才会被编译器合成出来
+
+- ```cpp
+  A a1;
+  a1.a = 10;
+  A a2 = a1;//这里没有为其合成拷贝构造函数
+  //这里其实是编译器内部的一种手法，成员变量初始化手法，比如int这种简单类型，直接就按值拷贝过去，编译器不需要合成拷贝构造函数就可以实现
+  //同时，这是递归实现的，即如果A里面还有一个对象A1，A1里面有int类型的话，那么也是会递归的去按值拷贝的
+  //这种按值拷贝会出现在所有的拷贝构造函数里面
+  ```
+
+- 某些情况下，如果我们不写自己的拷贝构造函数，编译器就会帮助我们合成出拷贝函数来
+
+  - 第一种情况：如果一个类A没有拷贝构造函数，但是含有一个**类类型**CTB的成员变量，该CTB含有拷贝构造函数，那么当代码中有涉及到类A的拷贝构造时，编译器就会为类A合成一个拷贝构造函数
+  - 第二种情况：如果一个类A没有拷贝构造函数，但是它的**父类**CTB有拷贝构造构造函数，那么当代码中有涉及到类A的拷贝构造时，编译器就会为类A合成一个拷贝构造函数
+  - 第三种情况：如果一个类A没有拷贝构造函数，但是该类声明了或继承了**虚函数**，那么当代码中有涉及到类A的拷贝构造时，编译器就会为类A合成一个拷贝构造函数（这个语句的含义是，设定类对象的虚函数指针值，虚函数表指针，虚函数表等概念）
+  - 第四种情况：如果一个类A没有拷贝构造函数，但是该类继承了**虚基类**，那么当代码中有涉及到类A的拷贝构造时，编译器就会为类A合成一个拷贝构造函数
+
+- 编译器合成的拷贝构造函数往往都是干一些特殊的事情，如果只是一些类成员变量值的拷贝，是不用专门生成拷贝构造函数的，内部就会干的
+
+
+
+
+
+
+
+# move constructor
 
 - 移动构造函数的参数是一个右值或者将亡值的引用
 - 也就是说只用一个右值，或者将亡值初始化另一个对象的时候，才会调用移动构造函数
@@ -8,37 +148,51 @@
 
 
 
-# 有哪几种构造函数
-
-- 默认构造函数
-- 初始化构造函数（带参数的）
-- 拷贝构造函数
-- 移动构造函数（move和右值引用，也叫做转移构造函数）
-- 委托构造函数（就是在参数列表里面调用别的构造函数.........）
-- 转换构造函数（形参时一个其他类型的变量）
 
 
+# 八股
 
-# 拷贝构造函数的参数为什么必须用引用
+## constructor中可以调用virtual function吗
 
-- 如果不是引用，是值传参的话，那就会陷入递归的情况
+- 可以在构造函数中调用虚函数，只是[不符合预期](https://blog.csdn.net/songchuwang1868/article/details/96481853)
+
+- 虚函数在构造函数里面不起作用
+
+- 总结：在构造函数里面，调用的函数都是静态绑定的（调用的成员函数中this都是当前的class，因此不会走virtual table）
+
+- ```cpp
+  #include <iostream>
+  
+  using namespace std;
+  
+  class A{
+  public:
+      A() {
+          
+      }
+      virtual void fun() {
+          cout << "A::fun()" << endl;
+      }
+  };
+  
+  class B: public A {
+  public:
+      B() {
+          fun();
+      }
+      virtual void fun() {
+          cout << "B::fun()" << endl;
+      }
+  };
+  
+  int main() {
+      B b1; // B::fun()
+  }
+  ```
 
 
 
-
-
-# 一个派生类构造函数的执行顺序
-
-- 虚拟基类的构造函数（多个虚拟基类则按照继承的顺序执行构造函数）
-- 基类的构造函数（多个普通基类也按照继承的顺序执行构造函数）
-- 类类型的成员对象的构造函数（按照初始化顺序）
-- 派生类自己的构造函数
-
-
-
-
-
-# 为什么构造函数不能作为虚函数
+## constructor为什么不能是virtual function
 
 - 角度1：
   - 背景：虚函数的存在是因为编译期间没法确定具体调用对象，才会有虚函数，虚函数表这么个东西
@@ -50,74 +204,7 @@
 
 
 
+## copy constructor的参数为什么必须是引用
 
-
-# 构造函数里面可以调用虚函数吗
-
-- 可以在构造函数中调用虚函数，只是不符合预期目标（https://blog.csdn.net/songchuwang1868/article/details/96481853），即虚函数在构造函数里面“不起作用”
-- 可以这样理解：在构造函数里面，调用的函数都是静态绑定的，就不会走虚函数表
-
-
-
-
-
-# 什么时候调用拷贝构造函数
-
-- 用类的一个实例化对象去初始化另一个对象的时候
-- 函数的参数是类的对象时（非引用传递） （类对象作为函数的参数且并非引用传递的时候）
-- 函数的返回值是函数体内局部对象的类的对象时 ,此时虽然发生（Named return Value优化）NRV优 化，但是由于返回方式是值传递，所以会在返回值的地方调用拷贝构造函数
-  - g++下不会发生拷贝构造函数，不仅如此即使返回局部对象的引用，依然不会发生拷贝构造函数，不仅如此即使返回局部对象的引用，依然不 会发生拷贝构造函数（不过我记得gcc关闭优化后，还是会调用拷贝构造函数）
-  - 即使发生NRV优化的情况下，Linux+ g++的环境是不管值返回方式还是引用方式返回的方式 都不会发生拷贝构造函数，而Windows + VS2019在值返回的情况下发生拷贝构造函数，引用返回方式 则不发生拷贝构造函数
-
-
-
-# 拷贝构造函数调用的时机
-
-- 函数以值传参的形式时
-- 函数以值形式作为返回值时（返回局部对象时）
-- 以已有的class构造对象时
-
-
-
-# 构造函数的调用顺序
-
-- 先调用父类的，再调用成员类的，最后调用自己的
-
-- ```cpp
-  #include <iostream>
-  #include <vector>
-  #include <stack>
-  #include <deque>
-  
-  class Test {
-  public:
-      Test() {std::cout << "Test" << std::endl;}
-      ~Test() {std::cout << "~Test" << std::endl;}
-      Test(const Test &p) {std::cout << "Test copy" << std::endl;}
-      Test(const Test &&p) {std::cout << "Test move" << std::endl;}
-      Test(int age) {std::cout << "Test age" << std::endl;}
-  };
-  
-  class A{
-  public:
-      A() {std::cout << "A()" << std::endl;}
-      ~A() {std::cout << "~A()" << std::endl;}
-  };
-  
-  class C{
-  public:
-      C() {std::cout << "C()" << std::endl;}
-      ~C() {std::cout << "~C()" << std::endl;}
-  };
-  
-  class B: public A{
-  public:
-      C c1;
-      B() {std::cout << "B()" << std::endl;}
-      ~B() {std::cout << "~B()" << std::endl;}
-  };
-  
-  int main() {
-      B b1;
-  }
-  ```
+- 如果是值传参的话，那就会陷入递归的情况
+- 是值传递，然后又要调用copy constructor，接着递归死循环

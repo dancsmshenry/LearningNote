@@ -1,6 +1,6 @@
 # 用数组模拟链表比指针实现，优势在哪儿
 
-- https://www.zhihu.com/question/62290617/answer/2411726280
+- [参考](https://www.zhihu.com/question/62290617/answer/2411726280)
 
 
 

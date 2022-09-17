@@ -988,6 +988,26 @@ unique_ptr对象的析构函数中会delete其关联指针，这样就相当于�
 
 
 
+- ```cpp
+  #include <iostream>
+  #include <memory>
+  
+  int main() {
+      std::shared_ptr<int> p(new int(13));
+      int *p1 = p.get();
+      int count = p.use_count(); // 1
+      {
+          std::shared_ptr<int> pp(p1);
+          (*pp) -- ;
+      }
+      int ret = (*p) ++ ;
+  }
+  ```
+
+- 会coredump，因为p后续是一个野指针...
+
+
+
 
 
 # 参考

@@ -1,3 +1,9 @@
+# 前置知识
+
+- stl的红黑树
+
+
+
 # map
 
 ## 实现
@@ -6,13 +12,19 @@
 
 
 
-- 底层是以红黑树的结构实现，插入删除查找都在$O(logn)$时间内完成
+- 底层是以**红黑树**的结构实现，插入删除查找都在$O(logn)$时间内完成
+  - 注意这里的value_type是pair<const Key, T> value_type;
 - 对于红黑树，其中定义了一个模版参数，如果它是key那么它就是set，如果它是map，那么它就是map
   - 实现map的红黑树的节点数据类型是key+value
   - 实现set的节点数据类型是value
 - 特性：所有元素都会根据元素的键值自动被排序，map的所有元素都是pair，同时拥有实值（value）和键值（key）；map不允许两个元素拥有相同的键值
 - 对map中的元素进行操作时，之前元素的迭代器不会因此失效
 - PS：红黑树的每个节点都需要记录当前节点的value，color，left，right，parent（所以比链表更加占用内存）
+
+
+
+- 关于map的迭代器
+- <img src="../image/map的迭代器.png" style="zoom:200%;" />
 
 
 
@@ -99,11 +111,39 @@ int main() {
 ## 实现
 
 - unordered_map中的bucket所维护的list是其自己定义的由hashtable_node数据结构组成的linked-list
+
 - bucket聚合体本身使用vector进行存储（**所以说本质是数组**）
+
 - hashtable的迭代器只提供前进操作，不提供后退操作
+
 - 在hashtable设计bucket的数量上，其内置了28个质数[53, 97, 193,...,429496729]，在创建hashtable时，会根据存入的元素个数选择大于等于元素个数的质数作为hashtable的容量（vector的长度），其中每个bucket 所维护的linked-list长度也等于hashtable的容量。如果插入hashtable的元素个数超过了bucket的容量，就要进行重建table操作，即找出下一个质数，创建新的buckets vector，重新计算元素在新hashtable的位置
+
 - 什么时候扩容：当向容器添加元素的时候，会判断当前容器的元素个数，如果大于等于阈值---即当 前数组的长度乘以加载因子的值的时候，就要自动扩容啦
+
 - ![](../image/拉链法实现hashtable.png)
+
+- unordered_map是基于**hash_table**实现，一般是由一个大vector，vector元素节点可挂接链表来解决冲突来实现。hash_table最大的优点，就是把数据的存储和查找消耗的时间大大降低，几乎可以看成是常数时间；而代价仅仅是消耗比较多的内存。然而在当前可利用内存越来越多的情况下，用空间换时间的做法是值得的
+
+- hash_table节点的定义
+
+  - ```cpp
+    template<class Vaule>
+    struct __hashtable_node {
+        __hashtable_node* next;
+        Value val;
+    };
+    ```
+
+- hash_table的迭代器
+
+  - ![](../image/hashtable的迭代器.png)
+  - hashtable的迭代器没有后退操作，hashtable也没有定义所谓的逆向迭代器
+
+- hashtable的数据结构
+
+  - ![](../image/hashtable的数据结构.png)
+
+- ![](../image/hashtable的节点数.png)
 
 
 
@@ -141,6 +181,12 @@ unordered_map
 - unordered_multimap 底层数据结构为hash表，无序，可重复
 
 
+
+
+
+# multimap
+
+- <img src="../image/multimap.png" style="zoom:150%;" />
 
 
 

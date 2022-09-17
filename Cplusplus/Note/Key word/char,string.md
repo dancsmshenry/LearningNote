@@ -32,6 +32,11 @@
     char s1[4] = "abc";
     sizeof s1; // 记录的是字符数组的大小
     strlen(s1);// 记录的是字符串删掉\0的长度
+    
+    char s2[] = "dsfsdf";// 不能被[]蒙骗为指针，实际上还是一个数组..（可变的）
+    void test(char a[]){
+        std::cout << sizeof(a) << std::endl;//	z
+    }
     ```
 
 

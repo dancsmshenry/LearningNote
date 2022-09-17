@@ -1,52 +1,6 @@
-# PS
+# epoll的数据结构
 
-- IO多路复用本质上还是阻塞的，进程或线程还是会阻塞在调用select/poll/epoll函数上，真正的非阻塞还得是异步io（也就是proctor），或者是把epoll等函数包装成reactor
-- select，poll需要每次把感兴趣的事件全量传入select或者poll方法中，内核每次都需要复制解析一边，浪费系统资源，而epoll维护了一个全局的rbt，不需要每次全量解析
-
-
-
-- epoll到底有没有用mmap，能不能少一次用户态内核态的拷贝
-  fd少的时候用select吗？
-  epoll和select的选用
-- linux上的epoll的man page,
-
-
-
-
-
-epoll_wait函数
-
-- 格式：`int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);`
-- 功能：阻塞一小段时间并等待事件发生，返回事件集合，也就是获取内核的事件通知
-- 说白了，就是遍历这个双向链表，把这个双向链表里边的节点数据拷贝出去，拷贝完毕后就从双向链表里移除
-- 因为双向链表里记录的是所有有数据/有事件的socket（tcp连接）
-- 参数：epfd，是epoll_create（）返回的epoll对象描述符
-- 参数events：是内存，也是数组，长度是maxevents，表示此次epoll_wait调用可以收集到的maxevents个已经继续（已经准备好的）读写事件
-- 说白了，就是返回实际发生事件的tcp连接数目
-- 参数timeout：阻塞等待的时长
-- epitem结构设计的高明之处，既能够作为红黑树的节点，又能够作为双向链表中的节点
-
-
-
-内核向双向链表增加节点一般有四种情况
-
-- 客户端完成三路握手，服务器要accept
-- 当客户端关闭连接，服务器也要调用close关闭
-- 客户端发送数据来，服务器要用read，recv来接收数据
-- 当**可以**发送数据时，服务器可以调用send，write
-- 也还有其他的情况
-
-
-
-
-
-
-
-# Epoll
-
-## epoll的数据结构
-
-### 红黑树
+## 红黑树
 
 - 用途：用于存放需要监听的fd
 
@@ -58,12 +12,11 @@ epoll_wait函数
 
 
 
-### 双向链表
+## 双向链表
 
-- 用途：
+- 用途：缓存就绪的socket和可读可写的fd
 
-  - 缓存就绪的socket和可读可写的fd
-  - 只需要拷贝这个双向链表到用户空间，在遍历即可（注意这里也需要拷贝，没有共享内存）
+- 只需要拷贝这个双向链表到用户空间，在遍历即可（注意这里也需要拷贝，没有使用共享内存mmap）
 
 - ```cpp
   struct list_head rdllist;
@@ -71,21 +24,13 @@ epoll_wait函数
 
 
 
-### 等待队列
-
-- wait_queue_head_t wq
-- epoll_wait使用的等待队列（使用这个系统调用的进程的fd，如果没有事件发生的话，就一直阻塞，否则就把他唤醒）放着正在等待的进程
-- 每个epoll对象都会有一个等待队列，该队列会记录有哪些进程阻塞在epoll_wait函数上，所以当有就绪事件时，知道唤醒那些进程
 
 
 
 
+# epoll的使用流程
 
-
-
-## epoll的使用流程
-
-### epoll_create
+## epoll_create
 
 - ```cpp
   //# open an epoll file descriptor
@@ -136,7 +81,7 @@ epoll_wait函数
 
 
 
-### epoll_ctl
+## epoll_ctl
 
 - ```cpp
   //# 往 epoll instance 上添加、删除、更改一个fd（socket)
@@ -147,16 +92,27 @@ epoll_wait函数
 
 
 
-### epoll_wait
+## epoll_wait
 
 - ```cpp
   //# wait for events on epoll instance
   int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
+  //	epfd，是epoll_create（）返回的epoll对象描述符
+  //	events：是内存，也是数组，长度是maxevents，表示此次epoll_wait调用可以收集到的maxevents个已经继续（已经准备好的）读写事件
+  //	timeout：阻塞等待的时长
   ```
-
+  
 - 等待其管理的连接上的IO事件
 
 - 内核通过一个事件表直接管理用户感兴趣的所有事件，因此每次调用epoll_wait时，无需反复传入用户感兴趣的事件，epoll_wait系统调用的参数events仅用来反馈就绪的事件
+
+- 功能：阻塞一小段时间（timeout ms）并等待事件发生，返回事件集合，也就是获取内核的事件通知
+
+- 遍历这个双向链表，把这个双向链表里边的节点数据拷贝出去，拷贝完毕后就从双向链表里移除
+
+- 因为双向链表里记录的是所有有数据/有事件的socket（tcp连接）
+
+
 
 
 
@@ -186,6 +142,7 @@ LT的处理过程：
 - 当EPOLLIN事件到达时，read fd中的数据并处理
 - 当需要写出数据时，把数据write到fd中；如果数据较大，无法一次性写出，那么在epoll中监听EPOLLOUT事件
 - 当EPOLLOUT事件到达时，继续把数据write到fd中；如果数据写出完毕，那么在epoll中关闭EPOLLOUT事件
+- PS:epollin代表缓冲区的数据可读；epollout代表缓冲区的数据可写
 
 
 
@@ -320,6 +277,38 @@ et下的坑爹
 - 如果此时再来一次数据123456
 - 那么此时读到的就是cd，新来的数据是会接到fg后面
 - 所以读数据其实都是从socket的内核缓冲区中的读的
+
+
+
+
+
+- IO多路复用的本质还是阻塞，因为当有事件触发的时候线程会被阻塞在上下文，真正的非阻塞io只有异步io
+- select，poll需要每次把感兴趣的事件全量传入select或者poll方法中，内核每次都需要复制解析一边，浪费系统资源，而epoll维护了一个全局的rbt，不需要每次全量解析
+
+
+
+- epoll到底有没有用mmap，能不能少一次用户态内核态的拷贝
+  fd少的时候用select吗？
+  epoll和select的选用
+- linux上的epoll的man page,
+
+
+
+
+
+- epitem结构设计的高明之处，既能够作为红黑树的节点，又能够作为双向链表中的节点
+
+
+
+内核向双向链表增加节点一般有四种情况
+
+- 客户端完成三路握手，服务器要accept
+- 当客户端关闭连接，服务器也要调用close关闭
+- 客户端发送数据来，服务器要用read，recv来接收数据
+- 当**可以**发送数据时，服务器可以调用send，write
+- 也还有其他的情况
+
+
 
 
 
