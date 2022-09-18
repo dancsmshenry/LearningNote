@@ -32,6 +32,35 @@
 
 
 
+# struct的初始化
+
+- ```cpp
+  #include<stdio.h>
+  struct student{
+      /* data */
+      int age;
+      char name[5];
+      char gender;
+      double score;
+  };
+  
+  int main()
+  {
+      struct student stu={
+          .age=15, // 这也s
+          .gender='M',
+          .name="ca",
+          .score=56.15,
+      };
+     
+      printf("%d,%c,%s,%lf",stu.age,stu.gender,stu.name,stu.score);
+  }
+  ```
+
+- 
+
+
+
 # struct在C和C++中的区别
 
 - 在C语言中，不支持成员函数（但是可以支持函数指针）；在Cpp中支持成员函数
