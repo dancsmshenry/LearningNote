@@ -257,6 +257,29 @@
 
 
 
+## virtual destructor抛出异常
+
+- 《effective cpp》中第八条
+
+- 不能让析构函数吐出异常，因为这可能会使程序**提前结束**或**出现不明确行为**
+
+- 解决办法：
+
+  - 在析构函数中运用try catch，即如果抛出了异常就结束程序，通常通过调用abort完成
+
+  - ```cpp
+    DBConn::~DBConn(){
+        try{db.close();}
+        catch(...){
+            std::abort();
+        }
+    }
+    ```
+
+  - 或者不用abort，直接记录下此次异常
+
+
+
 
 
 
