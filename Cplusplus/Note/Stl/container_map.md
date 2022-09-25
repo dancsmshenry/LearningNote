@@ -82,6 +82,11 @@ int main() {
 
 	// 4) 用数组方式插入数据
 	mapStudent[1] = "student_one";
+    
+    //	删除元素
+    map<int, int> map1;
+    auto i = map.find(1);
+    map.eraset(i)
 }
 ```
 

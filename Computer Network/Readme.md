@@ -42,3 +42,17 @@ TCP
 others
 
 - cmd中的ping一下的工作原理
+
+
+
+
+
+## Open System Interconnection
+
+- 物理层
+- 数据链路层
+- 网络层
+- 传输层
+- 会话层
+- 表示层
+- 应用层

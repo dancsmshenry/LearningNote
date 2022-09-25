@@ -1,3 +1,25 @@
+# 有关数组传参的问题
+
+- ```cpp
+  void func(int arr[10][10]) {} // ok
+  void func(int arr[][]) {} // error
+  void func(int** arr, int n, int m) {} // ok
+  void func(int arr[1][]) {} // error
+  void func(int arr[][1]) {} // error
+  
+  void func(int arr[102]) {} // ok
+  void func(int* arr) {} // ok
+  void func(int arr[]) {} // o
+  ```
+
+- 
+
+
+
+
+
+
+
 # noexcept
 
 作用

@@ -1008,6 +1008,26 @@ unique_ptr对象的析构函数中会delete其关联指针，这样就相当于�
 
 
 
+- ```cpp
+  //	一些实战
+  #include <iostream>
+  #include <memory>
+  
+  int main() {
+      std::shared_ptr<int> p(new int(13));
+      int *q = p.get();
+      {
+          std::shared_ptr<int> p1(q);
+          (*p1) -- ;
+      }
+      int ret = (*p) ++ ;//	注意到这一部分的时候，数据就会被删除掉了（因为在p1在{}中认为只有它自己拿到了这个数据，那么出来的时候就会把数据给销毁掉，造成的结果就是访问到未知的数据.）
+  }
+  ```
+
+- 
+
+
+
 
 
 # 参考

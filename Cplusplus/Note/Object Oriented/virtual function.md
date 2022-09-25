@@ -63,6 +63,8 @@
   - http://baiy.cn/doc/cpp/inside_rtti.htm
 
   - https://blog.csdn.net/xiaxzhou/article/details/76576516
+  
+- 出现的一些情况是虚函数指针和虚表的那个指针变为了同一个指针了
 
 
 

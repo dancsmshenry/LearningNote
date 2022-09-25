@@ -25,7 +25,7 @@
   - 不能用于在不同类型的指针之间互相转换
   - 不能用于整型和指针之间的互相转换
   - 不能用于不同类型的引用之间的转化
-  - 不能转换掉const或volatile，或者 __unaligned属性
+  - **不能转换掉const**或volatile，或者 __unaligned属性
 
 
 
@@ -37,11 +37,9 @@
 #### 用法
 
 - ```cpp
-  dynamic_cast< type-id > (expression);//	type-id 必须是类指针，类引⽤或 void*
+  dynamic_cast<type-id> (expression);//	type-id 必须是类指针，类引⽤或 void*
   //	如果 type-id 是类指针类型，那么expression也必须是一个指针，如果 type-id 是一个引用，那么 expression 也必须是一个引用
   ```
-  
-- 
 
 
 
