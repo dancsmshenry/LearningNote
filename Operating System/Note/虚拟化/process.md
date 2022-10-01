@@ -1,10 +1,46 @@
-进程退出后所有的线程也会退出
+进程退出后，线程是如何处理的：
+
+- 主线程以 return 的方式退出：那么此时main() 执行完 return 之后，实际上会调用 exit() 函数，该函数除了执行关闭IO等操作之外，还会执行关掉其他子线程的操作
+
+- 主线程以pthread_exit退出的：在主线程中执行 pthread_exit() ，实际上是提前结束了 main 的主线程，也就无法执行后续的 exit() 函数了。所以，这种方法是可以达到主线程退出子线程继续运行的目的
+
+- ```cpp
+  #include <iostream>
+  #include <pthread.h>
+  #include <unistd.h>
+  
+  void *func(void *args)
+  {
+      while (true)
+      {
+          std::cout << "I am func." << std::endl;
+          sleep(3);
+      }
+  }
+  
+  int main()
+  {
+      pthread_t pid = 0;
+      pthread_create(&pid, nullptr, func, nullptr);
+      pthread_detach(pid);
+      pthread_exit(nullptr);
+      return 0;
+  }// 在linux中可以轻松验证：g++ test.cpp -o test -pthread;上面的线程在主线程
+  ```
+
+- 
 
 
 
 **进程的切换一定发生在中断/异常/系统调用处理过程中**
 
+- 其实这里我是存疑的，因为，处理中断异常或是系统调用，本质上页表都是没有更换的，只是将栈换为了内核栈，并且执行内核的代码与硬件进行交互
+- 当然，上面有点纰漏的就是，kernel会通过中断来切换时间片，这应该算是进程的切换了...
+- 或者说是进程被阻塞了，挂起，也会造成进程的切换
 
+
+
+说到底，进程的切换，要围绕进程的调度图来思考
 
 https://blog.csdn.net/a745233700/article/details/120866618
 

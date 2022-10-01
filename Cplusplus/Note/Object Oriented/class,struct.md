@@ -47,7 +47,7 @@
   int main()
   {
       struct student stu={
-          .age=15, // 这也s
+          .age=15, // 一种类型的
           .gender='M',
           .name="ca",
           .score=56.15,
@@ -55,8 +55,13 @@
      
       printf("%d,%c,%s,%lf",stu.age,stu.gender,stu.name,stu.score);
   }
+  
+  typedef struct {int i;} color;
+  struct color c2 {int i}; // 错误的用法（其他的都是z）
+  struct {int i;} c1;
+  struct color {} c3;
   ```
-
+  
 - 
 
 

@@ -89,7 +89,7 @@
   
   void test2() {
       const char *c1 = "ab\0c\0";
-      cout << c1;
+      //	cout << c1; // cc1指针是不能直接打印的.
       // ab
       // char*读到\0就会停下来
   }
@@ -162,3 +162,15 @@ string的优点
 
 
 ## move函数
+
+
+
+
+
+char32_t u2[] = u"hello";
+
+char16_t u4 = u8"hello";
+
+char u3[] = u"hello";
+
+char utf8[] = u8"hello";

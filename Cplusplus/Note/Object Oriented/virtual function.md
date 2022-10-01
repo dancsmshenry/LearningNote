@@ -282,6 +282,70 @@
 
 
 
+## 父类对象（指针）调用子类虚函数
+
+- CRTP，这是一种设计模式，主要是用于父类从子类中提取相关信息
+
+- ```cpp
+  template <typename T>
+  class Base
+  {
+  public:
+      virtual ~Base() = default;
+      virtual void fun()
+      {
+          cout << "Base::fun()" <<endl;
+      }
+      
+      void callChildMethod()
+      {
+          static_cast<T&>(*this).show();
+      }
+  };
+  
+  class Sub : public Base<Sub>
+  {
+  public:
+      virtual void fun()
+      {
+          cout << "Sub::fun()" <<endl;
+      }
+      
+      virtual void show()
+      {
+          cout << "Sub::show()" <<endl;
+      }
+  };
+  
+  Sub sub;
+  Base<Sub>& base = sub;
+  base.callChildMethod();
+  ```
+
+
+
+## 子类调用父类虚函数
+
+- ```cpp
+  class a1 {
+  public:
+      virtual ~a1() = default;
+      virtual void show() {std::cout << "a1" << std::endl;}
+  };
+  
+  class b1: public a1 {
+  public:
+      virtual void show() {std::cout << "b1" << std::endl;}
+  };
+  
+  int main() {
+      b1 b;
+      static_cast<a1>(b).show();
+  }
+  ```
+
+
+
 
 
 

@@ -43,3 +43,13 @@ read，write的api
 读：用多个指针指向它，引用计数++
 
 写：全局锁，先判断引用计数，多人在读的话就swap数据
+
+
+
+
+
+https://blog.csdn.net/tabe_/category_11455179.html
+
+https://blog.csdn.net/tabe_/category_11327992.html
+
+https://blog.csdn.net/tabe_/category_10897043.html

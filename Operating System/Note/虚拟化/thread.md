@@ -203,6 +203,13 @@
 
 - ![](../image/进程状态图.png)
 
+实现线程的三种模式：KLT（内核线程），ULT（用户线程），LWP（轻量级线程，用户级线程加轻量级进程混合）
+
+- 一个理解：os中只有内核线程，所谓的用户线程都是在用户态代码库上实现的
+- 因此就会衍生为1 v 1，1 v n，n v m的线程模式
+
+
+
 
 
 
@@ -227,3 +234,5 @@
 - https://www.nowcoder.com/discuss/821457
 - https://www.zhihu.com/question/19732473/answer/241673170
 - https://www.zhihu.com/question/492983429/answer/2264063636
+- https://blog.csdn.net/qq_41055045/article/details/118885500
+- https://blog.csdn.net/mccand1234/article/details/118465728

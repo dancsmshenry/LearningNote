@@ -17,6 +17,18 @@ This is a depository which records the note of operating system and some persona
 
 
 
-# 笔试中一些没有用的八股
 
-- 软件工程三要素：方法、工具和过程
+
+## 软件工程三要素
+
+- **方法、工具和过程**
+
+
+
+
+
+
+
+## uml多重度
+
+- 是指一个类的实例能够与另一个类的多少个实例相关联
