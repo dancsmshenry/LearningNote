@@ -1,4 +1,4 @@
-bzero
+# bzero
 
 - bzero() 能够将内存块（字符串）的前n个字节清零
 - 在"string.h"头文件中
@@ -16,7 +16,11 @@ bzero
 
 
 
-memset
+
+
+
+
+# memset
 
 - ```cpp
   void *memset(void *s, int c, size_t n);  //返回指向s的指针。,也可以不用这个返回的指针

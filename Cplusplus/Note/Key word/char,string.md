@@ -35,7 +35,7 @@
     
     char s2[] = "dsfsdf";// 不能被[]蒙骗为指针，实际上还是一个数组..（可变的）
     void test(char a[]){
-        std::cout << sizeof(a) << std::endl;//	z
+        std::cout << sizeof(a) << std::endl;//	返回的是指针的大小
     }
     ```
 
@@ -95,8 +95,6 @@
   }
   ```
 
-- 
-
 
 
 ## string和char*
@@ -113,6 +111,18 @@ string的优点
 
 - 方便，不需要关心是否释放相关内存，不需要担心内存泄漏问题
 - 有些string是const char*不能替代的，比如一个string中间有'\0'，使用const char *作为参数传递过去会被截断的，也就不符合需求
+
+
+
+## 对char*的一个理解
+
+- ```cpp
+  char *p1 = "abcd"; // 这句话，在cpp中会被默认为下面这句话
+  const char *p1 = "abcd";
+  
+  char *p1 = nullptr; // 而这句话就不会被认为是const
+  p1 = (char*)malloc(100); // 所以，string里面的实现应该都是这样实现的
+  ```
 
 
 
@@ -167,10 +177,15 @@ string的优点
 
 
 
-char32_t u2[] = u"hello";
+# to read or solve
 
-char16_t u4 = u8"hello";
+- https://www.cnblogs.com/cthon/p/9181979.html
+- muduo书中的string的设计
 
-char u3[] = u"hello";
+- char32_t u2[] = u"hello";
 
-char utf8[] = u8"hello";
+- char16_t u4 = u8"hello";
+
+- char u3[] = u"hello";
+
+- char utf8[] = u8"hello";
