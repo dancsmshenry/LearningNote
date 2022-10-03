@@ -204,6 +204,12 @@ launch.json
 
 
 
+选取某一列的数据
+
+- alt + shift + 选取下拉或上拉
+
+
+
 
 
 to do list
