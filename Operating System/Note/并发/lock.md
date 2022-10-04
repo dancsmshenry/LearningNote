@@ -93,17 +93,24 @@ linux下的api
 api的使用
 
 - ```cpp
-  // 声明一个互斥量    
+  // 声明一个互斥量
   pthread_mutex_t mtx;
-  // 初始化 
+  
+  // 初始化（返回值：成功：0；失败：-1）
   pthread_mutex_init(&mtx, NULL);
-  // 加锁  
+  
+  // 加锁
   pthread_mutex_lock(&mtx);
-  // 解锁 
+  
+  // 解锁
   pthread_mutex_unlock(&mtx);
+  
   // 销毁
   pthread_mutex_destroy(&mtx); 
-  // 非阻塞模式请求锁，并返回值
+  
+  //  非阻塞调用模式（返回值：成功：0；失败：-1）
+  //	如果互斥量没被锁住, trylock函数将对互斥量加锁, 并获得对共享资源的访问权限
+  //	如果互斥量被锁住了,trylock函数将不会阻塞等待而直接返回EBUSY, 表示共享资源处于忙状态
   pthread_mutex_trylock(&mtx);
   
   /**

@@ -1,26 +1,74 @@
-# 定义及分类
+# 背景
 
-- 如果是pthread的话，那就是内核线程，由OS管理
-- 但如果是go的goroutine，那就是用户线程，由用户态管理
-- 而用户态的线程是基于内核态的线程构建的，所以就会有很多的模型，例如一对一模型，多对一模型，多对多模型
-  - 存在一个线程中有多个协程（比如项目burger中就是一个线程中有多个协程，轮询消费协程中的事件），也存在多个线程中有多个协程（golang就是）
+- 进程间切换计算机资源开销很大，切换效率非常低
+- 进程间数据共享的开销也很大
+- 进程占用空间较大，启动一个新的进程必须分配给它独立的地址空间，建立众多的数据表来维护它的代码段、堆栈段和数据段
+
+
+
+
+
+
+
+# 定义
+
+- 实现线程的三种模式：KLT（内核线程，1:1），ULT（用户线程，N:1），LWP（轻量级线程，N:M）
+  - 如果是cpp pthread库中的线程，就是KLT模型（好像java里面的线程也是内核线程；Windows NT 内核也是1:1的）
+  - 如果是go的goroutine，就是LWP模型
+  - 如果是libco的coroutine，就是ULT模型
 
 
 
 
 ## 用户线程
 
-- 用户线程的切换由用户态程序自己控制切换，不需要内核干涉，少了进出内核态的消耗，但不能很好的利用多核Cpu
-- 就是go里面的goroutine
+- 用户线程的切换由用户态程序自己控制切换，不需要内核干涉，少了进出内核态的消耗
+- 优点是能够有效的应对IO密集的场景
+- 缺点是不能很好的利用多核CPU
+
+
+
+- 一般来说，针对KLT，ULT模型，如果一个用户线程发生了阻塞，那么就会直接造成整个内核线程对应的所有用户线程阻塞（当然如果对系统调用使用了hook，就另外说）
+- 所以准确的说，是导致了内核线程阻塞，才会整体的阻塞
+- 之前说的多对一模型，之所以我们的项目还在用，就是hook了系统调用（因为多对一的时候，其中一个用户线程阻塞，就会造成整体的阻塞）
 
 
 
 ## 内核线程
 
-- 由操作系统创建和销毁，内核维护进程及线程的上下文信息以及线程切换，一个内核线程由于IO操作而阻塞，不会影响其他（内核）线程的运行（因为linux是以task_struct作为调度的）
-- 切换由内核控制，当线程进行切换的时候，由用户态转化为内核态。切换完毕要从内核态返回用户态；可以很好的利用smp，即利用多核cpu。windows线程就是这样的
-- 注意Linux2.4版本之前pthread用的LinuxThread实现，和Linux2.5以后pthread用的NPTL（据说比较好支持了POSIX线程标准）,都是系统级别的1:1线程模型，都是系统级线程
-- LinuxThread的内核对应的管理实体就是进程，又称LWP（轻量级进程），每个线程的pid是不一样的（但是getpid返回的都是其进程的pid）
+- 由操作系统创建和销毁，内核维护线程及线程的上下文信息以及线程切换
+- 一个内核线程由于IO操作而阻塞，不会影响同一个进程下其他（内核）线程的运行
+- 内核线程的切换：由用户态转化为内核态，切换完毕要从内核态返回用户态
+- PS：Linux2.4版本之前pthread用的LinuxThread实现，和Linux2.5以后pthread用的NPTL，他们都是系统级别的1:1线程模型
+- 缺点：创建成本高（需要系统调用才能创建）；切换成本高
+
+
+
+## 轻量级线程
+
+- golang的goroutine
+
+
+
+
+
+
+
+# 组成
+
+## 线程栈
+
+- 对于 Linux 进程或者说主线程，其 stack 是在 fork 的时候生成的，实际上就是复制了父亲的 stack 空间地址，然后写时拷贝 (cow) 以及动态增长
+- 然而对于主线程生成的子线程而言，其 stack 将不再是这样的了，而是事先固定下来的，使用 mmap 系统调用
+
+- 由于线程栈是从进程的地址空间中 map 出来的一块内存区域，原则上是线程私有的
+- 但是同一个进程的所有线程生成的时候浅拷贝生成者的 task_struct 的很多字段，其中包括所有的 vma，如果愿意，其它线程也还是可以访问到的
+
+
+
+## 其他
+
+- 一些寄存器及PC
 
 
 
@@ -31,14 +79,9 @@
 # 线程的创建
 
 - fork()函数就是调用系统调用clone()来实现父进程拷贝的从而创建一个新进程的
-- clone()里有一个flag参数，这个参数有很多的标志位指定了克隆时需要拷贝的东西，其中标志位CLONE_VM就是定义拷贝时是否使用相同的内存空间。
+- clone()里有一个flag参数，这个参数有很多的标志位指定了克隆时需要拷贝的东西，其中标志位CLONE_VM就是定义拷贝时是否使用相同的内存空间
 - fork()调用clone()时没有设置CLONE_VM，所以在内核看来就是产生了两个拥有不同内存空间的进程
-- 而pthread_create()里调用clone()时设置了CLONE_VM，所以在内核看来就产生了两个拥有相同内存空间的进程，即生成了一个内核态的线程
-
-
-
-- 另外，看到网上很多文章说，POSIX线程是混合模型，有用户级和系统级线程，通过一个参数来选择。等等。我是这样理解的：
-- POSIX只是一个协议，各个系统的实现不一样。我只知道LInux的线程是系统级线程，是内核参与调度的，是操作系统可见的。不管LinuxThread还是NPTL都是这样的
+- 而pthread_create()里调用clone()是设置了CLONE_VM，所以在内核看来就产生了两个拥有相同内存空间的进程，即生成了一个内核态的线程
 
 
 
@@ -46,19 +89,10 @@
 
 
 
+# 线程的通信
 
-
-
-
-# 等待解决的问题
-
-- 进线程，协程的切换，快慢，代价https://blog.csdn.net/weixin_37841366/article/details/109237089
-- 进程，线程同步，通信的各种方式
-- linux下进线程的调度都是一样的，因为其底层都是task_struct，kernel只要调度task_struct就可以了
-
-
-
-- 
+- 互斥量（pthread_mutex_t）
+- 条件变量（pthread_cond_t）
 
 
 
@@ -94,39 +128,9 @@
 
 
 
-流程
+过程
 
 - 线程发生了上述的事情，kernel发现了有线程崩溃，于是向当前进程发送信号来终止该进程
 - 如果进程没有注册自己的信号处理函数，那么操作系统会执行默认的信号处理程序（一般是发送kill信号，一般最后会让进程退出），但如果注册了，则会执行自己的信号处理函数
 
-- 所以，本质上是jvm注册了信号处理函数，对此进行了捕获；而cpp则没有实现，需要自己去实现信号捕获
-
-
-
-
-
-
-
-# 参考
-
-- https://blog.csdn.net/qq_41489540/article/details/109261692
-- https://blog.csdn.net/lxq19980430/article/details/102764018
-- https://blog.csdn.net/ctthuangcheng/article/details/8914309
-- https://blog.csdn.net/gatieme/article/details/51481863
-- https://blog.csdn.net/qq_42011541/article/details/102711196
-- https://blog.csdn.net/gatieme/category_6225543.html
-- https://blog.csdn.net/qq_41055045/article/details/118885500
-- https://blog.csdn.net/mccand1234/article/details/118465728
-- https://blog.csdn.net/ctthuangcheng/article/details/8914444
-- https://blog.csdn.net/gatieme/category_6225543.html
-- https://blog.csdn.net/gatieme/category_6393814.html
-- https://blog.csdn.net/gatieme/category_1840439.html
-- https://www.nowcoder.com/discuss/821457
-- https://www.zhihu.com/question/19732473/answer/241673170
-- https://www.zhihu.com/question/492983429/answer/2264063636
-- https://kernel.blog.csdn.net/article/details/52384965
-- https://kernel.blog.csdn.net/article/details/51482122
-- https://www.cnblogs.com/charlesblc/p/6242518.html
-- https://www.cnblogs.com/wanglulu/p/5522809.html
-- http://www.cnitblog.com/tarius.wu/articles/2277.html
-- https://pluscb.xyz/2021/10/04/%E7%BB%93%E5%90%88%E5%86%85%E6%A0%B8%E6%80%81%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%BB%93%E6%9E%84%E8%B0%88%E8%B0%88-%E4%B8%BA%E4%BB%80%E4%B9%88%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2%E6%AF%94%E8%BF%9B%E7%A8%8B%E5%BF%AB/
+- 所以，本质上是**jvm注册了信号处理函数，对此进行了捕获**；而cpp则没有实现，需要自己去实现信号捕获
