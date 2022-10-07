@@ -210,6 +210,12 @@ launch.json
 
 
 
+折叠所有代码行：按住ctrl （始终不要松开），再按k，松开k，再按0，即ctrl+k+0、
+
+打开所有代码行：按住ctrl （始终不要松开），再按k，松开k，再按j，即ctrl+k+j
+
+
+
 
 
 to do list

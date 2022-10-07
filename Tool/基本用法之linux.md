@@ -44,7 +44,12 @@
 
 # 解压文件
 
-- `tar xzf file_name`
+- 解压.tar文件
+  - `tar xzf file_name`
+
+- 解压tar.gz文件
+  - `tar -zxvf file_name`
+
 
 
 
@@ -57,6 +62,12 @@
 - `wget download_url`
 
 
+
+## 库的安装
+
+- 很多时候，某些库（protobuf）是可以用pip进行安装和卸载的
+- pip install protobuf==3.16.0（指定版本安装）
+- pip uninstall protobuf（卸载库）
 
 
 
