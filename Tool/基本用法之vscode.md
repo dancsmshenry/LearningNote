@@ -1,73 +1,75 @@
-##### Vscode-icons
+# 插件
+
+## Vscode-icons
 
 - 可以控制vscode中的文件管理的树目录显示图标，即改变文件显示的图标
 
 
 
-##### Tabnine Autocomplete AI
+## Tabnine Autocomplete AI
 
 - 是一个机器学习驱动的代码自动补全工具，使用 GitHub 的近 200 万个文件进行了训练，由于深度学习的分析能力，Deep TabNine 提出的代码补全建议整体上具有很高的质量
 
 
 
-##### Rainbow Brackets
+## Rainbow Brackets
 
 - 可以将同一对花括号给定相同的颜色，可以一眼就看出配对的两个花括号
 
 
 
-##### Polacode
+## Polacode
 
 - 将代码变为照片存储，便于分享
 - 使用方法：ctrl+shift+p，然后输入polacode
 
 
 
-##### One Dark Pro
+## One Dark Pro
 
 - 设置为one dark pro背景
 
 
 
-##### Chinese (Simplified) Language Pack for Visual Studio Code
+## Chinese (Simplified) Language Pack for Visual Studio Code
 
 - vscode中文包
 
 
 
-##### code runner
+## code runner
 
 - 不知道有什么用，但是好像是能够运行代码的一个插件
 - 右键即可编译运行单文件，很方便；但无法Debug
 
 
 
-##### Astyle
+## Astyle
 
 - 格式化代码
 
 
 
-##### C/C++
+## C/C++
 
 - 又名 cpptools，提供Debug和Format功能
 
 
 
-##### C/C++ Clang Command Adapter
+## C/C++ Clang Command Adapter
 
-##### C/C++ Extension Pack
+## C/C++ Extension Pack
 
 
 
-##### Language Support for Java(TM) by Red Hat
+## Language Support for Java(TM) by Red Hat
 
 - java的配置（也没有必要一定要这样配置，但是这样配置会更舒服）
   - 方法参考日志2021.04.15
 
 
 
-##### Markdown in all one
+## Markdown in all one
 
 - 能够给markdown创建目录
   - 虽然[toc]也可以，但是上传到github就不行了
@@ -76,7 +78,7 @@
 
 
 
-##### Setting sync
+## Setting sync
 
 - 多端同步配置
 
@@ -84,7 +86,7 @@
 
 
 
-##### vscode下配置cpp编译器gcc
+## vscode下配置cpp编译器gcc
 
 创建一个.vscode的文件夹，里面放两个文件一个是task.json，另一个是launch.json
 
@@ -174,41 +176,45 @@ launch.json
 
 
 
-##### 复制上一行的数据
+# 指令
+
+## 复制上一行的数据
 
 - alt + shift + 上或下键，复制当前行的数据到下一行
 
 
 
-##### 切换到终端
+## 切换到终端
 
 - ctrl + `
 
 
 
-##### 查找文件
+## 查找文件
 
 - ctrl + p
 
 
 
-##### 查找字符
+## 查找字符
 
 - ctrl + f
 
 
 
-##### 运行代码
+## 运行代码
 
 - ctrl + alt + n
 
 
 
-选取某一列的数据
+## 选取某一列的数据
 
 - alt + shift + 选取下拉或上拉
 
 
+
+## 代码行
 
 折叠所有代码行：按住ctrl （始终不要松开），再按k，松开k，再按0，即ctrl+k+0、
 
@@ -218,7 +224,9 @@ launch.json
 
 
 
-to do list
+
+
+# to do list
 
 https://blog.csdn.net/m0_46548070/article/details/105116420
 

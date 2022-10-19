@@ -107,6 +107,29 @@ int main() {
 
 
 
+## 自定义类型放入map中
+
+- ```cpp
+  class A {
+  public:
+      A() = default;
+      A(const A&) = default;
+      ~A() = default;
+      int i;
+      bool operator<(const A& a1) const{
+          return a1.i < this -> i;
+      }
+  };
+  
+  int main() {
+      map<A, int> map2; 
+      A a1, a2;
+      map2[a1] = 1;
+  }
+  ```
+
+
+
 
 
 
@@ -151,6 +174,47 @@ int main() {
 - ![](../image/hashtable的节点数.png)
 
 
+
+## 自定义类型放入unordered_map中
+
+```cpp
+#include <iostream>
+#include <string>
+#include <unordered_map>
+using namespace std;
+struct my_key {
+    int    num;
+    string name;
+    my_key(){}
+    ~my_key(){}
+    my_key(int a, string b) : num(a), name(b){}
+    bool operator==(const my_key &t)const {
+        return this->num == t.num;
+    }
+};
+struct myHashFuc {
+	std::size_t operator()(const my_key &key) const {
+		return std::hash<int>()(key.num);
+	}
+};
+ 
+int main() {
+    unordered_map <my_key, bool, myHashFuc> mmp;
+    my_key myuin(1, "bob");
+    mmp[myuin] = true;
+ 
+    cout << mmp[myuin] << endl;
+    return 0;
+}
+```
+
+
+
+由于unordered_map是采用哈希实现的，对于系统的类型int, string等，都已经定义好了hash函数，所以如果我们引入新的自定义类型的话，系统并不知道如何去计算我们引入的自定义类型的hash值，所以我们就需要自己定义hash函数，告诉系统用这种方式去计算我们引入的自定义类型的hash值
+
+
+
+除了自定义哈希函数外，系统计算了hash值后，还需要判断是否冲突，对于默认的类型，系统都知道怎样去判断是否相等，但不知道怎样去判断我们引入的自定义类型是否相等，所以需要我们重载==号，告诉系统用这种方式去判断2个键是否相等
 
 
 

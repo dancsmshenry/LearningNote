@@ -49,7 +49,7 @@
        Singleton() = default;
        ~Singleton() = default;
    };
-  
+    
   //线程安全的，effective cpp里面给的例子（）
   ```
 
@@ -102,7 +102,7 @@
   }
   
   // initialize defaultly
-  Singleton Singleton::instance;
+  Singleton Singleton::instance = new Singleton();
   //线程安全的
   ```
 

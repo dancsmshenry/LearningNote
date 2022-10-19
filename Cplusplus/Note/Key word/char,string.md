@@ -175,6 +175,25 @@ string的优点
 
 
 
+## string和unordered_map
+
+```cpp
+int main() {
+    unordered_map<string, int> hashmap;
+    string s1 = "1", s2 = "1";
+    hashmap[s1] = 11;
+    cout << hashmap["1"] << endl;//	11
+    hashmap[s2] = 12;
+    cout << hashmap["1"] << endl;//	12
+}
+```
+
+相同内容的string会被放入到同一个slot中，可能是因为string重置了=，使得unordered_map认为它们是一样的
+
+PS：这里换成map<string,int>也是一样，大概就是它们都重载了这个标识符吧
+
+
+
 
 
 # to read or solve

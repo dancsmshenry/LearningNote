@@ -27,3 +27,13 @@
 
 
 产生的原因，如何避免；如何定位
+
+
+
+
+
+一种比较好玩的检查内存泄漏的方法：https://blog.csdn.net/qq_21539375/article/details/124149145
+
+通过hook malloc以及free等函数，可以快速确定是否有内存泄漏的情况发生
+
+有些小tips：

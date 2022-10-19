@@ -48,8 +48,10 @@
   }
   
   //empty
+  bool flag = d1.empty();
   
   //size
+  int sizee = d1.size();
   
   //max_size
   
@@ -81,6 +83,14 @@
 - deque系由一段一段的定量连续空间构成。一旦有必要在deque的前端或尾端增加新空间，便配置一段定量连续空间，串接在整个deque的头端或尾端
 - deque的最大任务，便是在这些分段的定量连续空间上，维护其整体连续的假象，并提供随机存取的借口。避开了“重新配置、复制、释放”的轮回，代价则是复杂的迭代器架构
 - deque采用一块所谓的map（注意，不是STL的map容器）作为主控。这里所谓map是一小块连续空间，其中每个元素（此处称为一个节点，node）都是指针，指向另一段（较大的）连续线性空间，称为缓冲区。缓冲区才是deque的储存空间主体。SGI STL 允许我们指定缓冲区大小，默认值0表示将使用512bytes缓冲区
+- 在g++10.3中，deque的大小为80（64位机器），deque::iterator的大小为32（依然是4个指针）
+  - iterator的组成：cur（指向当前元素在buffer中的位置），first（指向当前buffer的头部），last（指向当前buffer的尾部），node（指向当前迭代器对应的缓冲区在中控器中的位置，是指向中心的位置）（因此iterator的大小为4 * 8）
+  - deque的组成：start（头iterator，32，deque的第一个元素），finish（尾iterator，32，deque最后一个元素的下一个节点），pointer（map_pointer，一个指针，是一个指向数据的二级指针，挖坑，8字节，一个双重指针 一个存放指针的数组 数组里的每个元素指向一个存放元素的数组（就是一个缓冲区），指向map，map是块连续空间，其内部的每个元素都是一个指针(称为节点)），map_size（size_type，map中继器的大小，8字节，map的大小），刚好80字节
+
+https://blog.csdn.net/qq_15041569/article/details/110943325
+
+https://blog.csdn.net/CHYabc123456hh/article/details/121449313
+
 
 
 

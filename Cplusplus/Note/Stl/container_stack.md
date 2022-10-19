@@ -43,3 +43,5 @@
   - 标准容器 std::vector、std::deque和std::list满足这些要求。若不为特定的 stack 类特化指定容器类，则使用标准容器std::deque
 
 - stack不提供迭代器（因为先进后出，所以不需要也不能有迭代器）
+
+- 大小也是80
