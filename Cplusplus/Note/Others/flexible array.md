@@ -1,17 +1,11 @@
-https://www.jb51.net/article/224935.htm
-
-https://www.bilibili.com/video/BV1pT4y1Y746
-
-
-
-本质(柔性数组)
+# 柔性数组
 
 - 在结构体里面想放一个动态数组，但是又不想存一个指针，就可以使用柔性数组
 
 - ```c
   struct t1 {
     int i;
-    int a[0];
+    int a[];
   }; // t1的大小是4，不是8
   ```
 
@@ -22,3 +16,27 @@ https://www.bilibili.com/video/BV1pT4y1Y746
 - 同时能加快访问速度，提高缓存利用率
 
 - 也可以理解为可变数组
+
+- 柔性数组规定只能放在最后一个位置上面，并且只能有一个
+
+
+
+# 优点
+
+可以省去一个指针的内存占用
+
+并且，因为是结构体分配的内存，所以是紧密的凑在一起的，减少了cache miss（不过还是得遵守padding的原则）
+
+同时，因为这里是以数组的形式存在的（而不是指针形式的），所以内存上的释放就不需要再次去释放一遍其中的内容
+
+
+
+
+
+
+
+# reference
+
+- https://www.jb51.net/article/224935.htm
+- https://www.bilibili.com/video/BV1pT4y1Y746
+- https://blog.xwyam.tech:1729/index.php/archives/82/

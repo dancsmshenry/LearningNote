@@ -70,8 +70,33 @@
 
 
 
+# XSS攻击
+
+定义
+
+- XSS是跨站脚本攻击(Cross Site Scripting)，为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，故将跨站脚本攻击缩写为XSS
+- 恶意攻击者往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中Web里面的Script代码会被执行，从而达到恶意攻击用户的目的
+
+
+
+- 比较好的理解就是黑客在url及网址上边嵌入一些js代码，达到攻击的效果
+- XSS的攻击方式就是想办法“教唆”用户的浏览器去执行一些这个网页中原本不存在的前端代码
+
+
+
+- 比如说：pdd利用一些企业网址的重定向，将自己的砍价地址链接嵌入知乎的重定向链接或者163邮箱的重定向链接，以此蒙混过微信的检测，从而保护自己的砍价链接
+- 再比如说窃取网页浏览中的cookie值
+
+
+
+![](../image/反射xss攻击.jpg)
+
+![](../image/存储型xss攻击.jpg)
+
 
 
 # 参考
 
 - https://zhuanlan.zhihu.com/p/412540663
+- https://zhuanlan.zhihu.com/p/26177815
+- https://zhuanlan.zhihu.com/p/473515515

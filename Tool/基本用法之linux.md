@@ -71,6 +71,20 @@
 
 
 
+# 应用程序的安装
+
+- `sudo apt-get install cmake`，最后填需要安装的应用程序
+
+
+
+## gcc的安装
+
+- `sudo apt install gcc`安装gcc
+- `gcc -v`查看gcc版本
+- 如果失败了，可能需要更新一下`sudo apt-get install update`
+
+
+
 
 
 ## vim常用
@@ -99,7 +113,69 @@ top 动态显示内存中的进程信息（top）
 
 
 
+发现Unable to locate package的问题
 
+- 可能是软件源发生了更替
+- 解决：先`sudo apt-get update`，`sudo apt-get install`
+
+
+
+如何退出conf文件
+
+- Ctrl + x
+
+
+
+wrk安装时出现的问题
+
+- https://blog.csdn.net/GMCN__/article/details/119491365
+
+
+
+
+
+
+
+# WSL
+
+wsl的安装：应用商店安装即可
+
+
+
+## 如何在wsl上访问windows的文件
+
+- 首先进入 WSL，然后进根目录/，使用ls可以看到一个名为mnt的目录（mnt 是 mount 加载的缩写）
+- 在这里可以看到各种盘，例如c表示 C 盘，d表示 D 盘
+- 然后我们就可以进入不同的盘来对文件进行操作了
+
+
+
+## wsl和vscode的配置
+
+- 好像不需要怎么配置...，直接下载好vscode的插件remote-ssh，remote-wls即可
+
+- 插件那里切换过去即可
+
+- 需要安装一些插件，还需要切换到阿里源，同时更新一些配置
+
+- ```shell
+  sudo sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+  sudo apt update -y
+  sudo apt upgrade -y
+  
+  //	安装gcc和gdb
+  sudo apt-get install gdb
+  sudo apt-get install g++
+  ```
+
+- 
+
+
+
+## 安装wsl后可能导致windows的gcc出现红线
+
+- 可能是修改了gcc的路径
+- 去`c_cpp_properties.json`路径下查找`"compilerPath": "D:\\Cpp\\TDM-GCC-64\\bin\\gcc"`即可
 
 
 

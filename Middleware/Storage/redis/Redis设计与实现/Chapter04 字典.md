@@ -38,11 +38,11 @@
 
 - ![](image/字典.png)
 - type是一个指向dictType结构的指针（dictType保存了一簇用于操作特定类型键值对的函数）
-  - ![](image/dictType.png)
+  - <img src="image/dictType.png" style="zoom:150%;" />
 - privata则保存了需要传给那些类型特定函数的可选参数
 - ht是一个包含两个项的数组，其中每一项都是一个dictht哈希表，一般来字典只用ht[0]，ht[1]只会在ht[0]进行rehash的时候用上
 - rehashidx记录了rehash目前的进度，如果没有rehash，那么就是-1
-- ![](image/字典_02.png)
+- <img src="image/字典_02.png" style="zoom:200%;" />
 
 
 

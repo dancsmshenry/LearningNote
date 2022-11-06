@@ -119,7 +119,7 @@
 
 
 
-- ![](image/调度规则.png)
+- <img src="image/调度规则.png" style="zoom:150%;" />
 
 
 

@@ -383,3 +383,325 @@ C++用析构函数回收垃圾，写C和C++程序时一定要注意内存的申�
       std::cout << ** ++ p << std::endl; // 读到第二个字符串的第一个字母
   }
   ```
+
+
+
+
+
+# strncpy
+
+将src的开头的n个字符，复制到dest的位置
+
+```cpp
+//	dest为目标数组，src为源数组，n为要复制字符的个数
+char* strncpy_t(char* dest, const char* src, int n) {
+	assert(dest != NULL);	//	保证dest非空
+	assert(src != NULL);	//	保证src非空
+	char* ret = dest;	//	将dest首地址储存在ret中，在之后dest++运算中，可以方便找到
+	while (n) {	//	一次复制一个字符，要复制n次
+		*dest = *src;	//	复制
+		++ src;    //	源地址往后+1
+		++ dest;   //	目标地址往后+1
+		-- n;      //	跳出循环条件
+	}
+	return ret;	//	返回目的数组的首地址
+}
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+# split
+
+将字符串按照分割符spacer分隔开
+
+```cpp
+//	str为原字符串，v为结果，spacer为分隔符
+void split(string str, vector<string> &v, string spacer) {
+    int pos1, pos2;
+    int len = spacer.length();     //记录分隔符的长度
+    pos1 = 0;
+    pos2 = str.find(spacer);
+    while(pos2 != string::npos) {
+        v.push_back(str.substr(pos1, pos2 -pos1));
+        pos1 = pos2 + len;
+        pos2 = str.find(spacer, pos1);    // 从str的pos1位置开始搜寻spacer
+    }
+    if(pos1 != str.length()) {//分割最后一个部分
+    	v.push_back(str.substr(pos1));
+    }
+}
+
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+# strcpy
+
+将src的所有字符，copy到dest上
+
+```cpp
+char* my_strcpy(char* dest, const char* src) {
+    assert(dest && src);
+
+    char *res = dest;
+    while (*src != '\0') {
+        *dest = *src;
+        ++ dest;
+        ++ src;
+    }
+
+    return res;
+}
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+# memcpy
+
+```cpp
+void* memcpy(void *dest, const void *src, size_t count) {
+    if (dest == NULL || src == NULL || dest <= src + count) {
+        return NULL;
+    }
+
+    char *tmp_dest = dest;
+    const char *tmp_src = src;
+
+	//	while (count--) *tmp_dest++ = *tmp_src++;
+    while (count) {
+        -- count;
+        *tmp_dest = *tmp_src;
+        tmp_dest = (char*)tmp_dest + 1;
+        tmp_src = (char*)tmp_src + 1;
+    }
+
+    return dest;
+}
+```
+
+
+
+# 大小端转换
+
+```cpp
+#include <stdio.h>
+ 
+int main()
+{
+    int a = 1, result;
+    result = ((a & 0x000000ff) << 24) |
+             ((a & 0x0000ff00) << 8)|
+             ((a & 0x00ff0000) >> 8)|
+             ((a & 0xff000000) >> 24);
+    printf("%d\n", result);
+ 
+    return 0;
+}
+```
+
+
+
+
+
+# 字典树
+
+```cpp
+class TrieNode{
+    public:
+        TrieNode* next[26];
+        bool isval;
+        TrieNode(){
+            for (int i = 0; i < 26; i ++ ){
+                next[i] = nullptr;
+            }
+            isval = false;
+        }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie():root(new TrieNode) {}
+    
+    void insert(string word) {
+        TrieNode* p = root;
+        for (const char& i: word){
+            if (p -> next[i - 'a'] == nullptr){
+                p -> next[i - 'a'] = new TrieNode();
+            }
+            p = p -> next[i - 'a'];
+        }
+        p -> isval = true;
+    }
+    
+    bool search(string word) {
+        TrieNode* p = root;
+        for (const char& i: word){
+            if (p -> next[i - 'a']){
+                p = p -> next[i - 'a'];
+            }else{
+                return false;
+            }
+        }
+
+        return p -> isval;
+    }
+    
+    bool startsWith(string prefix) {
+        TrieNode* p = root;
+        for (const char& i: prefix){
+            if (p -> next[i - 'a']){
+                p = p -> next[i - 'a'];
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+
+
+# string类的实现
+
+
+
+
+
+# LRU
+
+```cpp
+struct Node {
+    int key;
+    int value;
+    Node *prev;
+    Node *next;
+    Node(): key(0), value(0), prev(nullptr), next(nullptr) {}
+    Node(int _key, int _value): key(_key), value(_value), prev(nullptr), next(nullptr) {}
+};
+
+class LRUCache {
+private:
+    unordered_map<int, Node*> cache;
+    Node *head;
+    Node *tail;
+    int size;
+    int capacity;
+
+public:
+    LRUCache(int _capacity): capacity(_capacity), size(0) {
+        head = new Node();
+        tail = new Node();
+        head -> next = tail;
+        tail -> prev = head;
+    }
+
+    int get(int key) {
+        if (!cache.count(key)) {
+            return -1;
+        }
+
+        Node *node = cache[key];
+        move_to_head(node);
+        
+        return node -> value;
+    }
+
+    void put(int key, int value) {
+        if (!cache.count(key)) {
+            Node *node = new Node(key, value);
+            cache[key] = node;
+            add_to_head(node);
+            ++ size;
+            if (size > capacity) {
+                Node *removed = remove_tail();
+                cache.erase(removed -> key);
+                delete removed;
+                -- size;
+            }
+        } else {
+            Node *node = cache[key];
+            node -> value = value;
+            move_to_head(node);
+        }
+    }
+    
+    void add_to_head(Node *node) {
+        node -> next = head -> next;
+        node -> prev = head;
+        head -> next -> prev = node;
+        head -> next = node;
+    }
+
+    void remove_node(Node *node) {
+        node -> prev -> next = node -> next;
+        node -> next -> prev = node -> prev;
+    }
+
+    void move_to_head(Node *node) {
+        remove_node(node);
+        add_to_head(node);
+    }
+
+    Node* remove_tail() {
+        Node* node = tail -> prev;
+        remove_node(node);
+        return node;
+    }
+};
+```
+
+
+
+
+
+# 字符串相乘
+
+```cpp
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        if (num1 == "0" || num2 == "0") {
+            return "0";
+        }
+        if (num2.length() > num1.length()) {
+            return multiply(num2, num1);
+        }
+
+        vector<int> res(num1.size() + num2.size(), 0);
+        string result = "";
+        for (int i = num2.size() - 1; i >= 0; -- i) {
+            int count{};
+            for (int j = num1.size() - 1; j >= 0; -- j) {
+                int index = num2.size() - i + num1.size() - j - 2;
+                res[index] = res[index] + count + (num1[j] - '0') * (num2[i] - '0');
+                count = res[index] / 10;
+                res[index] %= 10;
+            }
+            res[num2.size() - i - 1 + num1.size()] += count;
+        }
+
+        while (res.back() == 0) res.pop_back();
+        for (int i = res.size() - 1; i >= 0; -- i) {
+            result += to_string(res[i]);
+        }
+
+        return result;        
+    }
+};
+```
+

@@ -1,193 +1,187 @@
+# backround
+
+**基类对象转换为派生类对象，是不安全的**
+
+- 派生类是包含于基类的，即基类的“体积”是小于派生类的
+
+- 如果一个指向基类的指针强转为指向派生类的指针（该指针始终指向基类，只是指针类型变了），再通过该指针调用派生类的特有方法或者数据
+- 就会访问到未知的数据，从而导致崩溃
+- 所以这种转换在`dynamic_cast`中就会报错
+
+<br/>
+
+**派生类对象转换为基类对象，是安全的**
+
+- 理由同上，派生类是包含于基类的，因此对方法或数据的使用，不会造成越界
+
+<br/>
+
+**派生类指针只能指向派生类，基类指针可以指向基类或派生类**
+
+<br/>
+
+**type conversion针对的是指针和引用**
+
+- 引用可以理解为指针的语法糖
+
+<br/>
+
+<br/>
+
+<br/>
+
 # static_cast
 
-#### 用法
+## 用途
 
-- ```cpp
-  static_cast < type-id > (expression);//该运算符把expression转换为type-id类型
-  ```
+- 等价于C里面的强制转换，可以将`non-const`对象转为`const`对象
+- 用于基本数据类型之间的转换（例如`int`转换为`char`）
+- 把空指针转换为目标类型的空指针
+- 把任何类型的表达式转换成`void`类型
+- 也可以用于类对象之间的转换（但没有动态类型检查，所以不安全）
 
+格式：`static_cast<type-id>(expression);`
 
+<br/>
 
-#### 作用
+## 优点
 
-- 用于基本数据类型之间的转换，如把int转换成char，把int转换成enum
-  - 把空指针转换成目标类型的空指针 
-  - 把任何类型的表达式转换成void类型
-  - 用于类层次结构中基类（父类）和派生类（子类）之间指针或引用引用的转换
-    - 可以上行转换（派⽣类指针->基类指针）和下行转换（基类指针->派⽣类指针），但下行转换没有动态类型检查，所以不安全
+更加明显，能够一眼看出转换为什么类型
 
-- 优点
-  - 更加安全
-  - 更加直接明显，能够一眼看出是什么类型转换成什么类型
+更加安全
 
-- 缺点
-  - 没有运行时类型检查来保证转换的安全性
-  - 不能用于在不同类型的指针之间互相转换
-  - 不能用于整型和指针之间的互相转换
-  - 不能用于不同类型的引用之间的转化
-  - **不能转换掉const**或volatile，或者 __unaligned属性
+<br/>
 
+## 缺点
 
+没有运行时类型检查来保证转换的安全性（`dynamic_cast`）
 
+不能用于在不同类型指针之间的转换
 
+不能用于整型和指针之间的的转换
 
+不能用于不同类型的引用之间的转化
+
+**不能去除掉已有对象的const或volatile，或者__unaligned属性**
+
+<br/>
+
+## 总结
+
+可以理解为C里面强制转换的平替，但又有一些局限性
+
+<br/>
+
+<br/>
+
+<br/>
 
 # dynamic_cast
 
-#### 用法
+## 用途
 
-- ```cpp
-  dynamic_cast<type-id> (expression);//	type-id 必须是类指针，类引⽤或 void*
-  //	如果 type-id 是类指针类型，那么expression也必须是一个指针，如果 type-id 是一个引用，那么 expression 也必须是一个引用
-  ```
+- 将基类的指针或引用安全地转换为派生类的指针或引用（前提：该基类指针指向的是派生类，同时**基类必须有虚函数**）
+- 或是将派生类的指针或引用安全地转换为基类的指针或引用（基类不需要有虚函数）
 
-- 要么是指针，要么是引用
+格式：`dynamic_cast <type-id>(expression)`，其中`type-id`可以是类指针，类引用或`void*`，`expression`也要是对应的类型
 
+<br/>
 
+若对指针进行`dynamic_cast`，失败返回`nullptr`，成功返回正常cast后的对象指针
 
-#### 作用
+若对引用进行`dynamic_cast`，失败抛出一个**异常**，成功返回正常cast后的对象引用
 
-- 主要用于类层次间的上行转换和下行转换，还可以用于类之间的交叉转换 
-- 专⻔⽤于派⽣类之间的转换
-- dynamic_cast运算符可以在执行期决定真正的类型，也就是说expression必须是多态类型
-  - 如果下行转换是安全的（也就说，如果基类指针或者引用确实指向一个派生类对象）这个运算符会传回适当转型过的指针
-  - 如果下行转换不安全，这个运算符会传回空指针（也就是说，基类指针或者引用没有指向一个派生类对象）
-  - ⽽static_cast，当类型不⼀致时，转换过来的是错误的指针，可能造成⾮法访问等问题
-- 在类层次间进行上行转换时，dynamic_cast和static_cast的效果是一样的 
-- 在进行下行转换时，dynamic_cast具有类型检查的功能，比static_cast更安全
+<br/>
 
-纠正
+## 代码
 
-- 基类对象（指针）转子类对象（指针），是不安全的，在dynamic_cast中是不会成功的
-  - 那么为什么基类转子类是不安全的，是因为：
-  - 基类是包含于派生类的，即基类的“体积”比派生类的小。如果有一个基类对象的指针强转为派生类，我们调用派生类的方法(而基类没有)的时候，就会访问到一个不存在的东西，之后就是未知的行为了(极有可能崩溃)
-- 而在dynamic_cast中，失败的话会返回nullptr
-- 而子类转基类都是安全的
+```cpp
+#include <iostream>
+#include <assert.h>
 
+using namespace std;
 
+// 父类
+struct Tfather {
+    virtual void f() { cout << "father's f()" << endl; }
+};
 
+// 子类
+struct Tson : public Tfather {
+    void f() { cout << "son's f()" << endl; }
+    int data; // 子类独有的成员
+};
 
+int main() {
+    Tfather father;
+    Tson son;
+    son.data = 123;
 
+    Tfather *pf;
+    Tson *ps;
 
+    //	上行转换：没有问题
+    ps = &son;
+    pf = dynamic_cast<Tfather *>(ps);
+    pf->f();
+
+    //	下行转换（pf实际指向子类对象）：没有问题
+    pf = &son;
+    ps = dynamic_cast<Tson *>(pf);
+    ps->f();
+    cout << ps->data << endl; // 访问子类独有成员有效
+
+    //	下行转换（pf实际指向父类对象）：含有不安全操作，dynamic_cast则返回nullptr（而static_cast则会无视）
+    pf = &father;
+    ps = dynamic_cast<Tson *>(pf);
+    assert(ps != nullptr); // 违背断言，阻止以下不安全操作
+    ps->f();
+    cout << ps->data << endl; // 不安全操作，对象实例根本没有data成员
+}
+```
+
+<br/>
+
+## 总结
+
+主要用于类之间的转换
+
+上行转换（派生类转换为基类），和`static_cast`等效
+
+下行转换（基类转换为派生类），`dynamic_cast`具有类型检查功能，更加安全
+
+相比`static_cast`会更加耗时，因为`dynamic_cast`会在运行时进行类型检查来保证转换的安全性
+
+<br/>
+
+<br/>
+
+<br/>
 
 # reinterpret_cast
 
-#### 用法
+## 用途
 
-- type-id 必须是一个指针、引用、算术类型、函数指针或者成员指针
+- 可以将整型转换为指针，也可以把指针转换为数组，或是将指针和引⽤之间进⾏转换
 
-- ```cpp
-  reinterpret_cast<type-id>(expression);
-  //type-id必须是一个指针、引用、算术类型、函数指针或者成员指针，用于类型之间进行强制转换
-  ```
+- 从底层对数据进⾏重新解释；依赖具体的平台，可移植性差
+- 等价于C里面的强制转换
 
+格式：`reinterpret_cast<type-id>(expression);`，`type-id`必须是一个指针、引用、算术类型、函数指针或者成员指针，用于类型之间进行强制转换
 
+<br/>
 
-#### 作用
+<br/>
 
-- 可以将整形转换为指针，也可以把指针转换为数组可以在指针和引⽤之间进⾏肆⽆忌惮的转换
-- 它可以用于类型之间进行强制转换
-- 从底层对数据进⾏重新解释，依赖具体的平台，可移植性差
-- 不到万不得已，不要使⽤这个转换符，⾼危操作
-
-
-
-
+<br/>
 
 # const_cast
 
-#### 用法
+## 用途
 
-- ```cpp
-  const_cast <type-id> (expression);
-  ```
+- 给已有对象添加`const`或删除`const`，或是`volstile`
+- 是唯一一个可以操作常量的转换符
+- 常量指针（或引用）被转化为非常量指针（或引用），并且仍然指向原来的对象
+- 一般用于修改底层指针，如`const char *p`形式
 
-
-
-
-
-#### 作用
-
-- 专⻔⽤于 const 属性的转换，去除 const 性质，或增加 const 性质；用来修改类型的const或volatile属性
-- 唯⼀⼀个可以操作常量的转换符
-- 常量指针被转化成非常量的指针，并且仍然指向原来的对象
-- 常量引用被转换成非常量的引用，并且仍然指向原来的对象 
-- 一般用于修改底指针，如const char *p形式
-
-
-
-
-
-
-
-# example
-
-- ```cpp
-  #include <iostream>
-  using namespace std;
-  class Base {
-  public:
-      Base() : b(1) {}
-      virtual void fun(){};
-      int b;
-  };
-  
-  class Son : public Base {
-  public:
-      Son() : d(2) {}
-      int d;
-  };
-  
-  int main() {
-      //reinterpret_cast(以下两者效果相同)
-      int n = 97;
-      int *p = &n;
-      char *c = reinterpret_cast<char *>(p);
-      char *c2 = (char *)(p);
-      cout << "reinterpret_cast输出：" << *c2 << endl;
-  
-      // const_cast
-      const int *p2 = &n;
-      int *p3 = const_cast<int *>(p2);
-      *p3 = 100;
-      int *i = nullptr;
-      const int* p = const_cast<const int*>(i); // 也可以用来添加const熟悉
-      cout << "const_cast输出：" << *p3 << endl;
-  
-      // static_cast
-      Base *b1 = new Son;
-      Base *b2 = new Base;
-      Son *s1 = static_cast<Son *>(b1); //同类型转换
-      Son *s2 = static_cast<Son *>(b2); //下行转换，不安全
-      cout << "static_cast输出：" << endl;
-      cout << s1->d << endl;
-      cout << s2->d << endl; //下行转换，原先父对象没有d成员，输出垃圾值
-      
-      // dynamic_cast
-      Son *s3 = dynamic_cast<Son *>(b1); //同类型转换
-      Son *s4 = dynamic_cast<Son *>(b2); //下行转换，安全
-      cout << "dynamic_cast输出：" << endl;
-      cout << s3->d << endl;
-      if (s4 == nullptr) cout << "s4指针为nullptr" << endl;
-      else cout << s4->d << endl;
-  }
-  
-  
-  // 输出结果
-  // reinterpret_cast输出：a
-  // const_cast输出：100
-  // static_cast输出：
-  // 2
-  // -33686019
-  // dynamic_cast输出：
-  // 2
-  // s4指针为nullptr
-  ```
-
-
-
-
-
-# 参考
-
-- https://zhuanlan.zhihu.com/p/368267441
+格式：`const_cast <type-id> (expression);`
