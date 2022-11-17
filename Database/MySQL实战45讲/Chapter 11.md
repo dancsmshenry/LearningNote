@@ -1,7 +1,7 @@
 # 怎么给字符串字段加索引？
 
-- ![](images/1email索引结构.png)
-- ![](images/2email索引结构.png)
+- ![](image/1email索引结构.png)
+- ![](image/2email索引结构.png)
 
 
 

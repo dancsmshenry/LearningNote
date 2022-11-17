@@ -42,7 +42,7 @@ update T set c = c + 1  where ID=2;
 - 引擎讲这行新数据更新到内存中，同时将这个更新操作记录到redo log里面，此时redo log处于prepare状态，然后告知执行器执行完成了，随时可以提交事务
 - 执行器生成这个操作的binlog，然后把binlog写入磁盘
 - 执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交状态，更新完成
-- <img src="images/update语句执行流程.png" style="zoom:150%;" />
+- <img src="image/update语句执行流程.png" style="zoom:150%;" />
 - 注意：这里最后将redo log的写入拆成了两个步骤：prepare和commit，这就是两阶段提交
 
 
@@ -52,7 +52,7 @@ update T set c = c + 1  where ID=2;
 ### 两阶段提交
 
 - 不使用两阶段提交的原因：
-- <img src="images/两阶段提交.png" style="zoom:150%;" />
+- <img src="image/两阶段提交.png" style="zoom:150%;" />
 
 
 

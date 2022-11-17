@@ -19,7 +19,7 @@
 
 ## 二者的比较
 
-- <img src="images/lock与latch的比较.png" style="zoom: 200%;" />
+- <img src="image/lock与latch的比较.png" style="zoom: 200%;" />
 
 
 
@@ -34,7 +34,7 @@
   - 排他锁（X Lock），允许事务删除或更新一行数据
 - 如果一个事务T1已经获得了行r的共享锁，那么另外的事务T2可以立即获得行r的共享锁，这种情况就是**锁兼容**
 - 若有其他的事务T3想获得行r的排他锁，则必须等待事务T1，T2释放行r上的共享锁，这就是**锁不兼容**
-- <img src="images/排他锁和共享锁的兼容性.png" style="zoom:150%;" />
+- <img src="image/排他锁和共享锁的兼容性.png" style="zoom:150%;" />
 
 
 

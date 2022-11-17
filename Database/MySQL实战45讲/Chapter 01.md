@@ -2,7 +2,7 @@
 
 ### 基础架构
 
-- <img src="images/MySQL逻辑架构图.png" alt="MySQL逻辑架构图" style="zoom:150%;" />
+- <img src="image/MySQL逻辑架构图.png" alt="MySQL逻辑架构图" style="zoom:150%;" />
 
 - MySQL 可以分为 Server 层和存储引擎层两部分
   -  Server 层包括连接器、查询缓存、分析器、优化器、执行器等，涵盖 MySQL 的大多数核心服务功能

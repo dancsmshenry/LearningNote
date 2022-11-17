@@ -1,6 +1,6 @@
-##### 第一章 了解web及网络基础
+# 了解web及网络基础
 
-###### HTTP（HyperText Transfer Protocol）
+## HTTP（HyperText Transfer Protocol）
 
 - HTTP0.9/1.0/1.1/2.0
 - 定义：超文本传输协议（英语：HyperText Transfer Protocol，缩写：HTTP）是一种用于分布式、协作式和超媒体信息系统的应用层协议。HTTP是万维网的数据通信的基础。
@@ -11,7 +11,7 @@
 
 
 
-###### TCP/IP协议族
+## TCP/IP协议族
 
 - 定义：
   - 互联网协议套件（英语：Internet Protocol Suite，缩写IPS）是网络通信模型，以及整个网络传输协议家族，为网际网络的基础通信架构。它常通称为**TCP/IP协议族**（英语：TCP/IP Protocol Suite，或TCP/IP Protocols），简称TCP/IP。因为该协议家族的两个核心协议：**TCP（传输控制协议）和IP（网际协议）**，为该家族中最早通过的标准
@@ -33,7 +33,7 @@
 
 
 
-###### UDP
+## UDP
 
 - 定义：
   - 用户数据报协议（英语：User Datagram Protocol，缩写：UDP；又称**用户数据包协议**）是一个简单的面向数据报的通信协议，位于OSI模型的传输层
@@ -43,7 +43,7 @@
 
 
 
-###### 路由选择
+## 路由选择
 
 - 是指选择通过互连网络从源节点向目的节点传输信息的通道，而且信息至少通过一个中间节点。路由选择工作在 OSI 参考模型的网络层
 
@@ -51,7 +51,7 @@
 
 
 
-###### IP协议
+## IP协议
 
 - 在网络层负责传输
 - 定义：网际协议（英语：Internet Protocol，缩写：IP），又称互联网协议，是用于分组交换数据网络的协议
@@ -65,7 +65,7 @@
 
 
 
-###### IP地址
+## IP地址
 
 - **IP地址**（英语：IP Address，全称Internet Protocol Address），又译为**网际协议地址**、**互联网协议地址**。当设备连接网络，设备将被分配一个IP地址，用作标识。通过IP地址，设备间可以互相通讯，如果没有IP地址，我们将无法知道哪个设备是发送方，无法知道哪个是接收方
 - 主要功能：
@@ -79,7 +79,7 @@
 
 
 
-###### ARP协议
+## ARP协议
 
 - 负责解析地址的ARP协议
 
@@ -95,7 +95,7 @@
 
 
 
-###### MAC地址
+## MAC地址
 
 - MAC地址（英语：Media Access Control Address），直译为媒体访问控制地址，也称为局域网地址（LAN Address），以太网地址（Ethernet Address）或物理地址（Physical Address），它是一个用来确认网络设备位置的地址。
 
@@ -103,10 +103,9 @@
 
 
 
-###### TCP协议
+## TCP协议
 
 - 三次握手策略（标志：syn和ack）
-  - ![](https://gitee.com/dancsmshenry/photo/raw/master/img/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.png)
 - 为了更容易传送大数据才把数据分割，而且TCP协议能够确认**数据**最终是否**送达**到对方
 - 若是握手过程中某个阶段莫名中断，TCP协议会再次以相同的顺序发送相同的数据包
 - 位于传输层，提供可靠的字节流服务
@@ -115,7 +114,7 @@
 
 
 
-###### DNS服务（Domain Name System）
+## DNS服务（Domain Name System）
 
 - 定义：
   - 域名系统（DNS）是互联网的一项服务。它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网，DNS使用TCP和UDP端口53
@@ -128,7 +127,7 @@
 
 
 
-###### URI（Uniform Resource Identifier)
+## URI（Uniform Resource Identifier)
 
 - 定义：
   - **在电脑术语中，统一资源标识符是一个用于标识某一互联网资源名称的字符串**。 该种标识允许用户对任何（包括本地和互联网）的资源通过特定的协议进行交互操作。URI由包括确定语法和相关协议的方案所定义
@@ -147,7 +146,7 @@
 
 
 
-###### URL（Uniform Resource Locator）
+## URL（Uniform Resource Locator）
 
 - 定义：
   - 即统一资源定位系统，是**因特网的万维网服务程序上用于指定信息位置的表示方法**
@@ -164,7 +163,7 @@
 
 
 
-###### URI和URL的区别
+## URI和URL的区别
 
 - uri是一个比较大概抽象的地址，而url是一个确切的地址，通过url能够找到准确的一个文件
 

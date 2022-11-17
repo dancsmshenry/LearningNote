@@ -1,2 +1,3 @@
 # Cplusplus
-This is a repository which records notes and summary in c++.
+Records some notes for book in c++, and summary in c++.
+

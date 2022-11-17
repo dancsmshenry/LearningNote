@@ -1,13 +1,13 @@
-##### 第九章 基于HTTP的功能追加协议
+# 基于HTTP的功能追加协议
 
-###### Ajax
+## Ajax
 
-###### Comet
+## Comet
 
-###### Spdy
+## Spdy
 
-###### Websocket
+## Websocket
 
-###### HTTP/2.0
+## HTTP/2.0
 
-###### WebDAV
+## WebDAV

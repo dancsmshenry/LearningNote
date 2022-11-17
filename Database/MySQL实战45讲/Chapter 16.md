@@ -20,7 +20,7 @@
   - 到主键 id 索引取出整行，取 name、city、age 三个字段的值，存入 sort_buffer 中
   - 从索引 city 取下一个记录的主键 id
   -  重复上述两个步骤直到 city 的值不满足查询条件为止
-- <img src="images/全字段排序.png" style="zoom:150%;" />
+- <img src="image/全字段排序.png" style="zoom:150%;" />
 - 图中按照name排序的动作，可能在内存中完成，也可能需要外部排序，这取决于排序所需的内存和参数 sort_buffer_size
 
 
@@ -54,7 +54,7 @@
   - 重复上述步骤直到不满足 city='杭州’条件为止
   - 对 sort_buffer 中的数据按照字段 name 进行排序
   - 遍历排序结果，取前 1000 行，并按照 id 的值回到原表中取出 city、name 和 age 三个 字段返回给客户端
-- <img src="images/rowid排序.png" style="zoom:150%;" />
+- <img src="image/rowid排序.png" style="zoom:150%;" />
 
 
 
@@ -83,7 +83,7 @@
   - 到主键 id 索引取出整行，取 name、city、age 三个字段的值，作为结果集的一部分直 接返回
   - 从索引 (city,name) 取下一个记录主键 id
   - 重复上述两个步骤，直到查到第 1000 条记录，或者是不满足 city='杭州’条件时循环结束
-- <img src="images/引入联合索引后查询语句的执行计划.png" style="zoom:150%;" />
+- <img src="image/引入联合索引后查询语句的执行计划.png" style="zoom:150%;" />
 
 - 这个查询过程不需要临时表，也不需要排序，相当于拿这1k个数据只扫描了1k次
 
@@ -95,4 +95,4 @@
   - 从索引 (city,name,age) 找到第一个满足 city='杭州’条件的记录，取出其中的 city、 name 和 age 这三个字段的值，作为结果集的一部分直接返回
   - 从索引 (city,name,age) 取下一个记录，同样取出这三个字段的值，作为结果集的一部分直接返回
   - 重复执行第二步，直到1k条记录
-- <img src="images/引入联合索引后查询语句的执行流程.png" style="zoom:150%;" />
+- <img src="image/引入联合索引后查询语句的执行流程.png" style="zoom:150%;" />
