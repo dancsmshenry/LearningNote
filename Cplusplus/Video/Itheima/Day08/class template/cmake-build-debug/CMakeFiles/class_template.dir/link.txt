@@ -1,3 +1,0 @@
-D:\CLion\bin\cmake\win\bin\cmake.exe -E rm -f CMakeFiles\class_template.dir/objects.a
-D:\Cpp\LLVM\bin\ar.exe cr CMakeFiles\class_template.dir/objects.a @CMakeFiles\class_template.dir\objects1.rsp
-D:\Cpp\LLVM\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\class_template.dir/objects.a -Wl,--no-whole-archive -o class_template.exe -Wl,--out-implib,libclass_template.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\class_template.dir\linklibs.rsp

@@ -1,3 +1,0 @@
-F:/Code/Cplusplus/ITheima/Day01/const_test_in_c++/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-F:/Code/Cplusplus/ITheima/Day01/const_test_in_c++/cmake-build-debug/CMakeFiles/const_test_in_c__.dir
-F:/Code/Cplusplus/ITheima/Day01/const_test_in_c++/cmake-build-debug/CMakeFiles/edit_cache.dir

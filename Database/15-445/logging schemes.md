@@ -166,7 +166,7 @@ DBMS的需求（对外提供的服务）
 
 # Shadowing page
 
-影子分页就是一种not stea+force的策略
+影子分页就是一种not steal+force的策略
 
 ## 细节
 

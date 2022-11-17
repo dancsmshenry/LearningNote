@@ -1,4 +1,0 @@
-D:\CLion\bin\cmake\win\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" F:\Code\Cplusplus\ITheima\Day01\const_test_in_c
--- Configuring done
--- Generating done
--- Build files have been written to: F:/Code/Cplusplus/ITheima/Day01/const_test_in_c/cmake-build-debug

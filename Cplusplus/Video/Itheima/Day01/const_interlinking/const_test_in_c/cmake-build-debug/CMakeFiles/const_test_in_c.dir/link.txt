@@ -1,3 +1,0 @@
-D:\CLion\bin\cmake\win\bin\cmake.exe -E rm -f CMakeFiles\const_test_in_c.dir/objects.a
-D:\Cpp\LLVM\bin\ar.exe cr CMakeFiles\const_test_in_c.dir/objects.a @CMakeFiles\const_test_in_c.dir\objects1.rsp
-D:\Cpp\LLVM\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\const_test_in_c.dir/objects.a -Wl,--no-whole-archive -o const_test_in_c.exe -Wl,--out-implib,libconst_test_in_c.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\const_test_in_c.dir\linklibs.rsp

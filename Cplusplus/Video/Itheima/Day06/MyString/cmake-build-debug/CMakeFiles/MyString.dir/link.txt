@@ -1,3 +1,0 @@
-D:\CLion\bin\cmake\win\bin\cmake.exe -E rm -f CMakeFiles\MyString.dir/objects.a
-D:\Cpp\LLVM\bin\ar.exe cr CMakeFiles\MyString.dir/objects.a @CMakeFiles\MyString.dir\objects1.rsp
-D:\Cpp\LLVM\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\MyString.dir/objects.a -Wl,--no-whole-archive -o MyString.exe -Wl,--out-implib,libMyString.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\MyString.dir\linklibs.rsp

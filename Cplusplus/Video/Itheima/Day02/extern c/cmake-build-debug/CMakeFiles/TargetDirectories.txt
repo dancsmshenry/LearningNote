@@ -1,3 +1,0 @@
-F:/Code/Cplusplus/Video/Itheima/Day02/extern c/cmake-build-debug/CMakeFiles/extern_c.dir
-F:/Code/Cplusplus/Video/Itheima/Day02/extern c/cmake-build-debug/CMakeFiles/edit_cache.dir
-F:/Code/Cplusplus/Video/Itheima/Day02/extern c/cmake-build-debug/CMakeFiles/rebuild_cache.dir

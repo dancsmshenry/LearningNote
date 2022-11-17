@@ -258,3 +258,15 @@ QPS
 
 - 每秒请求数是七层监听特有的概念
 - 指的是每秒可以完成的HTTP/HTTPS的查询（请求）的数量。当请求速率超过规格所定义的每秒查询数时，新建连接请求将被丢弃
+
+
+
+
+
+# 时间轮
+
+[一张图理解Kafka时间轮(TimingWheel),看不懂算我输! - 掘金](https://juejin.cn/post/6844904110399946766#heading-3)
+
+[【EP02】超级好玩的数据结构：定时器，时间轮，分层时间轮 Timer, Timing Wheel, Hierarchical Timing Wheel_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1ry4y1k7E6/?share_source=copy_web&vd_source=b0a035fa37e9787f338156cecb419cb7)
+
+https://zhuanlan.zhihu.com/p/384393449

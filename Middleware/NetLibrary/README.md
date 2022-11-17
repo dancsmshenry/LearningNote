@@ -11,3 +11,5 @@ muduo一些可以优化的地方：
 
 
 有些不是很懂的地方：channel的tie到底是干什么的？buffer是如何实现的
+
+https://www.nowcoder.com/discuss/post/353148000237199360

@@ -1,3 +1,0 @@
-F:/Code/Cplusplus/ITheima/Day01/namespace_use/cmake-build-debug/CMakeFiles/namespace_use.dir
-F:/Code/Cplusplus/ITheima/Day01/namespace_use/cmake-build-debug/CMakeFiles/edit_cache.dir
-F:/Code/Cplusplus/ITheima/Day01/namespace_use/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,3 +1,0 @@
-D:\CLion\bin\cmake\win\bin\cmake.exe -E rm -f CMakeFiles\namespace_use.dir/objects.a
-D:\Cpp\LLVM\bin\ar.exe cr CMakeFiles\namespace_use.dir/objects.a @CMakeFiles\namespace_use.dir\objects1.rsp
-D:\Cpp\LLVM\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\namespace_use.dir/objects.a -Wl,--no-whole-archive -o namespace_use.exe -Wl,--out-implib,libnamespace_use.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\namespace_use.dir\linklibs.rsp

@@ -1,4 +1,0 @@
-D:\CLion\bin\cmake\win\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "F:\Code\Cplusplus\Video\Itheima\Day08\class template"
--- Configuring done
--- Generating done
--- Build files have been written to: F:/Code/Cplusplus/Video/Itheima/Day08/class template/cmake-build-debug
