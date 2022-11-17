@@ -1,0 +1,1 @@
+![](image/c++ memory primitives_01.png)

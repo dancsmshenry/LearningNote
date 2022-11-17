@@ -1,0 +1,25 @@
+# C++编程简介
+
+- 面向对象
+  - 学习classes之间的关系
+    - 继承
+    - 复合
+    - 委托
+- 基于对象
+  - class without pointer members（Complex）
+  - class with pointer members（String）
+- Cpp的历史
+  - C++98（1.0）
+  - C++11（2.0）
+- Cpp的组成
+  - Cpp语言
+  - Cpp标准库
+- 推荐书籍
+  - C++ Primer 5th
+  - The C++ Programming Language
+  - Effective C++ 3th
+  - The C++ Strandard Library
+  - Stl 源码剖析
+- C vs C++
+  - 在c语言中，数据和函数是分离开的
+  - 而在cpp中，数据和函数（方法）共同组成了对象
