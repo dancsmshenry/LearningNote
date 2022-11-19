@@ -21,3 +21,50 @@ rpc和http的区别
 实际上：性能上的差异，rpc其实是一种思想，它的实现多样，既可以是socket（thift），也可以是http
 
 dynamic_cast，基类转派生类
+
+```cpp
+#include <pthread.h>
+
+class MutexLock {
+public:
+    //创建初始化互斥锁
+    MutexLock() {
+        if(pthread_mutex_init(&m_mutex,NULL) !=0)
+        {
+            throw std::exception();
+        }
+    }
+    //销毁互斥锁
+    ~MutexLock(){
+         pthread_mutex_destroy(&m_mutex);
+    }
+    //获取互斥锁
+    void lock() {
+        pthread_mutex_lock(&m_mutex);
+    }
+    //释放互斥锁
+    void unlock() {
+        pthread_mutex_unlock(&m_mutex);
+    }
+    //获取返回值
+    pthread_mutex_t* getMutex() {
+        return &m_mutex;
+    }
+private:
+    pthread_mutex_t m_mutex;
+};
+
+
+class MutexLockGuard {
+public:
+    explicit MutexLockGuard(MutexLock &mutex) : m_mutex(m_mutex) {
+      m_mutex.lock();
+    }
+    ~MutexLockGuard(){
+        m_mutex.unlock();
+    }
+private:
+    MutexLock m_mutex;
+};
+```
+
