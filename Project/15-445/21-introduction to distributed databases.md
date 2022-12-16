@@ -1,4 +1,52 @@
-shared memory
+# Parallel vs distributed
+
+并行数据库和分布式数据库的区别
+
+<br/>
+
+## Parallel DBMS
+
+是由多个物理节点组成的，同时在放在同一个机房（物理上是放在一起的）
+
+物理节点之间是通过高速的局域网连接的
+
+通信之间的消耗是可以忽略不计的（光纤连接的）
+
+比如说Oracle数据库集群之类的并行数据库集群
+
+<br/>
+
+<br/>
+
+## Distributed DBMS
+
+多个物理节点不再同一个机房里面，有一定距离
+
+节点之间是通过公网连接的
+
+此时节点之间的通信的消耗就是不可忽略的
+
+<br/>
+
+针对单节点DBMS中的一些组件，是可以复用到distributed DBMS中的，但也要有所改进才可以
+
+比如说SQL的优化查询，分布式事务的并发控制，以及分布式数据库的日志及恢复
+
+<br/>
+
+<br/>
+
+因此，当说到分布式数据库的时候，要分清到底是哪一种类型的DBMS
+
+<br/>
+
+<br/>
+
+<br/>
+
+# System architectures
+
+## Shared memory
 
 - cpu之间的分布式，即cpu之间通过network进行通信
 - 共享内存和磁盘
@@ -6,9 +54,11 @@ shared memory
 - 即分布式世界没有
 - 而现在cpu访问数据居然还用网络，自然效率就低下了
 
+<br/>
 
+<br/>
 
-shared disk
+## Shared disk
 
 - cpu和内存打包，用网络通信，共享磁盘，可以认为类似网盘一样
 - 计算能力和存储能力解耦（计算能力差加cpu，存储能力差加磁盘）
@@ -19,16 +69,31 @@ shared disk
 - 方便扩容
 - 问题：缓存不一致（A节点更新了数据，但是没有刷盘，只是在本地的内存更新了，而B节点此时需要访问数据，那么就出现问题了）
 
+<br/>
 
+<br/>
 
-shared nothing
+## Shared nothing
 
 - 相当于每台服务器都有独立的cpu、内存和硬盘，每个服务器之间依靠network通信
 - 数据一致性更加难以保存
+- 不方便扩容（相比存算分离）
 
+<br/>
 
+<br/>
 
+<br/>
 
+# Design issues
+
+<br/>
+
+<br/>
+
+<br/>
+
+# Partitioning schemes
 
 水平分区
 
@@ -49,3 +114,11 @@ consistent hashing
 垂直分区
 
 - 用的非常少
+
+<br/>
+
+<br/>
+
+<br/>
+
+# Distributed concurrency control 

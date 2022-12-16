@@ -220,7 +220,7 @@ bloom filter加速
 
 cost
 
-- ![](image/hash join cost_01.png)
+- <img src="image/hash join cost_01.png" style="zoom:150%;" />
 
 
 
