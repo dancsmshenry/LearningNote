@@ -44,9 +44,7 @@
 
 ## latch modes
 
-
-
-- <img src="image/latch modes.png" style="zoom: 150%;" />
+<img src="image/latch modes.png" style="zoom: 150%;" />
 
 
 
