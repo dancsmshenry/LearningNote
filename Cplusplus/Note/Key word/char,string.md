@@ -6,38 +6,40 @@
 
 ## char[]和char*
 
-- char* 的本质是 const char* 
+char* 的本质是 const char* 
 
-  - 即指向的数据是放在字符常量区的，如果出现两个char* 所指向的数据相同，那么就代表它们指向同一个地址
+- 即指向的数据是放在字符常量区的，如果出现两个char* 所指向的数据相同，那么就代表它们指向同一个地址
 
-  - 在cpp中最后在前面加上const，否则会warning
+- 在cpp中最后在前面加上const，否则会warning
 
-  - 会在字符串最后默认加上\0
+- 会在字符串最后默认加上\0
 
-  - ```cpp
-    const char* s1 = "abc";
-    sizeof s1; // 记录的是指针的大小
-    strlen(s1);// 记录的是字符串删掉\0的长度
-    ```
+- ```cpp
+  const char* s1 = "abc";
+  sizeof s1; // 记录的是指针的大小
+  strlen(s1);// 记录的是字符串删掉\0的长度
+  ```
 
-- char[]的本质是char* const
+<br/>
 
-  - 是一个字符数组
+char[]的本质是char* const
 
-  - 会在字符串最后默认加上\0（但是char[]是可以修改最后那个字符的；所以如果擅自修改最后一个字符，在使用strcpy等函数时就会出错）
+- 是一个字符数组
 
-  - sizeof(char[])会统计所有字符数
+- 会在字符串最后默认加上\0（但是char[]是可以修改最后那个字符的；所以如果擅自修改最后一个字符，在使用strcpy等函数时就会出错）
 
-  - ```cpp
-    char s1[4] = "abc";
-    sizeof s1; // 记录的是字符数组的大小
-    strlen(s1);// 记录的是字符串删掉\0的长度
-    
-    char s2[] = "dsfsdf";// 不能被[]蒙骗为指针，实际上还是一个数组..（可变的）
-    void test(char a[]){
-        std::cout << sizeof(a) << std::endl;//	返回的是指针的大小
-    }
-    ```
+- sizeof(char[])会统计所有字符数
+
+- ```cpp
+  char s1[4] = "abc";
+  sizeof s1; // 记录的是字符数组的大小
+  strlen(s1);// 记录的是字符串删掉\0的长度
+  
+  char s2[] = "dsfsdf";// 不能被[]蒙骗为指针，实际上还是一个数组..（可变的）
+  void test(char a[]){
+      std::cout << sizeof(a) << std::endl;//	返回的是指针的大小
+  }
+  ```
 
 
 
