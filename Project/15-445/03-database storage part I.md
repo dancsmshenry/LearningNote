@@ -1,77 +1,106 @@
-# disk-based architecture
+# Disk-based architecture
 
-- DBMS假定数据库的主要存储位置在非易失性磁盘上
-- DBMS的组件管理数据在非易失性存储和易失性存储之间移动
+DBMS假定数据库的主要存储位置在非易失性磁盘上
+
+DBMS的组件管理的数据在非易失性存储和易失性存储之间移动
+
+<br/>
+
+<br/>
+
+<br/>
+
+# Storage hierarchy
+
+<img src="image/storage hierarchy.png" style="zoom: 150%;" />
+
+<img src="image/storage hierarchy_01.png" style="zoom:150%;" />
+
+CPU：
+- CPU registers
+- CPU caches
+
+内存（memory）:
+
+- DRAM：动态随机存储器
+
+硬盘（disk）：
+
+- SSD：固态硬盘
+- HDD：机械硬盘
+
+<br/>
+
+<br/>
+
+设备的访问速度：
+
+<img src="image\access times.png" style="zoom: 150%;" />
+
+<br/>
+
+<br/>
+
+<br/>
+
+# Sequential vs random access
+
+在非易失的介质上，随机IO是慢于顺序IO的
+
+因此，DBMS需要尽量最大化磁盘的顺序IO
+
+将随机IO尽量转变为顺序IO
+
+<br/>
+
+<br/>
+
+<br/>
+
+# System design goals
+
+允许DBMS管理超过可用内存容量的数据库
+
+- 一个好的存储引擎要允许DBMS管理一个巨大数据量的数据库
+
+因为对磁盘IO的开销很大，所以要尽量避免出现大的停顿和性能下降
+
+- 不要让DBMS频繁的读写磁盘
+
+随机IO是远远慢于顺序IO的，所以要尽量把随机的读写转换为连续的读写
+
+<br/>
+
+<br/>
+
+<br/>
+
+# Disk-oriented dbms
+
+数据都是要存储在磁盘上的
+
+磁盘中有一个directory，存储的是每一个数据页在内存中的位置
+
+每个数据页前面都有一个handler，handler中存储的是这个page的元数据
+
+<br/>
+
+内存的buffer pool首先要把磁盘中的directory给loading到内存中
+
+然后再根据要找的数据和directory对应的关系
+
+再去loading对应的page
+
+<img src="image/disk-oriented dbms_01.png" style="zoom:150%;" />
+
+<br/>
+
+<br/>
+
+<br/>
 
 
-
-
-
-
-
-# storage hierachy
-
-- <img src="image/storage hierarchy.png" style="zoom:67%;" />
-- ![](image/storage hierarchy_01.png)
-- cpu：
-  - cpu registers
-  - cpu caches
-- 内存（memory）:
-  - DRAM：动态随机存储器
-- 硬盘（disk）：
-  - SSD：固态硬盘
-  - HDD：机械硬盘
-- 设备的访问速度
-  - <img src="image\access times.png" style="zoom:67%;" />
-
-
-
-
-
-
-
-# sequential vs random access
-
-- 在非易失的介质上，随机读写是慢于顺序读写的
-- 所以DBMS需要尽量最大化磁盘的顺序读写
-- 尽量把用户对磁盘随机的存取变为顺序的存取
-
-
-
-
-
-
-
-# system design goals
-
-- 允许DBMS管理超过可用内存容量的数据库（不能说内存多少就只能存取多少吧..）
-  - 一个好的存储引擎要允许DBMS管理一个巨大数据量的数据库
-- 因为对磁盘的读/写开销很大，所以要尽量避免出现大的停顿和性能下降
-  - 不要让database频繁的读写磁盘
-- 随机的对磁盘读写是远远慢于顺序写的，所以要尽量把随机的读写转换为连续的读写
-
-
-
-
-
-
-
-# disk-oriented dbms
-
-- 数据都是要存储在磁盘上的
-- 磁盘中有一个directory，存储的是每一个数据页在内存中的位置
-- 每个数据页前面都有一个handler，handler中存储的是这个page的元数据
-- 内存的buffer pool首先要把磁盘中的directory给loading到内存中，然后再根据要找的数据和directory对应的关系，再去loading对应的page
-  - ![](image/disk-oriented dbms_01.png)
-
-
-
-
-
-
-
-
-# why not use the os
+# Why not use the os
 
 - mmap：就是我需要什么数据页，就从virtual memory中去拿，而具体怎么把数据加载到物理内存中的，是OS帮我们操作的
 
@@ -104,39 +133,47 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
 
 - DBMS需要自己去管理数据库的数据页
 
+<br/>
 
+<br/>
 
+<br/>
 
+# Database storage
 
+DBMS的两大问题：
+- problem 1：DBMS的数据是怎样在磁盘上存储的（data page的结构是怎么样的）
+- problem 2：DBMS如何控制数据在磁盘和内存之间的流动
 
+<br/>
 
-# database storage
+本章主要研究problem 1
 
-- 数据库的两大问题
-  - problem 1：DBMS的数据是怎样在磁盘上存储的（data page的结构是怎么样的）
-  - problem 2：DBMS如何控制数据在磁盘和内存之间的流动
+<br/>
 
-- problem 1是本章要研究的
+<br/>
 
+<br/>
 
+# File storage
 
+<br/>
 
+## Storage manager
 
+storage manager负责维护DBMS中的文件
+- 有时候会对page进行读写调度，以提高页面的空间和时间局部性
 
+同时也将page组织在一起
 
-# file storage
+- 对发生读写的page进行跟踪
+- 也要记录可用空间的page
 
-## storage manager
+<br/>
 
-- storage manager负责维护DBMS中的文件
-  - 有时候会对page进行读写调度，以提高页面的空间和时间局部性
-- 同时也将page组织在一起
-  - 对发生读写的page进行跟踪
-  - 也要记录可用空间的page
+<br/>
 
-
-
-## database pages
+## Database pages
 
 - 文件存储（文件在磁盘上是如何存储的）
 - 页面是一个固定大小的数据块
@@ -152,9 +189,11 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
 
 - mysql中的page为16KB
 
+<br/>
 
+<br/>
 
-## database heap
+## Database heap
 
 - 堆文件是page的无序集合，其中元组以随机顺序存储
   - page需要有CRUD的功能
@@ -164,9 +203,11 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
   - linked list 链表
   - page directory 页目录
 
+<br/>
 
+<br/>
 
-### linked list
+### Linked list
 
 - 在文件的开头维护一个头页，存储两个指针
   - 空闲页面列表的头部（free page list）
@@ -176,9 +217,11 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
 - ![](image\linked list.png)
 - 读取的过程是首先将这个header页读入内存
 
+<br/>
 
+<br/>
 
-### page directory
+### Page directory
 
 - DBMS维护记录数据库文件中的数据页位置的特殊页，可以认为是一个directory
   - 存在directory page，里面存的是多少号id的page存在磁盘的哪个位置，即存储的是page的地址
@@ -186,19 +229,23 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
 
 - ![](image\page directory.png)
 
+<br/>
 
+<br/>
 
+<br/>
 
+# Page layout
 
+页面布局（数据在文件上是如何存储）
 
+<br/>
 
-# page layout
+<br/>
 
-- 页面布局（数据在文件上是如何存储）
+<br/>
 
-
-
-## page header
+## Page header
 
 每个页面都包含一个关于页面内容的元数据头（header）
 - 页面大小 page size
@@ -214,10 +261,12 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
   - log-structed
 - PS：存储的不只是元数据，平常的操作的记录也要保存的
 
+<br/>
+
+<br/>
 
 
-
-## tuple-oriented
+## Tuple-oriented
 
 - 跟踪页面中元组的数目，然后只在末尾追加一个新的元组
 - 删除就直接去掉这一行
@@ -229,26 +278,32 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
 
 - ![](image\tuple storage.png)
 
+<br/>
 
+<br/>
 
-### slotted pages
+### Slotted pages
 
 - 每个槽位都放着一个slot，slot指向真正数据存放的位置
 - 即数据可以是随机存储的，只需要知道slot的位置即可
 - ![](image\slotted pages.png)
 - slots数组映射到元素的起始位置偏移量
 
+<br/>
 
+<br/>
 
-## record ids
+## Record ids
 
 - 每一条记录都要有一个全局的id
 - 一般都是用pages_id+offset/slot
 - PS：这个id只能内部使用，外部的使用者不能用这个id去查询数据
 
+<br/>
 
+<br/>
 
-## log structed
+## Log structed
 
 - 系统将日志记录追加到数据库修改的文件中，插入存储整个元组
   - 删除将元组标记为已删除
@@ -258,28 +313,32 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
 - 为了节省空间需要定期压缩日志
 - 思路上就是leveldb的做法
 
+<br/>
 
+<br/>
 
+<br/>
 
-
-
-
-# tuple layout
+# Tuple layout
 
 - 元组的布局
 - tuple在磁盘上的表现就是一组二进制的字节
 
+<br/>
 
+<br/>
 
-## tuple header
+## Tuple header
 
 - 每个元组都有一个包含有关它的元数据的头作为前缀
   - 可见性信息（并发控制信息，concurrency control，该行是否被锁上了，事务的id号）
   - NULL值的位图（bit map for null values）即用0和1来表示后面的数据是否为null，因为数据的存储是一个接一个的，紧挨着的写的，如果不标记的话，可能读到下一条数据
 
+<br/>
 
+<br/>
 
-## tuple data
+## Tuple data
 
 - 属性通常按照创建表时指定的顺序存储
 - 可以在物理上对相关元组进行正规化(例如：pre join)，并将它们存储在同一个页面中
@@ -292,16 +351,20 @@ DBMS同时需要控制一些操作和数据，同时将一些事情做的比OS�
   - 最常见的:page_id +偏移/槽
   - 也可以包含文件的位置信息
 
+<br/>
 
+<br/>
 
+<br/>
 
+# Conclusion
 
+数据库的数据是按照页来存储的
 
+不同的方法来找到数据页（使用链表还是用字典）
 
-# conclusion
+page的存储结构（页可能是slot的存法）
 
-- 数据库的数据是按照页来存储的
-- 不同的方法来找到数据页（使用链表还是用字典）
-- page的存储结构（页可能是slot的存法）
-- tuples的存储结构
-- 操作系统的page和DBMS的page不是一样的，例如说mysql中一个page是16kb，那么到磁盘中就是4个4kb的page
+tuples的存储结构
+
+操作系统的page和DBMS的page不是一样的，例如说mysql中一个page是16kb，那么到磁盘中就是4个4kb的page
