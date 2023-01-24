@@ -1,26 +1,27 @@
-# two types of data structures
+# Two types of data structures
 
-- hash table
-- trees
+**Hash table**和**Tree**
 
+<br/>
 
+<br/>
 
+<br/>
 
+# Application
 
+数据结构在DBMS中的应用：
 
+- 数据库的元数据存储（internal meta-data）
+- 一些数据库的核心数据结构，例如Redis（core data storage）
+- 临时表，比如join中的hash join（temporary data structures）
+- 索引（table indexes）
 
-# application
+<br/>
 
-- （internal meta-data）数据库的元数据存储
-- （core data storage）一些数据库的核心数据结构（例如redis）
-- （temporary data structures）临时表（比如join语句中使用的就是hash表）
-- （table indexes）索引
+<br/>
 
-
-
-
-
-
+<br/>
 
 # design decisions of datestruct
 

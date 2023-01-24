@@ -440,21 +440,49 @@
 
 # git commit message规范
 
-- `<type>[(<scope>)]: <subject>`
-- type：
-  - 声明本次代码提交的类型（英文名，必填项）
-  - feat：新功能特性
-  - fix：bug修复
-  - perf：功能优化，包括性能优化、体验优化等
-  - refactor：代码重构（大范围的代码结构重构，不涉及代码功能）
-  - style：格式调整（小范围的代码格式调整，不涉及代码功能）
-  - merge：代码分支合并
-  - revert：代码版本回滚
-  - test：测试代码变动
-  - doc：文档变动
-- scope：
-  - 用于声明本次代码提交的影响范围（建议英文，选填项）
-  - 如Model层、Dao层、Service层、Controller层、View层等等
-  - 如果涉及多个scope，可以置空或用*代替
-- subject：
-  - 用于声明本次代码提交的描述信息（建议中文，必填项）。通常控制在50个字符内，且省略句末标点符号
+`<type>[(<scope>)]: <subject>`
+
+type：
+- 声明本次代码提交的类型（英文名，必填项）
+- feat：新功能特性
+- fix：bug修复
+- perf：功能优化，包括性能优化、体验优化等
+- refactor：代码重构（大范围的代码结构重构，不涉及代码功能）
+- style：格式调整（小范围的代码格式调整，不涉及代码功能）
+- merge：代码分支合并
+- revert：代码版本回滚
+- test：测试代码变动
+- doc：文档变动
+
+scope：
+- 用于声明本次代码提交的影响范围（建议英文，选填项）
+- 如Model层、Dao层、Service层、Controller层、View层等等
+- 如果涉及多个scope，可以置空或用*代替
+
+subject：用于声明本次代码提交的描述信息（建议中文，必填项）。通常控制在50个字符内，且省略句末标点符号
+
+<br/>
+
+<br/>
+
+<br/>
+
+# github网页上的操作
+
+## 删除分支
+
+<img src="image/删除分支_01.png" style="zoom:150%;" />
+
+点进view all branches
+
+<img src="image/删除分支_02.png" style="zoom:150%;" />
+
+点进右边的垃圾桶
+
+<br/>
+
+## 将仓库设为私有
+
+点进settings
+
+<img src="image/修改仓库权限.png" style="zoom:150%;" />
