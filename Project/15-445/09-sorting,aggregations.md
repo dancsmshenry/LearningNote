@@ -148,7 +148,7 @@ Pass #0：读取每一个数据页，将每一个数据页内的数据进行内�
 
 Pass #1，2，3：每次将两个数据页读入到内存中，将它们归并排序
 
-<img src="image\2-way external merge sort.png" style="zoom:150%;" />
+<img src="image/2-way external merge sort.png" style="zoom:150%;" />
 
 <br/>
 
@@ -273,7 +273,7 @@ B+树的数据结点和文件页是一一关联的，每一个叶子结点的数
 
 将数据过滤后，对数据进行排序，然后聚合去重
 
-<img src="image\sorting aggregation.png" style="zoom: 150%;" />
+<img src="image/sorting aggregation.png" style="zoom: 150%;" />
 
 如果SQL语句不要求对原数据进行排序，那么这种方法的时间复杂度就会偏高
 
@@ -316,7 +316,7 @@ B+树的数据结点和文件页是一一关联的，每一个叶子结点的数
 
 最后将数据按照分区放到磁盘中（落盘的时候可以做一些优化，比如说把重复的数据给删除）
 
-<img src="image\hash_partition.png" style="zoom: 150%;" />
+<img src="image/hash_partition.png" style="zoom: 150%;" />
 
 <br/>
 
@@ -336,7 +336,7 @@ B+树的数据结点和文件页是一一关联的，每一个叶子结点的数
 
 然后遍历该hash的bucket以匹配元组
 
-<img src="image\hash_rehash.png" style="zoom: 150%;" />
+<img src="image/hash_rehash.png" style="zoom: 150%;" />
 
 <br/>
 
@@ -348,7 +348,7 @@ B+树的数据结点和文件页是一一关联的，每一个叶子结点的数
 
 所以在Rehash阶段中的hash2函数（第二个hash函数），应该存入的是一个kv对
 
-<img src="image\hash summarization.png" style="zoom: 150%;" />
+<img src="image/hash summarization.png" style="zoom: 150%;" />
 
 <br/>
 

@@ -7,19 +7,11 @@
 - 恢复（Recovery）
 - 分布式数据库（Distributed Databases）
 
+<br/>
 
+<br/>
 
-
-
-
-
-# to do list
-
-- 后续三章的分布式数据库暂时不看
-- 还需要补上的第1、2、4、14章的视频和ppt
-- 后续多review
-
-
+<br/>
 
 # 参考
 
@@ -29,7 +21,9 @@
 - https://www.zhihu.com/column/c_1377634126124699648
 - https://www.jianshu.com/nb/36265841
 
+<br/>
 
+<br/>
 
 单独类（针对单个问题的文章）
 
