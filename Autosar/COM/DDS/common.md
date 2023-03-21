@@ -1,0 +1,1 @@
+instance_handle，我理解它就是用来存储guid的一个class

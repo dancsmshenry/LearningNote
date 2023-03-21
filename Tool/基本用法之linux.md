@@ -1,22 +1,69 @@
+# 权限管理
+
+chmod +x run.sh
+- 当前shell脚本因权限无法执行，使用该指令修改权限
+
+解压文件夹
+
+安装软件，下载文件
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 文件夹
+
+## 重命名文件夹
+
+- mv 原文件夹名 新文件夹名
+
+<br/>
+
+## 删除文件/文件夹
+
+- rm 文件名
+- rm -f 文件名 强制删除
+- rm -rf 文件夹名
+
+<br/>
+
+## 新建文件夹
+
+- mkdir 文件夹名
+- mkdir -p 文件夹名/文件夹名（可以递归的创建文件夹，比如创建test/toml11/toml这种文件夹）
+
+<br/>
+
+## 复制文件夹
+
+- cp -r /usr/bin/toml11* /home/hengrui.shen/test/
+  - 左边是源文件，右边是目标文件夹
+  - 将源文件中的内容全数移动到右边的文件夹
+
+<br/>
+<br/>
+
 # 进入文件夹
 
 - `cd filefolder_name`
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 # 用vim打开文件
 
 - `vi test.cpp`
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 # 查看文件
 
@@ -168,16 +215,22 @@ wsl的安装：应用商店安装即可
   sudo apt-get install g++
   ```
 
-- 
+<br/>
 
+<br/>
 
+<br/>
 
 ## 安装wsl后可能导致windows的gcc出现红线
 
 - 可能是修改了gcc的路径
 - 去`c_cpp_properties.json`路径下查找`"compilerPath": "D:\\Cpp\\TDM-GCC-64\\bin\\gcc"`即可
 
+<br/>
 
+<br/>
+
+<br/>
 
 # to do list
 

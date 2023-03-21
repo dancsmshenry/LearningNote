@@ -1,0 +1,50 @@
+<!-- 补充代码的快捷键，先写一个英文版的问号，然后再按回车 -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初识Vue</title>
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../vue.js"></script>
+</head>
+
+<body>
+
+    <div id="root">
+        <h1>Hello，{{name}}，{{address}}</h1>
+    </div>
+
+    <div id="root2">
+        <h1>Hello，{{name}}，{{address}}</h1>
+        <a v-bind:href="url">进入百度</a>
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产指示
+
+        new Vue({
+            el: '#root',
+            data: {
+                name: 'atguigu',
+                address: '上海'
+            }
+        }) // 创建Vue实例
+
+        new Vue({
+            el: '#root2',
+            data: {
+                name: '尚硅谷',
+                address: '北京昌平',
+                url: 'http://www.baidu.com'
+            }
+        }) // 创建Vue实例
+    </script>
+
+
+</body>
+
+</html>

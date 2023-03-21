@@ -4,70 +4,70 @@
 
 - 可以控制vscode中的文件管理的树目录显示图标，即改变文件显示的图标
 
-
+<br/>
 
 ## Tabnine Autocomplete AI
 
 - 是一个机器学习驱动的代码自动补全工具，使用 GitHub 的近 200 万个文件进行了训练，由于深度学习的分析能力，Deep TabNine 提出的代码补全建议整体上具有很高的质量
 
-
+<br/>
 
 ## Rainbow Brackets
 
 - 可以将同一对花括号给定相同的颜色，可以一眼就看出配对的两个花括号
 
-
+<br/>
 
 ## Polacode
 
 - 将代码变为照片存储，便于分享
 - 使用方法：ctrl+shift+p，然后输入polacode
 
-
+<br/>
 
 ## One Dark Pro
 
 - 设置为one dark pro背景
 
-
+<br/>
 
 ## Chinese (Simplified) Language Pack for Visual Studio Code
 
 - vscode中文包
 
-
+<br/>
 
 ## code runner
 
 - 不知道有什么用，但是好像是能够运行代码的一个插件
 - 右键即可编译运行单文件，很方便；但无法Debug
 
-
+<br/>
 
 ## Astyle
 
 - 格式化代码
 
-
+<br/>
 
 ## C/C++
 
 - 又名 cpptools，提供Debug和Format功能
 
-
+<br/>
 
 ## C/C++ Clang Command Adapter
 
 ## C/C++ Extension Pack
 
-
+<br/>
 
 ## Language Support for Java(TM) by Red Hat
 
 - java的配置（也没有必要一定要这样配置，但是这样配置会更舒服）
   - 方法参考日志2021.04.15
 
-
+<br/>
 
 ## Markdown in all one
 
@@ -76,13 +76,13 @@
   - 用法：
     - ctrl+shift+p，进入命令行，输入ctoc，找到markdown目录，点击即可
 
-
+<br/>
 
 ## Setting sync
 
 - 多端同步配置
 
-
+<br/>
 
 
 
@@ -172,59 +172,83 @@ launch.json
 }
 ```
 
+<br/>
 
+<br/>
 
-
+<br/>
 
 # 指令
 
 ## 复制上一行的数据
 
-- alt + shift + 上或下键，复制当前行的数据到下一行
+alt + shift + 上或下键，复制当前行的数据到下一行
 
-
+<br/>
 
 ## 切换到终端
 
-- ctrl + `
+ctrl + `
 
-
+<br/>
 
 ## 查找文件
 
-- ctrl + p
+ctrl + p
 
-
+<br/>
 
 ## 查找字符
 
-- ctrl + f
+ctrl + f
 
-
+<br/>
 
 ## 运行代码
 
-- ctrl + alt + n
+ctrl + alt + n
 
-
+<br/>
 
 ## 选取某一列的数据
 
-- alt + shift + 选取下拉或上拉
+alt + shift + 选取下拉或上拉
 
+<br/>
 
+## 折叠代码行
 
-## 代码行
-
-折叠所有代码行：按住ctrl （始终不要松开），再按k，松开k，再按0，即ctrl+k+0、
+折叠所有代码行：按住ctrl （始终不要松开），再按k，松开k，再按0，即ctrl+k+0
 
 打开所有代码行：按住ctrl （始终不要松开），再按k，松开k，再按j，即ctrl+k+j
 
+<br/>
 
+## 集体移动代码
 
+ctrl + { 将选中的代码左移
 
+ctrl + } 将选中的代码右移
 
+PS：一般用于格式的控制
 
+<br/>
+
+## 注释代码
+
+ctrl + / 将当前行的代码注释
+
+<br/>
+
+## 删除代码
+
+ctrl + shift + k 将当前行的代码全部删掉
+
+<br/>
+
+<br/>
+
+<br/>
 
 # to do list
 
