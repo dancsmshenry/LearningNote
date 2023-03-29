@@ -69,7 +69,7 @@ vscode的细则
 ```shell
 git add filename	# 将某个文件的修改提交到暂存区
 
-git add -A			# 将所有发生了修改的文件添加到暂存区中
+git add -A			# 将所有发生修改的文件都添加到暂存区
 git add .			# 和上一条等价
 ```
 
@@ -79,7 +79,7 @@ git add .			# 和上一条等价
 
 ```shell
 git init 		# 在当前目录创建 git 仓库
-git init <path> # 在 path 路径下创建 git 仓库
+git init <path> # 在指定 path 路径下创建 git 仓库
 ```
 
 <br/>
@@ -102,12 +102,12 @@ git clone <url> <dir_name>	# 将代码 clone 到指定目录中
 ```shell
 git config --global user.name "username"	# 设置 name
 git config --global user.email "useremail"	# 设置邮箱
-git config --global --list					# 查看 name h
+git config --global --list					# 查看当前账号信息
 ```
 
 <br/>
 
-## remote
+## remote（少）
 
 ```shell
 git remote add <name> <url>				#	添加远程仓库关联
@@ -119,7 +119,7 @@ git remote set-url <name> <new_url>		#	更新远程仓库 url
 
 <br/>
 
-## rm
+## rm（少）
 
 ```shell
 #	用于删除工作区文件，并将此次删除放入到暂存区（注：要删除的文件没有修改过，就是说和当前版本库文件的内容相同）
@@ -136,7 +136,7 @@ git rm --cached <file>
 
 <br/>
 
-## mv
+## mv（少）
 
 ```shell
 git mv <old_file> <new_file>	#	用于移动或重命名一个文件、目录或软链接
@@ -151,7 +151,7 @@ git mv -f <old_file> <new_file>	#	新文件名已经存在，若想强制覆盖�
 
 <br/>
 
-## reset
+## reset（少）
 
 - 用于将指定 commit 和 branch 的文件替换暂存区的文件。有三个常用参数，分别是`--hard`，`--soft`，`--mixed`，默认是`--mixed`。具体细节和应用场景可参考此[博客](https:#www.jianshu.com/p/c2ec5f06cf1a)
 
@@ -434,15 +434,9 @@ git rebase --continue	# 继续 rebase 过程，常在处理完冲突时使用
 
 <br/>
 
-## reflog
-
-```shell
-git reflog	# 查看所有分支的操作记录
-```
-
-<br/>
-
 ## tag
+
+- to learn
 
 ```shell
 git push origin --tags	#	标签全部推送至远程
