@@ -3,61 +3,35 @@
 chmod +x run.sh
 - 当前shell脚本因权限无法执行，使用该指令修改权限
 
-解压文件夹
-
-安装软件，下载文件
-
 <br/>
 
 <br/>
 
 <br/>
 
-# 文件夹
+# 关于文件夹的操作
 
-## 重命名文件夹
+```shell
+# 重命名文件夹
+mv oldname newname
 
-- mv 原文件夹名 新文件夹名
+# 删除文件夹
+rm -rf foldername
 
-<br/>
+# 新建文件夹
+mkdir foldername
+mkdir -p foldername/foldername # 可以递归的创建文件夹
 
-## 删除文件/文件夹
-
-- rm 文件名
-- rm -f 文件名 强制删除
-- rm -rf 文件夹名
-
-<br/>
-
-## 新建文件夹
-
-- mkdir 文件夹名
-- mkdir -p 文件夹名/文件夹名（可以递归的创建文件夹，比如创建test/toml11/toml这种文件夹）
-
-<br/>
-
-## 复制文件夹
-
-- cp -r /usr/bin/toml11* /home/hengrui.shen/test/
-  - 左边是源文件，右边是目标文件夹
-  - 将源文件中的内容全数移动到右边的文件夹
-
-<br/>
-<br/>
+# 复制文件夹
+cp -r /usr/bin/toml11* /home/hengrui.shen/test/ # 左边是源文件，右边是目标文件夹（从源文件夹移动到目标文件夹）
 
 # 进入文件夹
+cd foldername
 
-- `cd filefolder_name`
-
-<br/>
-
-<br/>
-
-<br/>
-
-# 用vim打开文件
-
-- `vi test.cpp`
+# 查看文件夹下的文件
+ls
+ls -a # 能够同时查看隐藏文件
+```
 
 <br/>
 
@@ -65,92 +39,75 @@ chmod +x run.sh
 
 <br/>
 
-# 查看文件
+# 关于文件的操作
 
-- 普通的查看文件：`ls`
-- 查看隐藏文件：`ls -a`
+```shell
+# 打开文件
+vim test.cc
 
-
-
-
-
-
-
-# 删除文件（文件夹）
-
-- `rm -rf 文件夹`，删除文件夹
-- `rm -f 文件名`，删除单个文件
-- `rm -r 文件名`，递归删除，不管有多少个文件，全部删除
-- `find ./ -name "*.o" | xarg rm -rf`，删除某种后缀类型的文件（这里是删除所有后缀为o的文件）
-
-
-
-
-
-
+# 删除文件
+rm filename
+rm -f filename # 强制删除文件
+find ./ -name "*.o" | xarg rm -rf # 删除.o后缀类型的文件
 
 # 解压文件
-
-- 解压.tar文件
-  - `tar xzf file_name`
-
-- 解压tar.gz文件
-  - `tar -zxvf file_name`
-
-
-
-
-
-
-
+tar xzf filename # 解压.tar文件
+tar -zxvf filename # 解压.tar.gz文件
 
 # 下载文件
+wget xxxx
+```
 
-- `wget download_url`
+<br/>
 
+<br/>
 
+<br/>
 
-## 库的安装
+# 关于进程的操作
 
-- 很多时候，某些库（protobuf）是可以用pip进行安装和卸载的
-- pip install protobuf==3.16.0（指定版本安装）
-- pip uninstall protobuf（卸载库）
+```shell
+# 列出与本次登录有关的进程信息
+ps -l
 
+# 查询内存中进程信息
+ps -aux
 
+# 查询***进程的详细信息
+ps -aux | grep ***
 
-# 应用程序的安装
+# 查看内存中进程的动态信息
+top
 
-- `sudo apt-get install cmake`，最后填需要安装的应用程序
+# 杀死进程
+kill -9 pid
 
+# 动态显示内存中的进程信息
+top
+```
 
+<br/>
 
-## gcc的安装
+<br/>
 
-- `sudo apt install gcc`安装gcc
-- `gcc -v`查看gcc版本
-- 如果失败了，可能需要更新一下`sudo apt-get install update`
+<br/>
 
+# 关于应用程序的安装
 
+```shell
+# 第一种，需要安装某些静态库，比如 protobuf，则可以使用 pip
+pip install protobuf==3.16.0 # 后面可以选择安装指定库
+pip uninstall protobuf # 卸载库
 
+# 第二种，需要安装 gcc 、或是 cmake，则需要使用 apt
+sudo apt-get install cmake # 后面添上需要安装的应用程序
+```
 
+<br/>
 
-## vim常用
+<br/>
 
-- 
-
-
-
-## 查看进程信息
-
-  ps -l  列出与本次登录有关的进程信息；
-ps -aux   查询内存中进程信息；
-ps -aux | grep ** *    查询  ***  进程的详细信息
-  top  查看内存中进程的动态信息；
-  kill -9 pid  杀死进程。
-
-top 动态显示内存中的进程信息（top）
-
-
+<br/>
 
 # Others
 
@@ -158,62 +115,64 @@ top 动态显示内存中的进程信息（top）
 - 重复上一次命令：!!
 - strace -p pid（可以查看当前进程用到了哪些系统调用）
 
-
+<br/>
 
 发现Unable to locate package的问题
 
 - 可能是软件源发生了更替
 - 解决：先`sudo apt-get update`，`sudo apt-get install`
 
-
+<br/>
 
 如何退出conf文件
 
 - Ctrl + x
 
-
+<br/>
 
 wrk安装时出现的问题
 
 - https://blog.csdn.net/GMCN__/article/details/119491365
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 # WSL
 
 wsl的安装：应用商店安装即可
 
-
+<br/>
 
 ## 如何在wsl上访问windows的文件
 
-- 首先进入 WSL，然后进根目录/，使用ls可以看到一个名为mnt的目录（mnt 是 mount 加载的缩写）
-- 在这里可以看到各种盘，例如c表示 C 盘，d表示 D 盘
-- 然后我们就可以进入不同的盘来对文件进行操作了
+首先进入 WSL，然后进根目录/，使用ls可以看到一个名为mnt的目录（mnt 是 mount 加载的缩写）
 
+在这里可以看到各种盘，例如c表示 C 盘，d表示 D 盘
 
+然后我们就可以进入不同的盘来对文件进行操作了
+
+<br/>
 
 ## wsl和vscode的配置
 
-- 好像不需要怎么配置...，直接下载好vscode的插件remote-ssh，remote-wls即可
+好像不需要怎么配置...，直接下载好vscode的插件remote-ssh，remote-wls即可
 
-- 插件那里切换过去即可
+插件那里切换过去即可
 
-- 需要安装一些插件，还需要切换到阿里源，同时更新一些配置
+需要安装一些插件，还需要切换到阿里源，同时更新一些配置
 
-- ```shell
-  sudo sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
-  sudo apt update -y
-  sudo apt upgrade -y
-  
-  //	安装gcc和gdb
-  sudo apt-get install gdb
-  sudo apt-get install g++
-  ```
+```shell
+sudo sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+sudo apt update -y
+sudo apt upgrade -y
+
+//	安装gcc和gdb
+sudo apt-get install gdb
+sudo apt-get install g++
+```
 
 <br/>
 
@@ -223,18 +182,6 @@ wsl的安装：应用商店安装即可
 
 ## 安装wsl后可能导致windows的gcc出现红线
 
-- 可能是修改了gcc的路径
-- 去`c_cpp_properties.json`路径下查找`"compilerPath": "D:\\Cpp\\TDM-GCC-64\\bin\\gcc"`即可
+可能是修改了gcc的路径
 
-<br/>
-
-<br/>
-
-<br/>
-
-# to do list
-
-- xargs学习
-- linux常用命令
-- 如何找到文本中首字母大写的所有行
-- nmap，linux下网络扫描和嗅探的工具
+去`c_cpp_properties.json`路径下查找`"compilerPath": "D:\\Cpp\\TDM-GCC-64\\bin\\gcc"`即可
