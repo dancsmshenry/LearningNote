@@ -250,6 +250,12 @@ launch.json
 
 <br/>
 
+# settings
+
+whitespace ，提交代码中需要将空格给删掉（选项：trim trailing whirespace）
+
+
+
 # to do list
 
 https://blog.csdn.net/m0_46548070/article/details/105116420
