@@ -1,30 +1,218 @@
-```cmake
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-```
-
-用于设置当前项目需要的 Cmake 最低版本为多少（如果低于这个版本就会报错）
-
-`FATAL_ERROR` 会被 CMake 2.6 及更高版本接受但被忽略（accepted but ignored）
-
-<br/>
-
-<br/>
+# 0、通用的 cmakelists 模板
 
 ```cmake
-project(ara-apd VERSION 1.0.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.16)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+project(learningcpp LANGUAGES C CXX)
+
+if (PROJECT_BINARY_DIR STREQUAL PROJECT_SOURCE_DIR)
+	message(WARNING "The binary directory of CMake cannot be the same as source directory!")
+
+if (NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release)
+endif()
 ```
 
-第一个 slot （NAME）用于指定项目的名称
-
-第二个 slot （VERSION）用于指定项目的版本号
-
-第三个 slot （DESCRIPTION）用于补充项目的具体信息
-
-第四个 slot （LANGUAGES）用于指定项目使用的语言
+<br/>
 
 <br/>
 
 <br/>
+
+# 1、cmake 的命令行使用方法
+
+编译三部曲
+
+```shell
+# 当前是在主目录下的
+
+# 通过 cmakelists 生成对应的 makefile 或者 ninja 文件，其中路径被设置为 build（也可以设置为别的），后续的则是设置一些编译参数，比如这里就是设置项目生成的版本
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+# 编译，编译的目录也被指定为了 build，而 --parallel 4 则是设置编译的线程数
+cmake --build build --parallel 4
+# 安装，将项目安装到指定目录下
+cmake --build build --target install
+```
+
+<br/>
+
+<br/>
+
+cmake 编译主要分为两个阶段：
+
+第一步是 cmake -B build，称为配置阶段（configure），这时只检测环境并生成构建规则，会在 build 目录下生成本地构建系统能识别的项目文件（Makefile 或是 .sln）
+
+在配置阶段，可以利用 -D 指定配置变量（即一些缓存变量），这些变量会被在本地缓存，即使后续只是 cmake -B build ，前面的缓存也会被使用到
+
+第二步是 cmake --build build，称为构建阶段（build），这时才实际调用编译器来编译代码
+
+<br/>
+
+<br/>
+
+可以通过 -G 选择，来控制通过 cmakelists 的生成器
+
+```shell
+# 选择 ninja 作为后续的生成构建器
+cmaek -GNinja -B build
+```
+
+挖个坑，后续还想要学一下 ninja 和 bazel
+
+ninja：实践来看编译的速度无论是首次编译还是二次编译，效率都高于 makefile
+
+bazel：很多开源的自动驾驶项目都使用这个来进行编译
+
+<br/>
+
+<br/>
+
+本章节的结构：通用的编译三部曲，讲解编译的两大步骤，详细讲述 -D 和 -G 的用法
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 2、如何添加新的文件到项目中
+
+```cmake
+# add_executable用于设置最终编译得到的文件以及需要编译的文件
+add_executable(main main.cc)
+
+# 先创建编译得到的目标文件，再添加源文件
+add_executable(main)
+target_sources(main PUBLIC main.cc other.cc)
+
+# 先创建编译得到的目标文件，再用一个变量存储源文件，最后添加源文件
+add_executable(main)
+set(sources main.cc other.cc)
+target_sources(main PUBLIC ${sources})
+
+# 使用 GLOB 自动查找指定拓展名的文件
+add_executable(main)
+file(GLOB sources *.cc)
+file(GLOB sources CONFIGURE_DEPENDS *.cpp *.h) # 可以自动将新的文件添加
+file(GLOB sources CONFIGURE_DEPENDS *.cpp *.h mylib/*.cpp mylib/*.h) # 将子文件夹里的文件一起添加进来
+target_sources(main PUBLIC ${sources})
+
+# 使用 aux_source_directory 自动搜集需要文件的后缀名（我个人比较认同的使用方式）
+add_executable(main)
+aux_source_directory(. sources)
+aux_source_directory(mylib sources)
+target_sources(main PUBLIC ${sources})
+
+# 使用 GLOB_RECURSE 自动包含所有子文件夹下的文件（但是缺点就是可能会将build里面的文件一同加进来，所以我觉得这种比较差，就不用了...）
+add_executable(main)
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS *.cc *.h)
+target_sources(main PUBLIC ${sources})
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 3、配置基本的编译选项
+
+```cmake
+# 指定最低所需的 cmake 版本，当用户使用的 cmake 小于这个版本的时候，就会报错
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR) # 在2.6以后的版本会被接受但是忽略
+cmake_minimum_required(VERSION 3.15...3.20) # 指定使用 cmake 的版本范围
+
+# 用于控制编译模式，分为 debug，release，minsizerel，relwithdebinfo 几种模式
+set(CMAKE_BUILD_TYPE Release)
+
+# project 初始化项目信息，并把当前 cmakelists.txt 所在位置作为根目录
+# 第一个 slot （NAME）用于指定项目的名称
+# 第二个 slot （VERSION）用于指定项目的版本号（可以把当前项目的版本号设定为 x.y.z；再通过一些宏可以获得具体的版本号）
+# 第三个 slot （DESCRIPTION）用于补充项目的具体信息
+# 第四个 slot （LANGUAGES）用于指定项目使用的语言（可以同时写多种语言）
+project(LearningC VERSION 1.0.0 LANGUAGES CXX)
+project(LearningCpp
+	VERSION 1.0.0
+	DESCRIPTION "a free open-source"
+	HOMEPAGE_URL http://www.baidu.com
+	LANGUAGES CXX C
+	)
+
+# 一些常用的宏
+# CMAKE_CURRENT_SOURCE_DIR 表示当前源码目录的位置，例如 ~/hellocmake
+# CMAKE_CURRENT_BINARY_DIR 表示当前输出目录的位置，例如 ~/hellocmake/build
+# PROJECT_SOURCE_DIR 表示最近一次调用 project 的 CMakeLists.txt 所在的源码目录（我理解为就是根目录的路径）
+# CMAKE_CURRENT_SOURCE_DIR 表示当前 CMakeLists.txt 所在的源码目录
+# CMAKE_SOURCE_DIR 表示最为外层 CMakeLists.txt 的源码根目录
+# CMAKE_BINARY_DIR 指的是存放二进制文件的文件夹
+
+# 设置 cpp 的编译选项
+set(CMAKE_CXX_STANDARD 17) # 选择 cpp 的编译版本；因此不要用 -std=17 指定版本，因为这样跨平台就会出问题
+set(CMAKE_CXX_STANDARD_REQUIRED ON) # bool 类型，表示是否一定要支持上述指定的 cpp 标准，off 表示 CMake 检测到编译器不支持 C++17 时不报错，而是默默调低到 C++14 给你用；on 则发现不支持报错，更安全
+set(CMAKE_CXX_EXTENSIONS ON) # 设为 ON 表示启用 GCC 特有的一些扩展功能；OFF 则关闭 GCC 的扩展功能，只使用标准的 C++；要兼容其他编译器（如 MSVC）的项目，都会设为 OFF 防止不小心用了 GCC 才有的特性；此外，最好是在 project 指令前设置 CMAKE_CXX_STANDARD 这一系列变量，这样 CMake 可以在 project 函数里对编译器进行一些检测，看看他能不能支持 C++17 的特性
+
+
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 4、如何将当前代码编译成库
+
+把文件编译成一个静态库
+
+```cmake
+# 第一个是库的名字，第二个表示要将当前库编译成静态、动态还是对象库，最后是要编译的文件
+add_library(mylib STATIC mylib.cc)
+add_library(mylib SHARED mylib.cc)
+add_library(mylib OBJECT mylib.cc) # 对象库类似于静态库，但不生成 .a 文件，只由 CMake 记住该库生成了哪些对象文件
+# 对象库不生成 .a 文件，只由 CMake 记住该库生成了哪些对象文件，因此就有人推荐用对象库代替静态库，避免跨平台的麻烦
+
+add_executable(main main.cc)
+
+target_link_libraries(main PUBLIC mylib)
+```
+
+<br/>
+
+一个比较坑的问题，动态库无法连接静态库，解决办法就是设置 `set(CMAKE_POSITION_INDEPENDENT_CODE ON)`
+
+```cmake
+# 设置全体库为 PIC
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+add_library(otherlib STATIC otherlib.cc)
+
+add_library(mylib SHARED mylib.cc)
+target_link_libraries(mylib PUBLIC otherlib)
+
+add_executable(main main.cc)
+target_link_libraries(main PUBLIC mylib)
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 5、如何使用别人写好的库
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 6、cmake 的基本语法
+
+## list
 
 ```cmake
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -41,6 +229,8 @@ PS：这里给 .cmake 模块指定了文件夹以后，后续的子模块可以�
 <br/>
 
 <br/>
+
+## option
 
 ```cmake
 option(ARA_CXX_STANDARD_EXTENSIONS "Description" OFF)
@@ -61,42 +251,39 @@ option(ARA_CXX_STANDARD_EXTENSIONS "Description" OFF)
 
 <br/>
 
+## if
+
 ```cmake
 if (CMAKE_BINARY_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 	#正文 
+	# STREQUAL 用于比较字符串，相同的话返回 true
 endif()
 ```
 
-等价于 cmake 中的 if 语句
-
-`STREQUAL` 用于比较字符串，相同的话返回 true
-
 <br/>
 
 <br/>
 
-```cmake
-CMAKE_BINARY_DIR			#	指的是存放二进制文件的文件夹
-CMAKE_CURRENT_SOURCE_DIR	#	指的是当前处理的 CMakeLists.txt 所在的路径
-```
-
-<br/>
-
-<br/>
-
-```cmake
-message(FATAL_ERROR "Building in-source is not supported. Create a build dir and remove CMakeFiles and CMakeCache.txt")
-```
+## message
 
 message 一般用于输出，而输出也分为不同的等级（第一个 slot 写输出语句的等级，第二个 slot 写输出的具体内容）
 
-NONE 通知信息，就是直接输出数据（结果： NONE/home/hengrui.shen/Project/test/build）
+```cmake
+# 输出语句字符串
+message("hello world!") # hello world!
 
-STATUS 输出状态信息，在前面会有 -- （结果：-- /home/hengrui.shen/Project/test/build）
+# STATUS 输出状态信息，会带有 -- 前缀
+message(STATUS "hello world!") # -- hello world!
 
-SEND_ERROR，FATAL_ERROR 生成的是错误信息（SEND_ERROR 会继续执行，FATAL_ERROR 会终止程序执行）
+# NONE 输出通知信息
+message(NONE "test message in cmake!") # NONEtest message in cmake!
 
-message("test without grade") ，直接输出信息，没有等级
+# FATAL_ERROR 输出错误信息并终止程序执行
+message(FATAL_ERROR "Building in-source is not supported. Create a build dir and remove CMakeFiles and CMakeCache.txt")
+
+# SEND_ERROR 输出错误信息并继续执行
+message(SEND_ERROR "Building in-source is not supported. Create a build dir and remove CMakeFiles and CMakeCache.txt")
+```
 
 <br/>
 
@@ -118,16 +305,6 @@ add_subdirectory(ara-api/core)
 
 <br/>
 
-```cmake
-add_library(ara-com-commom OBJECT ${COM_COMMON_SOURCES})
-```
-
-`add_library(<name> OBJECT <src>...)` 类型，是指库的类型固定为 OBJECT，将源文件进行了编译但是没有链接
-
-<br/>
-
-<br/>
-
 `set_target_properties(ara-com-common PROPERTIES POSITION_INDEPENDENT_CODE ON)`
 
 <br/>
@@ -137,10 +314,3 @@ add_library(ara-com-commom OBJECT ${COM_COMMON_SOURCES})
 
 - `set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` 这句话不起作用，感觉是版本的原因
 - 需要修改为`set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")`，这样才能生成 json 文件，以便 clang 实现代码跳转
-- 参考链接：https://gitlab.kitware.com/cmake/cmake/-/issues/16588
-
-<br/>
-
-<br/>
-
-最常用的两个指令：`cmake -B build` 和 `make -C build`

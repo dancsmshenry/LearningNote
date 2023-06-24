@@ -101,6 +101,9 @@ pip uninstall protobuf # 卸载库
 
 # 第二种，需要安装 gcc 、或是 cmake，则需要使用 apt
 sudo apt-get install cmake # 后面添上需要安装的应用程序
+
+# 安装 j
+apt-get install openjdk-11-jdk
 ```
 
 <br/>
@@ -144,6 +147,10 @@ wrk安装时出现的问题
 
 wsl的安装：应用商店安装即可
 
+换源：https://blog.csdn.net/weixin_45941288/article/details/122568131
+
+在安装g++的时候出现问题，https://blog.csdn.net/qq_35553433/article/details/112994517
+
 <br/>
 
 ## 如何在wsl上访问windows的文件
@@ -169,9 +176,23 @@ sudo sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
 sudo apt update -y
 sudo apt upgrade -y
 
-//	安装gcc和gdb
+//	安装gcc和gdb，还有 cmake
 sudo apt-get install gdb
 sudo apt-get install g++
+sudo apt-get install cmake
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+如何安装 boost 
+
+```shell
+sudo apt-get update
+sudo apt-get install libboost-all-dev
 ```
 
 <br/>
