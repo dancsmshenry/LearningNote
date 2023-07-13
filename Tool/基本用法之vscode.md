@@ -254,7 +254,33 @@ launch.json
 
 whitespace ，提交代码中需要将空格给删掉（选项：trim trailing whirespace）
 
+<br/>
 
+<br/>
+
+对于 clangd 的配置：
+
+因为 clangd 既可以对 c 进行跳转，也可以对 c++，所以建议每次最好添加配置文件 `./vscode/settings.json`
+
+```json
+{
+    "clangd.fallbackFlags": [
+        "-std=c++17",
+        // "-xc"
+    ],
+    "editor.tabSize": 2, // 重新设定tabsize
+}
+```
+
+<br/>
+
+并且，对于 `json` 文件的配置，我习惯将 json 放到 build 中，所以在配置 clangd 的时候，后面加上这句话
+
+`--compile-commands-dir=${workspaceFolder}/build/`
+
+<br/>
+
+<br/>
 
 # to do list
 

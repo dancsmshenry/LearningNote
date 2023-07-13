@@ -1,25 +1,50 @@
 # 0、通用的 CMakeLists 模板
 
+目前在 linux 下使用的 cmake 版本为 3.16，而 windows 下使用的版本为 3.20
+
 ```cmake
 # 指定 cmake 所需的最小版本
 cmake_minimum_required(VERSION 3.16)
 
 # 指定 cpp 编译的版本
 set(CMAKE_CXX_STANDARD 17)
+
 # 是否一定要支持上述指定的 cpp 标准
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 项目的基本信息，名字版本号
-project(learningcpp LANGUAGES C CXX)
+project(learning_cmake LANGUAGES C CXX)
 
 # 编译得到的二进制文件是否和当前源码是在同一目录下，如果是的话就需要警告
 if (PROJECT_BINARY_DIR STREQUAL PROJECT_SOURCE_DIR)
 	message(WARNING "The binary directory of CMake cannot be the same as source directory!")
+endif()
 
 # 设置项目的编译模式（可以理解为项目的优化程度）
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE Release)
 endif()
+
+# 设置最终的可执行文件
+add_executable(main)
+
+# 添加指定目录下需要编译的文件
+aux_source_directory(. SOURCES)
+aux_source_directory(src SOURCES)
+
+# 将文件添加到最终的编译单元中
+target_sources(main PUBLIC ${SOURCES})
+
+# 编译出静态库
+add_library(dog STATIC dog/dog.cc)
+
+# 链接静态库
+target_link_libraries(main PUBLIC dog)
+
+# 添加头文件搜索路径
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dog)
+
 ```
 
 <br/>
@@ -28,16 +53,29 @@ endif()
 
 <br/>
 
-# 1、cmake 命令行使用方法
+# 1、cmake 的命令行使用方法
+
+通过 -B 生成对应的 makefile 或者 ninja 文件，其中路径被设置为 build（如果不设置那么就会在当前路径生成）
+
+后续参数则是设置一些编译参数，例如 DCMAKE_EXPORT_COMPILE_COMMANDS 用于生成 json 数据库文件，方便使用插件 clangd 进行代码跳转，DCMAKE_INSTALL_PREFIX 是用于设置安装目录，DCMAKE_BUILD_TYPE 是用于设置安装的版本
 
 ```shell
-# PS：当时是在项目的主路径下
-
-# 通过 cmakelists 生成对应的 makefile 或者 ninja 文件，其中路径被设置为 build（也可以设置为别的），后续的则是设置一些编译参数，比如这里就是设置项目生成的版本，cmake_export_compile_commands 用于生成 json 文件，方便使用 clangd 实现代码跳转
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./build/release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-# 编译，编译的目录也被指定为了 build，而 --parallel 4 则是设置编译的线程数
+```
+
+<br/>
+
+编译，将编译的目录指定为 build，其中 --parallel 4 则是编译时用到的线程数
+
+```shell
 cmake --build build --parallel 4
-# 安装，将项目安装到指定目录下，这里指定了安装的目录为 build 目录下的 release 目录
+```
+
+<br/>
+
+安装，将当前项目安装到指定目录中，上述指定了将目录安装在 build/release 中
+
+```shell
 cmake --build build --target install
 ```
 
@@ -45,52 +83,53 @@ cmake --build build --target install
 
 <br/>
 
-cmake 编译主要分为两个阶段：
-
-第一步是 cmake -B build，称为配置阶段（configure），这时只检测环境并生成构建规则，会在 build 目录下生成本地构建系统能识别的项目文件（Makefile 或是 .sln）
-
-在配置阶段，可以利用 -D 指定配置变量（即一些缓存变量），这些变量会被在本地缓存，即使后续只是 cmake -B build ，前面的缓存也会被使用到
-
-第二步是 cmake --build build，称为构建阶段（build），这时才实际调用编译器来编译代码
-
-<br/>
-
-<br/>
-
-可以通过 -G 选择，来控制通过 cmakelists 的生成器
+通过 -G 选择，来控制 cmake 的生成器，可选的有 ninja、makefile以及 .sln
 
 ```shell
 # 选择 ninja 作为后续的生成构建器
-cmaek -GNinja -B build
+cmake -GNinja -B build
+
+# 这个有点坑爹的就是，一旦你修改了构造器，那么后续就会一直是这个构造器
+# 所以后续需要设置回 makefile
+# 还有就是，直接使用这个命令，就等价于使用了 cmake -B
+cmake -G"Unix Makefiles"
 ```
 
-挖个坑，后续还想要学一下 ninja 和 bazel
+<br/>
 
-ninja：实践来看编译的速度无论是首次编译还是二次编译，效率都高于 makefile
+<br/>
 
-bazel：很多开源的自动驾驶项目都使用这个来进行编译
+## cmake 编译的两阶段
+
+第一阶段是 `cmake -B build`，称为**配置阶段**（configure），这时只检测环境并生成构建规则，会在 build 目录下生成本地构建系统能识别的项目文件（Makefile 或是 .sln）
+
+在配置阶段，可以利用 -D 指定配置变量（即一些缓存变量），这些变量会被在本地缓存，即使后续只是 cmake -B build ，前面的缓存也会被使用到
+
+<br/>
+
+第二阶段是 `cmake --build build`，称为**构建阶段**（build），这时才实际调用编译器来编译代码
 
 <br/>
 
 <br/>
 
 <br/>
-
-
 
 # 2、cmake 的基本语法
 
 ## list
 
+向指定的 list 进行操作
+
 ```cmake
+list(APPEND <list><element> [<element>...])
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 ```
 
-背景：为了防止 cmakelists.txt 文件过长，因此将其分为几个模块，同时也方便平台的组件共用该 cmake 文件，cmake 模块文件一般是后缀名为 .cmake
 
-`CMAKE_CURRENT_LIST_DIR` 是用分号分隔的目录列表（是一个 list ，也就是说可以有多个路径），cmake 使用该路径检查附带的 .cmake 文件模块；默认为空
 
-`list(APPEND <list><element> [<element>...])` 向 list 中添加数据 element
+`` 向 list 中添加数据 element
 
 PS：这里给 .cmake 模块指定了文件夹以后，后续的子模块可以直接 include 对应的 .cmake 文件并使用，而不需要重新指定路径
 
@@ -162,7 +201,7 @@ message(WARNING "test in warning")
 
 <br/>
 
-# 3、cmake 项目的基本配置
+# 3、cmake 的基本配置
 
 ```cmake
 # 指定最低所需的 cmake 版本，当用户使用的 cmake 小于这个版本的时候，就会报错
@@ -194,7 +233,7 @@ project(LearningC
 # CMAKE_BINARY_DIR 指的是存放二进制文件的文件夹
 
 # 设置 cpp 的编译选项
-set(CMAKE_CXX_STANDARD 17) # 选择 cpp 的编译版本；因此不要用 -std=17 指定版本，因为这样跨平台就会出问题
+set(CMAKE_CXX_STANDARD 17) # 选择 cpp 的编译版本；因此不要用 -std=17 指定版本，因为这样跨平台就会出问题；不过这里配置的一般是当前主项目的编译版本，其中子项目，例如编译成的相关静态库则需要用 set_target_properties 来表示
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # bool 类型，表示是否一定要支持上述指定的 cpp 标准，off 表示 CMake 检测到编译器不支持 C++17 时不报错，而是默默调低到 C++14 给你用；on 则发现不支持报错，更安全
 set(CMAKE_CXX_EXTENSIONS ON) # 设为 ON 表示启用 GCC 特有的一些扩展功能；OFF 则关闭 GCC 的扩展功能，只使用标准的 C++；要兼容其他编译器（如 MSVC）的项目，都会设为 OFF 防止不小心用了 GCC 才有的特性；此外，最好是在 project 指令前设置 CMAKE_CXX_STANDARD 这一系列变量，这样 CMake 可以在 project 函数里对编译器进行一些检测，看看他能不能支持 C++17 的特性
 ```
@@ -207,32 +246,74 @@ set(CMAKE_CXX_EXTENSIONS ON) # 设为 ON 表示启用 GCC 特有的一些扩展�
 
 # 4、如何在项目中添加新的.cc文件
 
-```cmake
-# add_executable用于设置最终编译得到的文件以及需要编译的文件
-add_executable(main main.cc)
+方法一
 
-# 先创建编译得到的目标文件，再添加源文件
+```cmake
+# add_executable 用于设置编译最终得到的可执行文件，以及需要编译的文件
+add_executable(main main.cc)
+```
+
+<br/>
+
+<br/>
+
+方法二
+
+```cmake
+# 先设置最终得到的可执行文件，再依次添加源文件
 add_executable(main)
 target_sources(main PUBLIC main.cc other.cc)
+```
 
-# 先创建编译得到的目标文件，再用一个变量存储源文件，最后添加源文件
+<br/>
+
+<br/>
+
+方法三
+
+```cmake
+# 先设置最终得到的可执行文件，再用一个变量存储源文件，最后依次添加源文件
 add_executable(main)
 set(sources main.cc other.cc)
 target_sources(main PUBLIC ${sources})
+```
 
+<br/>
+
+<br/>
+
+方法四
+
+```cmake
 # 使用 GLOB 自动查找指定拓展名的文件
 add_executable(main)
 file(GLOB sources *.cc)
 file(GLOB sources CONFIGURE_DEPENDS *.cpp *.h) # 可以自动将新的文件添加
 file(GLOB sources CONFIGURE_DEPENDS *.cpp *.h mylib/*.cpp mylib/*.h) # 将子文件夹里的文件一起添加进来
 target_sources(main PUBLIC ${sources})
+```
 
+<br/>
+
+<br/>
+
+方法五
+
+```cmake
 # 使用 aux_source_directory 自动搜集需要文件的后缀名（我个人比较认同的使用方式）
 add_executable(main)
 aux_source_directory(. sources)
 aux_source_directory(mylib sources)
 target_sources(main PUBLIC ${sources})
+```
 
+<br/>
+
+<br/>
+
+方法六
+
+```cmake
 # 使用 GLOB_RECURSE 自动包含所有子文件夹下的文件（但是缺点就是可能会将build里面的文件一同加进来，所以我觉得这种比较差，就不用了...）
 add_executable(main)
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS *.cc *.h)
@@ -300,14 +381,14 @@ target_link_libraries(main PUBLIC mylib)
 
 ```cmake
 # 将当前目录下的 include 目录添加到后续 .h 文件的搜索路径中
-include_directories($CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 ```
 
 也就是说，后续在 .cc 文件中填写的如果是相对路径，那么就会被解释为在当前这个源目录下的路径
 
 比如说我们想要引入 include 文件夹下的 test.h 文件，文件真实路径为 include/test.h
 
-那么在主目录中的 main.cc 就只需要 `#include test.h"`即可引入
+那么在主目录中的 main.cc 就只需要 `#include "test.h"`即可引入
 
 <br/>
 
@@ -353,6 +434,47 @@ add_subdirectory(ara-api/core)
 # 9、如何配置编译对象的属性
 
 `set_target_properties(ara-com-common PROPERTIES POSITION_INDEPENDENT_CODE ON)`
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 10、如何安装库
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 11、关于 .cmake 文件
+
+背景：为了防止 cmakelists.txt 文件过长，因此将其分为几个模块，同时也方便平台的组件共用该 cmake 文件，cmake 模块文件一般是后缀名为 .cmake
+
+`CMAKE_CURRENT_LIST_DIR` 是用分号分隔的目录列表（是一个 list ，也就是说可以有多个路径），cmake 使用该路径检查附带的 .cmake 文件模块；默认为空
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 12、如何在 windows 下使用 cmake
+
+先去官网上下载 msi 安装包，然后安装
+
+接着在 vscode 中安装插件 cmake 和 cmake tools
+
+接着，cmake 有 makefile 和 ninja，所以需要把他们的可执行程序 exe 放到 cmake/bin 的目录下（当然，这个目录是被加入到系统变量中的）
+
+- ninja 可以直接在官网的 github 上下载二进制程序
+- cmake 则需要先下载 mingw32 （我这里是和 llvm 一起下载了），然后把其中 llvm/bin 的可执行程序 mingw32-make 放到 cmake/bin 的目录下，再改名为 make
+
+最后是配置插件，cmake generator 将其配置为 Unix makefiles
+
+注意：这个插件每次一打开目录，就会将 cmakelists 中的内容编译一遍，而上面则是用于修改 cmake 的默认生成构造器
 
 <br/>
 
