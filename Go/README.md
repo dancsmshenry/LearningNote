@@ -31,3 +31,14 @@
 
 
 - 一般情况下，goroutine在操作系统上只要你的硬件资源够它是可以无限启动的。但是如果出现大规模的启动goroutine的情况会造成大量占用系统资源，我们知道普通的部署一个golang应用的时候操作系统不仅仅会运行golang程序还有其他辅助的程序运行，所以理论上讲工作池的目的就是为了限制golang的启动数量，保证不会出现硬件计算资源溢出的情况
+
+
+
+# Golang 开发环境的配置
+
+```shell
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
+# 如果出现了问题，就需要使用 unset GO
+```
+

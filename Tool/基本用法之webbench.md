@@ -1,4 +1,4 @@
-# Webbench
+# 安装
 
 ```shell
 wget http://home.tiscali.cz/~cz210552/distfiles/webbench-1.5.tar.gz
@@ -32,15 +32,3 @@ webbench的用法
 
 
 https://blog.csdn.net/L_XRUI/article/details/76216079
-
-
-
-
-
-# Iperf
-
-
-
-
-
-# callgrind
