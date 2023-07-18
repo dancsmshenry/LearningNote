@@ -1,14 +1,14 @@
 # 前置知识
 
-- stl的红黑树
+stl的红黑树
 
-
+<br/>
 
 # map
 
 ## 实现
 
-- ![](../image/map的数据结构.png)
+![](../image/map的数据结构.png)
 
 
 
@@ -256,6 +256,37 @@ unordered_map
 # multimap
 
 - <img src="../image/multimap.png" style="zoom:150%;" />
+
+
+
+自定义数据，重载 < 并将数据放入 map 中
+
+```c++
+#include <map>
+#include <iostream>
+
+class A {
+public:
+  A() = default;
+  A(const A&) = default;
+  ~A() = default;
+  int i;
+  bool operator<(const A& a1) const{
+      return a1.i < this -> i;
+  }
+};
+
+int main() {
+  std::map<A, int> map2;
+  A a1, a2;
+  a1.i = 1;
+  a2.i = 1;
+  map2[a1] = 11212;
+  std::cout << map2.at(a2) << std::endl;
+}
+```
+
+
 
 
 

@@ -1,22 +1,40 @@
 # lambda的用法
 
-- ```cpp
-  auto func = []() {
-      cout << "" << endl;
-  };
-  
-  auto func1 = []() -> int {
-      return 1;
-  };
-  
-  []() { std::cout << "test in nameless function" << std::endl;}(); // 匿名函数
-  ```
+```c++
+#include <iostream>
 
+int main() {
+  // 一般形式的 lambda 函数
+  auto func = []() { std::cout << "" << std::endl; };
 
+  // 匿名的 lambda 函数，等价于直接执行
+  []() { std::cout << "test in nameless function" << std::endl; }();
 
+  int x = 4;
+  // 这里的 r 是对 x 的引用，而后面的 x 是在这个 lambda 作用域内新建的一个 x 变量
+  auto y = [&r = x, x = x + 1]() -> int {
+    r += 2;
+    std::cout << "x in lambda is " << x << std::endl;
+    return x + 2;
+  }(); // Updates ::x to 6
+  std::cout << "x = " << x << std::endl;
 
+  int y1 = 1;
+  // 这里的 y1 是在这个作用域内新建的一个
+  auto z = [y1]() mutable {
+    y1 += 1;
+    // const int i1 = y1;
+    std::cout << "y1 = " << y1 << std::endl;
+    return 1;
+  }();
+}
+```
 
+<br/>
 
+<br/>
+
+<br/>
 
 # lambda参数
 

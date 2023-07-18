@@ -1,22 +1,22 @@
 # 有关数组传参的问题
 
-- ```cpp
-  void func(int arr[10][10]) {} // ok
-  void func(int arr[][]) {} // error
-  void func(int** arr, int n, int m) {} // ok
-  void func(int arr[1][]) {} // error
-  void func(int arr[][1]) {} // error
-  
-  void func(int arr[102]) {} // ok
-  void func(int* arr) {} // ok
-  void func(int arr[]) {} // o
-  ```
+```c++
+void func(int arr[10][10]) {} // ok
+void func(int arr[][]) {} // error
+void func(int** arr, int n, int m) {} // ok
+void func(int arr[1][]) {} // error
+void func(int arr[][1]) {} // error
 
+void func(int arr[102]) {} // ok
+void func(int* arr) {} // ok
+void func(int arr[]) {} // o
+```
 
+<br/>
 
+<br/>
 
-
-
+<br/>
 
 # noexcept
 
@@ -77,11 +77,11 @@ noexcept运算符
   noexcept(e);     //当e调用的所有函数都做了步抛出说明且e本身不含有throw语句时，表达式为true，否则返回false
   ```
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 # ifdef
 
@@ -109,11 +109,11 @@ noexcept运算符
 - 在头文件中使用#define、#ifndef、#ifdef、#endif能避免头文件重定义
 - 侯捷的课里就说过头文件一定要用其包住
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 # extern
 
@@ -214,11 +214,11 @@ noexcept运算符
 
   - 因为c语言中没有_cplusplus这个宏
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 
 # enum
@@ -245,38 +245,30 @@ noexcept运算符
 
 - 存放的一般是一个int，sizeof得到的是4
 
+<br/>
 
+<br/>
 
-
-
-
-
-- - 
-
-
-
-
-
-
+<br/>
 
 # RAII
 
 - 如果一个函数有多处return，我想每个return都加一些相同的处理，最好怎么实现？
 - 这里最好的写法就是RAII模式的应用。不过很多时候我们也不必每次新建一个RAII模式的类。可以使用用unique_ptr来完成
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 # 函数指针和函数类型
 
-- https://www.jianshu.com/p/6ecfd541ec04
+https://www.jianshu.com/p/6ecfd541ec04
 
-- 函数指针指向的是函数而非对象，和其他指针类型一样，函数指针指向某种特定类型
+函数指针指向的是函数而非对象，和其他指针类型一样，函数指针指向某种特定类型
 
-- 函数类型由它的返回值和参数类型决定，与函数名无关
+函数类型由它的返回值和参数类型决定，与函数名无关
 
 - ```cpp
   bool length_compare(const string &, const string &); // 函数类型
@@ -294,7 +286,7 @@ noexcept运算符
 
 
 
-- 函数类型传参后会被隐式的转化为函数指针
+函数类型传参后会被隐式的转化为函数指针
 
 - ```cpp
   using FTtype = int(int,int); //函数类型
@@ -323,22 +315,39 @@ noexcept运算符
   PF  f1(int);   //正确： PF是函数指针类型
   ```
 
+<br/>
 
+<br/>
 
-
-
-
-
-
+<br/>
 
 # 如何把对象只分配到栈上
 
 - 将new operator函数定义为private，或者定义为delete函数
 
+<br/>
 
+<br/>
 
-
-
-
+<br/>
 
 # enable_shared_from_this
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 运算符的顺序
+
+```c++
+void add_1(int *a) {
+    *a ++ ; // 先取值，然后再 ++，不修改原来的值
+}
+
+void add_2(int *a) {
+    ++ *a; // 在其原来的基础上 
+}
+```
+

@@ -386,7 +386,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 也就是说，后续在 .cc 文件中填写的如果是相对路径，那么就会被解释为在当前这个源目录下的路径
 
-比如说我们想要引入 include 文件夹下的 test.h 文件，文件真实路径为 include/test.h
+比如说我们想要引入 include 文件夹下的 test.h 文件，文件真实路径为 `include/test.h`
 
 那么在主目录中的 main.cc 就只需要 `#include "test.h"`即可引入
 
@@ -394,17 +394,86 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 <br/>
 
-`target_link_directories`则更加细粒度的规定了头文件的引用范围，作用和`include_directories`几乎相同
+`target_link_directories`则更加细粒度的规定了头文件的引用范围，作用和`include_directories`相同
+
+<br/>
+
+**PRIVATE**
+
+被设定为 PRIVATE 的目录，下属的文件不能对项目外暴露，也不对项目内设为 PUBLIC 的文件暴露
+
+举例： include 下有两个目录：private 和 public，二者都存放 .h 文件，src 目录存放 .cc 文件
+
+其中目录 private 被设为 PRIVATE，目录 public 被设为 PUBLIC
+
+则，src 下的 .cc 文件可以使用 private 的文件，include/public 下的头文件和项目外的文件不可以使用 private 的文件
+
+<br/>
+
+从两种目录结构的角度进行理解：
+
+角度一：项目目录的结构是，将 .h 文件统一放到 include 中，再在 include 中拆分出 private 和 public
+
+- 则 PRIVATE 表示该目录下的头文件，只能给本目录下的 .cc 文件使用，不对外提供接口（例如一些辅助性的类）
+
+<br/>
+
+角度二：项目目录的结构是，将 .h 文件和 .cc 文件都放在一起，按照库或模块对文件进行分类
+
+- 设库 B 为该项目对外提供的库，库 B 依赖于库 A，库 A 的代码在库 B 的代码结构中，而将库 A 设为 PRIVATE 后，则表示库 A 只会提供给库 B 使用，而不会传导给库 B 的使用者，即没有传递性
 
 ```cmake
-# PRIVATE 表示这个目录下的头文件是不允许当前项目外的使用者使用的
-target_include_directories(ara-com PRIVATE ${CMAKE_CURRENT_SOURCE_DIRP}/include/private)
+target_include_directories(dog PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/private)
+```
 
-# 假设当前的库需要依赖内部库的头文件但是却不需要依赖该库的.a或者.so文件 (比如说可能只需要弓入其头文件的部分结构体，而不需要调用其具体的函数) ，但是该内部的库还是需要对外提供功能，就是说外部的使用者还是需要使用该内部库 (即需要使用其头文件)，那么此时就需要设为INTERFACE
-target_include_directories(ara-com INTERFACE ${CMAKE_CURRENT_SOURCE_DIRP}/include/public)
+<br/>
 
-# PUBLIC 则表示该库的头文件是可以被外界使用的
-target_include_directories(ara-com PUBLIC ${CMAKE_CURRENT_SOURCE_DIRP}/include/public)
+**INTERFACE**
+
+被设定为 INTERFACE 的目录，下属的文件对项目外的文件以及项目内被设为 PUBLIC 的文件暴露，不对项目内的可执行文件暴露
+
+举例： include 下有两个目录：interface 和 public，二者都存放 .h 文件，src 目录存放 .cc 文件
+
+其中目录 interface 被设为 INTERFACE，目录 public 被设为 PUBLIC
+
+则，src 下的 .cc 文件不可以使用 interface 的文件，include/public 下的头文件和项目外的文件可以使用 interface 的文件
+
+<br/>
+
+从两种目录结构的角度进行理解：
+
+角度一：项目目录的结构是，将 .h 文件统一放到 include 中，再在 include 中拆分出 interface 和 public
+
+- 则 INTERFACE 表示该目录下的头文件，是对外提供接口的（因此可以被设为 PUBLIC 的头文件使用），但是不能对当前目录下 .cc 文件暴露
+
+角度二：项目目录的结构是，将 .h 文件和 .cc 文件都放在一起，按照库或模块对文件进行分类
+
+- 设库 B 为该项目对外提供的库，库 B 不依赖于库 A，库 A 的代码在库 B 的代码结构中，而将库 A 设为 INTERFACE  后，则表示库 A 不会提供给库 B 使用，而是会直接给使用者用户，也不算有传递性
+
+```cmake
+target_include_directories(dog INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include/public)
+```
+
+<br/>
+
+**PUBLIC**
+
+被设定为 PUBLIC 的目录，谁都可以使用
+
+<br/>
+
+从两种目录结构的角度进行理解：
+
+角度一：项目目录的结构是，将 .h 文件统一放到 include 中，再在 include 中拆分出 interface 和 public
+
+- 则 PUBLIC 表示该目录下的头文件，谁都可以使用
+
+角度二：项目目录的结构是，将 .h 文件和 .cc 文件都放在一起，按照库或模块对文件进行分类
+
+- 设库 B 为该项目对外提供的库，库 A 的代码在库 B 的代码结构中，无论库 B 是否依赖于库 A，只要将库 A 设为 PUBLIC 后，则库 B 和用户使用者都可以使用，即有传递性
+
+```cmake
+target_include_directories(dog PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/public)
 ```
 
 <br/>
@@ -416,7 +485,7 @@ target_include_directories(ara-com PUBLIC ${CMAKE_CURRENT_SOURCE_DIRP}/include/p
 # 8、如何添加并构建子模块
 
 ```cmake
-add_subdirectory(ara-api/core)
+add_subdirectory(dog)
 ```
 
 具体格式：`add_subdirectory (source_dir [binary_dir] [EXCLUDE_FROM_ALL])`
@@ -433,7 +502,7 @@ add_subdirectory(ara-api/core)
 
 # 9、如何配置编译对象的属性
 
-`set_target_properties(ara-com-common PROPERTIES POSITION_INDEPENDENT_CODE ON)`
+`set_target_properties(dog PROPERTIES POSITION_INDEPENDENT_CODE ON)`
 
 <br/>
 
