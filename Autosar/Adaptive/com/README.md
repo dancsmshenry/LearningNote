@@ -91,4 +91,54 @@ SOA
 
 <br/>
 
-- - 
+# COM 组件
+
+服务之间是松耦合的，需要被发现才能够使用；服务是可重用的
+
+接口和协议的实现与语言无关
+
+服务接口的组成：method event field
+
+服务接口的组成：majorversion minorversion，主版本更新表示不兼容的升级；此版本更新表示向后兼容的升级
+
+对于 event，客户端需要订阅才能够收到 event；服务器可以一次向多个 client 发送 event
+
+Event 没有初始值，而 field 有初始值
+
+采用面向服务的通信架构，可以在进程内，同一个 machine 的进程间以及不同 machine 的进程间
+
+使用了 proxy/skeleton 模式
+
+## Com 的组成
+
+E2E 通信保护（在传输的数据前加上E2E的头保护，保证数据的可靠传输）
+
+Com api 的 c++11 的绑定
+
+## 其他
+
+当服务暂时失效时，客户端不需要释放 proxy 实例
+
+等到实例恢复后，proxy自动恢复连接
+
+## 网络绑定
+
+some/ip 服务发现，payload 数据的序列化
+
+Ipc 通信协议，进程间通信
+
+Dds 发布订阅体系，以数据为中心
+
+S2S 信号和服务之间相互转换，实现 ap 和 cp 之间的通信
+
+Com 组件支持多重网络的动态部署
+
+## 动态部署
+
+InstanceIdentifier：对于某个服务，针对某个具体的网络绑定层做出实例化部署
+
+InstanceSpecifier：对于某个服务，在多个网络绑定层做出部署，或者是一个服务在同一个网络绑定下同时部署多个实例
+
+## Comdeamon
+
+Com 的一个平台级应用程序，支持 some/ip 以及 ipc 的绑定，处理 some/ip-sd 的消息传输，路由 some/ip 消息给感兴趣的应用程序
