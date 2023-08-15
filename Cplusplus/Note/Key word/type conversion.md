@@ -3,10 +3,44 @@
 **基类对象转换为派生类对象，是不安全的**
 
 - 派生类是包含于基类的，即基类的“体积”是小于派生类的
-
 - 如果一个指向基类的指针强转为指向派生类的指针（该指针始终指向基类，只是指针类型变了），再通过该指针调用派生类的特有方法或者数据
 - 就会访问到未知的数据，从而导致崩溃
-- 所以这种转换在`dynamic_cast`中就会报错
+- 所以这种转换在`dynamic_cast`中不会成功
+- 父类强转子类就是会失败，结果就是指针指向 nullptr
+
+```c++
+#include <iostream>
+
+class Base {
+public:
+  Base(){}
+  virtual void f1() {}
+};
+
+class Child : public Base {
+public:
+  void f1() override{}
+};
+
+int main() {
+  Base *pb;
+  Child *pc;
+  Base b;
+  Child c;
+  // pb = reinterpret_cast<Base *>(&c);
+  pb = dynamic_cast<Base *>(&c);
+  if (pb == NULL) {// 不会运行
+    std::cout << "error" << std::endl;
+  }
+  // pc = reinterpret_cast<Child *>(&b); // 能强转成功，但是 是U
+  pc = dynamic_cast<Child *>(&b);
+  if (pc == NULL) {// 会运行，基类转化派生类是一种不安全的行为
+    std::cout << "error1" << std::endl;
+  }
+}
+```
+
+
 
 <br/>
 

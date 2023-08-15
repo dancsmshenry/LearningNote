@@ -351,3 +351,106 @@ void add_2(int *a) {
 }
 ```
 
+<br/>
+
+<br/>
+
+<br/>
+
+`std::cout << std::boolalpha ` 会使得后面的 true 和 false 都以字符串的形式输出
+
+<br/>
+
+<br/>
+
+<br/>
+
+装饰器模式
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 萃取
+
+C++ 萃取：
+
+利用类模板的偏特化，根据目标数据类型的不同，从而做出不同的操作
+
+（例如可以给当前类带上一个 string 的变量，标注用来存储数据类型的名字，然后再利用偏特化，给每个类对象的成员变量 string 标记为对象的名称）
+
+主要就是利用类模板偏特化，using 或者 typename 来针对不同的数据类型，做出不同的操作
+
+[mp.weixin.qq.com](https://mp.weixin.qq.com/s?__biz=MzU2NzI5MjQzMQ==&mid=2247484011&idx=1&sn=28396d55ece2aceac3107b50da7fef93)
+
+```C++
+struct __TrueType {  
+   bool Get () {
+       return true ;  
+   }
+};  
+struct __FalseType  
+{  
+   bool Get ()  
+   {  
+       return false ;  
+   }  
+};  
+// 自定义类型一般不特化  
+
+template <class _T>  
+struct TypeTraits  
+{  
+   typedef __FalseType __IsPODType;  
+};  
+// 下面是对常见的几种内置类型的特化，当然内置类型还有很多，我只是举几个常见的；  
+
+template <>  
+struct TypeTraits< bool>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+template <>  
+struct TypeTraits< char>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+
+template <>  
+struct TypeTraits< short>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+
+template <>  
+struct TypeTraits< int>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+
+template <>  
+struct TypeTraits< long>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+
+template <>  
+struct TypeTraits< unsigned long long>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+
+template <>  
+struct TypeTraits< float>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+
+template <>  
+struct TypeTraits< double>  
+{  
+   typedef __TrueType __IsPODType;  
+};  
+```

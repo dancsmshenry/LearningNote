@@ -303,6 +303,40 @@ plain old data的定义
 
 
 
+# 父类调用子类函数
+
+```c++
+#include <iostream>
+
+template <typename T>
+class Base {
+public:
+  virtual ~Base() = default;
+  virtual void fun() { std::cout << "Base::fun()" << std::endl; }
+
+  void callChildMethod() { static_cast<T &>(*this).show(); }
+};
+
+class Sub : public Base<Sub> {
+public:
+  void fun() override { std::cout << "Sub::fun()" << std::endl; }
+
+  virtual void show() { std::cout << "Sub::show()" << std::endl; }
+};
+
+int main() {
+  Sub s1;
+  std::cout << "s1.fun()--------------" << std::endl;
+  s1.fun();
+  std::cout << "s1.callChildMethod()----------" << std::endl;
+  s1.callChildMethod();
+}
+```
+
+
+
+
+
 # to do list
 
 A继承自父类B和C，如果使用B的指针ptr1和C的指针ptr2同时指向一个A对象，则ptr1和ptr2的地址是否一致？（经过测试，是不一样的，但是有个问题就是如果A，B，C都是空类的话，那地址是不是一样的，答是不一样的，为啥？？）
