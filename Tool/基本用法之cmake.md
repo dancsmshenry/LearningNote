@@ -492,7 +492,7 @@ add_subdirectory(dog)
 
 必选参数：`source_dir` 指定一个子目录，子目录下应该包含 CMakeLists.txt 文件和代码文件（可以是相对路径或绝对路径）
 
-可选参数：`binary_dir` 指定一个子目录，用于存放输出的二进制文件（如果不指明的话，那么生成的可执行文件都会在build下的同名目录中）
+可选参数：binary_dir 指定一个子目录，用于存放子目录的二进制文件（如果不指明的话，那么生成的二进制文件和 makefile 就会和主目录是在同一个路径下），也可以写相对路径（比如是在主目录下的 cmakelists.txt 中写的，那么相对路径就可以写为 ../demo-apps/build）
 
 <br/>
 
@@ -511,6 +511,27 @@ add_subdirectory(dog)
 <br/>
 
 # 10、如何安装库
+
+install 指令
+
+DIRECTORY，例如 `include(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include ESTINATION${CMAKE_INSTALL_INCLUDEIR})`
+
+就是将指定目录下的文件（include 下的文件），全部移动到指定文件目录下
+
+FILE，用法同上，就是将指定文件，移动到指定目录下
+
+TARGET，安装指定的目标文件
+
+```cmake
+# 将二进制可执行文件 myrun 安装到目录 ${PROJECT_SOURCE_DIR}/build/bin
+install(TARGETS myrun 
+    RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/build/bin # 二进制可执行文件
+    LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/build/lib # 动态库
+    ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/build/lib # 静态库
+)
+```
+
+
 
 <br/>
 
@@ -547,6 +568,26 @@ add_subdirectory(dog)
 
 <br/>
 
+记录一次灵异事件：在 windows 上构建 cmake 项目，始终出现找不到编译器的情况
+
+```shell
+-- Building for: NMake Makefiles
+-- The C compiler identification is unknown
+-- The CXX compiler identification is unknown
+CMake Error at CMakeLists.txt:11 (project):
+  The CMAKE_C_COMPILER:
+
+    cl
+
+  is not a full path and was not found in the PATH.
+```
+
+后续使用了指令 cmake -G"Unix Makefiles"  -B build ，才恢复正常
+
+而且，必须要最开始执行这条指令，指定了 makefile 作为构造器，才能够正常运行
+
+<br/>
+
 <br/>
 
 <br/>
@@ -558,3 +599,15 @@ add_subdirectory(dog)
 `set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` 这句话不起作用，感觉是版本的原因
 
 需要修改为`set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")`，这样才能生成 json 文件，以便 clang 实现代码跳转
+
+cmake中的 public，interface 和 private 大体思路上都是一样的，表示传递的依赖性：
+
+public表示自己可以使用指定的头文件或是链接的库
+
+interface表示自己不可以使用指定的头文件或是链接的库，但是当别的编译单元 target 指定当前单元时，可以使用 interface 标记的头文件和链接的库
+
+private表示自己可以使用指定的头文件或是链接的库，但是别的编译单元使用当前单元时，就无法使用指定的头文件和链接的库
+
+https://blog.csdn.net/sinat_37231928/article/details/121684722
+
+https://zhuanlan.zhihu.com/p/82244559

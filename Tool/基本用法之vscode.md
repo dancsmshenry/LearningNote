@@ -259,3 +259,5 @@ https://blog.csdn.net/weixin_44263973/article/details/120998615
 https://www.baidu.com/s?ie=UTF-8&wd=The%20authenticity%20of%20host%20%27github.com%20(20.205.243.166)%27%20can%27t%20be%20established
 
 https://blog.csdn.net/m0_56257585/article/details/125322437
+
+vscode 终端消息太多，导致显示消息量有限：https://blog.csdn.net/weixin_42429288/article/details/109359724

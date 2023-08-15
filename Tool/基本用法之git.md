@@ -56,6 +56,19 @@ vscode的细则
 - vscode左下角切换分支
 - 带origin的是远程仓库（github上的）分支，其他的是本地的分支
 
+```shell
+# 根据具体的要求对内容进行修改
+mkdir muduo
+cd muduo
+git init
+git remote add origin git@github.com:dancsmshenry/annotation_of_muduo.git # 这里需要修改为你的仓库 ssh 链接地址
+git pull origin main
+git checkout -b main
+git branch -d master
+```
+
+
+
 <br/>
 
 <br/>
@@ -378,6 +391,7 @@ type：声明本次代码提交的类型（英文名，必填项）
 - revert：代码版本回滚
 - test：测试代码变动
 - doc：文档变动
+- chroe：工具的变动
 
 <br/>
 
