@@ -386,71 +386,259 @@ C++ 萃取：
 [mp.weixin.qq.com](https://mp.weixin.qq.com/s?__biz=MzU2NzI5MjQzMQ==&mid=2247484011&idx=1&sn=28396d55ece2aceac3107b50da7fef93)
 
 ```C++
-struct __TrueType {  
-   bool Get () {
-       return true ;  
-   }
-};  
-struct __FalseType  
-{  
-   bool Get ()  
-   {  
-       return false ;  
-   }  
-};  
-// 自定义类型一般不特化  
+struct __TrueType {
+  bool Get() { return true; }
+};
+struct __FalseType {
+  bool Get() { return false; }
+};
+// 自定义类型一般不特化
 
-template <class _T>  
-struct TypeTraits  
-{  
-   typedef __FalseType __IsPODType;  
-};  
-// 下面是对常见的几种内置类型的特化，当然内置类型还有很多，我只是举几个常见的；  
+template <class _T> struct TypeTraits {
+  typedef __FalseType __IsPODType;
+};
+// 下面是对常见的几种内置类型的特化，当然内置类型还有很多，我只是举几个常见的；
 
-template <>  
-struct TypeTraits< bool>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
-template <>  
-struct TypeTraits< char>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
+template <> struct TypeTraits<bool> {
+  typedef __TrueType __IsPODType;
+};
+template <> struct TypeTraits<char> {
+  typedef __TrueType __IsPODType;
+};
 
-template <>  
-struct TypeTraits< short>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
+template <> struct TypeTraits<short> {
+  typedef __TrueType __IsPODType;
+};
 
-template <>  
-struct TypeTraits< int>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
+template <> struct TypeTraits<int> {
+  typedef __TrueType __IsPODType;
+};
 
-template <>  
-struct TypeTraits< long>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
+template <> struct TypeTraits<long> {
+  typedef __TrueType __IsPODType;
+};
 
-template <>  
-struct TypeTraits< unsigned long long>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
+template <> struct TypeTraits<unsigned long long> {
+  typedef __TrueType __IsPODType;
+};
 
-template <>  
-struct TypeTraits< float>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
+template <> struct TypeTraits<float> {
+  typedef __TrueType __IsPODType;
+};
 
-template <>  
-struct TypeTraits< double>  
-{  
-   typedef __TrueType __IsPODType;  
-};  
+template <> struct TypeTraits<double> {
+  typedef __TrueType __IsPODType;
+};
 ```
+
+<br/>
+
+<br/>
+
+发现关于函数传参的规律
+
+对于函数原型
+
+```c++
+void t1(int i) { std::cout << "t1" << std::endl; }
+```
+
+无论传入的参数是 int 的，还是 double 的，都会调用到这个函数
+
+而对于函数原型
+
+```c++
+void t1(int i) { std::cout << "t1" << std::endl; }
+
+void t1(double i) { std::cout << "t2" << std::endl; }
+```
+
+会根据传入参数类型更加能转换为对应的类型而调用
+
+比如传入的是 int 或 long long，那么输出的就是 t1
+
+而如果传入的是 double 或 float，那么输出的就是 t2
+
+---
+
+但是，不能根据函数的返回值作为函数直接不同的区别条件
+
+```c++
+int v2() { return 1; }
+// double v2() { return 1.0; } // error
+```
+
+<br/>
+
+<br/>
+
+```c++
+template <typename T> void v1(T t1, T t2, T t3) {
+  std::cout << "T" << std::endl;
+}
+
+template <typename T> void v1(T t1, T t2, int t3) {
+  std::cout << "int" << std::endl;
+}
+
+v1<int>(1, 2, 3); // ambiguous
+```
+
+这样调用会有歧义，根本调用不了
+
+与其这样写，不如直接上特化
+
+```c++
+template <typename T> void v1(T t1, T t2, T t3) {
+  std::cout << "T" << std::endl;
+}
+
+template <> void v1(int t1, int t2, int t3) { std::cout << "int" << std::endl; }
+```
+
+而且，之前的那种做法（`void v1(T t1, T t2, int t3)`），还会导致 int 的偏特化版本写不了
+
+<br/>
+
+<br/>
+
+关于数组传参的多个疑问，编译器到底是如何辨别传参不同的
+
+```c++
+void ttt(int arr[1][1]) {} // right
+
+void ttt(int a[]) {} // right
+
+// 这里是如何分辨出指针类型的不同的，传入的不都是地址吗
+
+//////////
+
+void func(int arr[][1]) {} // right
+
+//////////
+
+void func(int arr[1][]) {} // error
+
+// 这样写为什么会出错，而上面就不会
+```
+
+<br/>
+
+<br/>
+
+```C++
+std::string *a = new std::string("test");
+delete a;
+if (a == nullptr) {
+    std::cout << "333\n";
+}
+// without 333
+// delete 后，指针指向的地址前后不变，即没有指回 nullptr（记得知乎上有个问题就是问为什么不指向 nullptr）
+```
+
+<br/>
+
+<br/>
+
+列表初始化数据不可以自动的转换数据类型
+
+```C++
+std::vector<int> vec1(10, 0);
+long long n{vec1.size()}; // error
+long long n{static_cast<long long>(vec1.size())}; // correct
+```
+
+<br/>
+
+关于运算符的操作及运算的顺序
+
+```C++
+int num = 7 & 3;
+// 这里的 & 等价于二进制中的 与操作
+
+int b = 10, a = 3;
+b += b *= b %= a++; // 计算的顺序是从右往左的
+// b = 2 a = 4
+```
+
+<br/>
+
+<br/>
+
+关于结构体
+
+```C++
+// 构建临时的结构体对象
+struct {
+    int i;
+} c1;
+
+// 另类的定义结构体的方法
+typedef struct {
+    int i;
+} color;
+
+color c1;
+c1.i = 1;
+```
+
+<br/>
+
+<br/>
+
+如何理解多文件编译：
+
+把 a.cc 和 b.cc 同时编译为一个可执行文件，假如在 a.cc 中创建了一个全局或 namespace 的变量，这个变量的构造函数输出了一行数据，那么这个数据会不会在执行时输出》
+
+会的，因为将两个 .cc 合并在一起执行，那么就是同一个编译单元，就可以理解为是一个全局变量
+
+<br/>
+
+<br/>
+
+在 c 中，函数的定义与实现的参数列表不同（例如定义时是一个传参，实现时是 2个或者 3个），代码依旧可以运行（这里调用的时候要和定义时相同即可）
+
+无论是在同一个编译单元的（main.c,test.h.test.c 在一个编译单元），还是不在同一个编译单元的（main.c，test.h和test.c不在同一个编译单元）
+
+而在 c++ 中，则会出现链接失败的情况
+
+```c
+// 声明（函数的声明是不会被写入汇编的）
+void test(); // 或者 void test(int i);
+
+// 实现
+void test(int i, int j, int k, int l) {}
+```
+
+<br/>
+
+<br/>
+
+在 c 中，是不允许定义多个名字相同的函数，而如果在声明时有多个名字相同的函数，在特定条件下是可以的
+
+```C
+// 定义，这种情况下是不会报错
+void test();
+void test(int i);
+
+// 定义，但是这种情况下会报错
+void test(int i);
+void test(int i, int j);
+```
+
+原因：在 c 中，编译单元的链接中，函数的链接是有缺陷的（在链接时，只检查函数的名字是否匹配），而不会校验函数的入参和返回值
+
+即，假设声明时只有1个入参，而定义时有2个入参，那么在调用该函数时就会读取到未知的数据
+
+解决办法：在函数定义的位置（例如这里的test.c中），引入 test.h 文件，确保函数的声明和定义保持一致性
+
+<br/>
+
+<br/>
+
+外部链接和内部链接
+
+外部链接：当前编译单元能够向其他编译单元提供相关函数或变量的定义或实现，并让其他编译单元使用，那么这个变量或函数是外部链接的
+
+内部链接：不能将变量对外展示，例如说 static 修饰的函数变量，或者是 inline 修饰的（因为 inline 会展开函数，从而没有了函数的概念）
+

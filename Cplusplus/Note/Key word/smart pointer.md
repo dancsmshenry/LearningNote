@@ -207,18 +207,17 @@ int main() {
   
   //	同样是raw pointer造成的问题
   void test() {
-      std::shared_ptr<int> p(new int(13));
+      std::shared_ptr<int> p(new int(12));
       int *p1 = p.get();
       int count = p.use_count(); // 1
       {
           std::shared_ptr<int> pp(p1);
           (*pp) -- ;
       }
-      int ret = (*p) ++ ;
-      //	此时，数据就会被删除掉了（因为在p1在{}中认为只有它自己拿到了这个数据，那么出来的时候就会把数据给销毁掉，造成的结果就是访问到未知的数据.）
+      // 在这里，指针 p 会认为自己独享了数据 12，而从指针 pp 的角度来说，它也独享了数据 12，它们的 use_count 都是1，那么就会造成数据被两个共享指针都析构了一遍。多次析构造成了 c
   }
   ```
-
+  
 - 解决办法：杜绝使用raw pointer的做法；使用enable_shared_from_this解决类指针this放入smart pointer的问题
 
 - ```cpp

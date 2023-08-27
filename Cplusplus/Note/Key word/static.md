@@ -199,6 +199,26 @@
 
 
 
+```c++
+class A {
+public:
+    A() {
+        std::cout << "---" << std::endl;
+    }
+};
+
+static void test() {
+    static A a1;
+}
+
+// 对于静态函数中的静态变量，只有函数被调用时才会创建，函数没有调用的话则不会被创建（因此有单例模式）
+// 非静态函数中的静态变量
+```
+
+
+
+
+
 # 参考
 
 - https://www.cnblogs.com/xuxm2007/p/4652944.html

@@ -217,3 +217,16 @@
 - 对于萃取的理解
   - 提取一个类中我们想要的类型
   - 概念很简单，但是运用起来很复杂，参考stl的关于traits的讲述
+
+
+
+使用 accumulate 可以计算求和， max_element 求最大值
+
+```C++
+#include "numeric"
+
+std::vector<int> vec(10, 10);
+auto sum = std::accumulate(vec.begin(), vec.end(), 0);
+
+auto itmax = std::max_element(vec.begin(), vec.end()); // return iterator
+```

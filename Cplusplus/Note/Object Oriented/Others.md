@@ -31,7 +31,7 @@
 # 空类默认提供的函数
 
 - ```cpp
-  A(); //默认构造函数 
+  A(); //默认构造函数
   ~A(); //默认析构函数
   A（const A&); //默认拷贝构造函数
   A& operator=(const A &); //默认赋值函数。
@@ -221,9 +221,9 @@ Standard Layout的定义
 
 - 子类中的第一个非静态成员的类型与其基类不同（具体的原因可以参考下面的博文）
   - 因为在cpp的标准里面，如果基类没有任何数据成员，基类应不占用空间，所以允许派生类的第一个成员与基类共享同一地址空间
-  
+
   - 如果派生类的第一个成员和基类的类型相同，而cpp标准要求相同的类型不同的对象的地址必须有所区分，所以编译器就会为基类分派一个字节的地址空间
-  
+
   - ```cpp
     #include <iostream>
     #pragma  pack(1)
@@ -269,17 +269,17 @@ Standard Layout的定义
     	std::cout << sizeof(D) << std::endl;
     }
     ```
-  
+
   - 这就直接导致的结果是，同样是一个空类加上一个int，不同的排列方法会导致大小的不同
-  
+
   - 探讨对象B的内存布局
-  
+
   - 如果是先A a;，再int i;，那么编译器为了区分B和A，对象布局就是第一层用一个字节表示对象B，第二层用一个字节来区分表示对象A，第三层用四个字节表示对象int i，这样一共就用了6个字节
-  
+
   - 而如果是先int i;，再A a;，那么编译器就不需要去区分B和A了，则对象布局时第一层用四个字节表示int i；，这里顺带也会用来表示对象B，然后第二层用一个字节表示对象A a，这样一共就用了5个字节
-  
+
   - 而这里为什么对象D同样是把空类放到最前面，但是大小却依然是5，是因为对象C和对象D没有父子关系，即使再同一个地址编译器也能够区分
-  
+
 - 总结：一切都是因为cpp的标准说，相同类型的不同对象的地址必须不同，编译器为了实现，就为那个不同的对象分配一个字节的地址空间
 
 
@@ -340,3 +340,144 @@ int main() {
 # to do list
 
 A继承自父类B和C，如果使用B的指针ptr1和C的指针ptr2同时指向一个A对象，则ptr1和ptr2的地址是否一致？（经过测试，是不一样的，但是有个问题就是如果A，B，C都是空类的话，那地址是不是一样的，答是不一样的，为啥？？）
+
+
+
+
+
+# 关于多继承中函数调用的顺序
+
+A
+
+B->C（C 继承于 B）
+
+C,A ->D（D 继承于 C A）
+
+构造的调用顺序：先构造 B，再构造 C ，接着构造 A，最后构造 D
+
+析构的调用顺序：先析构 D，再析构 A，接着析构 C，最后析构 B
+
+构造和析构的顺序完全相反
+
+```c++
+class A {
+public:
+  A() { std::cout << "A()" << std::endl; }
+  ~A() { std::cout << "~A()" << std::endl; }
+};
+
+class B {
+public:
+  B() { std::cout << "B()" << std::endl; }
+  ~B() { std::cout << "~B()" << std::endl; }
+};
+
+class C : public B {
+public:
+  C() { std::cout << "C()" << std::endl; }
+  ~C() { std::cout << "~C()" << std::endl; }
+};
+
+class D : public C, public A {
+public:
+  D() { std::cout << "D()" << std::endl; }
+  ~D() { std::cout << "~D()" << std::endl; }
+};
+
+void test() {
+  D d1;
+}
+// B()
+// C()
+// A()
+// D()
+// ~D()
+// ~A()
+// ~C()
+// ~B()
+```
+
+有个问题：既然要隐藏实现，那为什么不直接写一个 .h 文件，然后把具体的一些实现函数放到 .cc 文件中，这样也可以实现只暴露规范提供的接口。问题一：外部实现函数无法访问 private 变量
+
+在构造函数中，不要把 this 指针传递给别的函数，可以理解为不要注册回调（不是安全的），即使是在函数的最后一行
+
+因为当前类可能会被其他类继承，而此时的 this 并没有构造完成
+
+一个比较好的方式就是，构造函数+initialize 两段式构造
+
+[muduo网络库:01---线程安全的对象生命期管理之(多线程中对象的构造与析构)_mb6128aabee41d4的技术博客_51CTO博客](https://blog.51cto.com/u_15346415/5223440)
+
+
+
+<br/>
+
+<br/>
+
+如何分析类的大小以及内存对齐
+
+题外话：当前 vscode 的跳转有问题，我编译的 g++ 是 tdm-gcc-64 的，但是跳转的却是 llvm 里面的
+
+```c++
+class c2 {
+public:
+  char s[17]; // 17 (+3)
+  int i1; // 4
+  double d1; // 8
+  int i2; // 4 (+4)
+};
+
+  std::cout << sizeof(c2) << std::endl;
+  std::cout << offsetof(c2, i1) << " " << offsetof(c2, i2) << std::endl;
+```
+
+<br/>
+
+<br/>
+
+子类调用父类的虚函数（除了 static_cast ，还有其他方法吗）
+
+```c++
+// 子类调用父类的虚函数（除了 static_cast，还有其他方法吗）
+class a1 {
+public:
+    virtual void func() {std::cout << "a1" << std::endl;}
+};
+
+class b1 {
+public:
+    virtual void func() override {std::cout << "b1" << std::endl;}
+};
+b1 bb;
+(static_cast<a1>(bb)).func();
+```
+
+<br/>
+
+<br/>
+
+```c++
+// 浅拷贝的问题
+class Animal {
+public:
+    int *name;
+    Animal() {
+        name = new int(1);
+        std::cout << "Animal()" << std::endl;
+    }
+    // 如果不写这个拷贝构造函数，使用编译器默认提供的，那么就会出现问题
+    Animal(const Animal& other) {
+        name = new int(*other.name);
+    }
+    ~Animal() {
+        std::cout << "~Animal()" << std::endl;
+        delete name;
+        name = nullptr;
+        // 崩溃的原因是，同一个指针多次 delete 不会有问题，但是多个指向同一个对象的指针进行 delete ，就会 oom
+    }
+}
+
+// 结论是，使用深拷贝和浅拷贝都没有问题，但要注意浅拷贝可能会造成对一个对象的多次析构，从而造成 oom
+```
+
+而这里如果把 int 替换为了 string，那么即使不重写拷贝构造函数，也不会有问题（此时把 delete 操作给删除了）
+

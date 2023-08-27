@@ -38,3 +38,20 @@ constexpr还能用于修饰类的构造函数，即保证如果提供给该构�
 1. 是一种很强的约束，更好地保证程序的正确语义不被破坏。
 2. 编译器可以在编译期对constexpr的代码进行非常大的优化，比如将用到的constexpr表达式都直接替换成最终结果等。
 3. 相比宏来说，没有额外的开销，但更安全可靠
+
+
+
+在 c++17 中，Constexpr 适用于编译期的判断，用于编译期对模板的判断
+
+```C++
+template <int N, int... Ns>
+auto sum() {
+  if constexpr (0 == sizeof...(Ns))
+    return N;
+  else // 这里的 else 不可以被省略，因为编译
+    return N + sum<Ns...>();
+}
+
+// 调用
+sum<1, 2, 3>(); // returns 6
+```
