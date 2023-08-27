@@ -34,6 +34,9 @@ ls -a # 能够同时查看隐藏文件
 
 # 查看当前文件夹中文件的所有详细信息
 l
+
+# 将某个文件夹复制到具体的路径下
+cp -r folder path
 ```
 
 <br/>
@@ -59,6 +62,9 @@ tar -zxvf filename # 解压.tar.gz文件
 
 # 下载文件
 wget xxxx
+
+# 将某个文件复制到具体的路径下
+cp file path
 ```
 
 <br/>
@@ -129,8 +135,6 @@ cd .. # 返回前一个文件夹
 strace -p pid # 可以查看当前进程用到了哪些系统调用
 ```
 
-
-
 <br/>
 
 发现Unable to locate package的问题
@@ -149,6 +153,12 @@ strace -p pid # 可以查看当前进程用到了哪些系统调用
 wrk安装时出现的问题
 
 - https://blog.csdn.net/GMCN__/article/details/119491365
+
+<br/>
+
+https://sourceforge.net/p/boost/activity/?page=0&limit=100#64d394b2d747e69e43894463
+
+在 linux 主机无法联网时，使用该网站下载 boost 包
 
 <br/>
 

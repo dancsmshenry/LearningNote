@@ -389,6 +389,8 @@ git show branch_name
 
 # git commit message 规范
 
+需要参考：https://www.conventionalcommits.org/zh-hans/v1.0.0-beta.4/
+
 `<type>[(<scope>)]: <subject>`
 
 **type**，声明本次代码提交的类型（英文名，必填项）：

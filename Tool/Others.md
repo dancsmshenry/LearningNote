@@ -71,3 +71,18 @@ chmod +x $HOME/.cargo/env	//	如果上一条指令的权限不够，就chmod权�
 rustc --version	//	查看rust的版本
 ```
 
+<br/>
+
+<br/>
+
+<br/>
+
+# pandoc 使用出现的问题
+
+使用 pandoc 的时候，是先将 markdown 转换成 latex，然后再将 latex 转成 pdf 的
+
+因此可能会爆出以下错误 ! File ended while scanning use of \@newl@bel
+
+有时候我们使用latex时，之前出现了错误我们已经修改好了，但是再次编译的时候出现如下这种错误，这个主要使用因为上次使用latex编译时生成的.aux文件影响了这次的latex编译，我们在文件目录中将   正在编译的文件名.aux  这个文件直接删除即可
+
+也就是将该 aux 文件或是之前编译的错误删除即可

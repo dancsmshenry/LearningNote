@@ -1,0 +1,23 @@
+```
+Checks:
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  modernize-*,
+  -modernize-avoid-c-arrays,
+  -modernize-deprecated-headers,
+  -modernize-loop-convert,
+  -modernize-use-equals-default,
+  -modernize-use-nodiscard,
+  -modernize-use-trailing-return-type,
+  -modernize-use-transparent-functors,
+  -modernize-use-using,
+  readability-*,
+  -readability-else-after-return,
+  -readability-identifier-length,
+  -readability-implicit-bool-conversion,
+  -readability-inconsistent-declaration-parameter-name,
+  -readability-magic-numbers,
+  -readability-named-parameter,
+  -readability-qualified-auto
+
+```
