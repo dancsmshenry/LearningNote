@@ -142,3 +142,16 @@ InstanceSpecifier：对于某个服务，在多个网络绑定层做出部署，
 ## Comdeamon
 
 Com 的一个平台级应用程序，支持 some/ip 以及 ipc 的绑定，处理 some/ip-sd 的消息传输，路由 some/ip 消息给感兴趣的应用程序
+
+- autosar adaptive -> ara::com -> dds
+- autosar adaptive和autosar classic的区别，是什么原因导致了adaptive的诞生，二者的应用分别在哪些方面，至少需要了解二者的架构上的组成
+- ara，了解ara的**主要**组件有啥，这些组件的作用是什么，然后需要着重了解ara::com的架构，务必要理解proxy/skeleton模式（这模式不懂，后续很难深入下去理解com如何进行网络绑定）
+- 因为后续需要做的是网络绑定，因此对于网络绑定的几种方法（IPC，SOME/IP，DDS）都要有一定程度的了解，并且深入理解DDS
+- 对于DDS，我认为需要划分为两个部分，一个是上层的DDS架构，即DCPS；另一个是下层的传输协议RTPS，并且涉及服务发现的部分
+  - 比如说DCPS，这里要明白DCPS划分的五个部分、理解QoS的不同策略
+  - 再者就是RTPS，要了解报文的组成，服务发现的协议以及在RTPS层中角色与DCPS中对象的映射
+
+<br/>
+
+- 其实，can总线的广播机制，本质上也是一种发布订阅模型，只不过它做的比较简陋，信息的每次发布都是通过广播的机制传达到所有的总线上
+- 有一点，对于com的架构不太了解，到底什么是proxy/skeleton模式、导致后续dds和com模块进行映射的时候，一直搞不明白

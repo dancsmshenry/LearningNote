@@ -13,3 +13,9 @@ Electronic Control Unit
 然后输出指令，控制有关执行器动作，达到快速、准确、自动控制发动机工作的目的
 
 SOC
+
+https://github.com/GreyZhang/hack_autosar
+
+
+
+不管是someip还是dds，这个跟需求有关。最终的是底层协议栈才是关键，不要丢包，数据确定性等等才是重点。
