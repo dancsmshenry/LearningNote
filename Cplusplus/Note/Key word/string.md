@@ -81,3 +81,33 @@ while (str.find("-") < str.size()) {
 
 
 
+对于 char * 的类型，新建的时候要用 new char[]，删除的时候要用 delete[]
+
+PS：被 CSDN 坑了，只要不加 [] 的都是会内存泄漏（可以用 asan 检测出来）
+
+```c++
+#include <cstring>
+
+class Person {
+public:
+  char *name;
+  int age;
+  int *a;
+
+  Person(const char *name, int age) {
+    this->name = new char[strlen(name) + 1];
+    a = new int[10];
+    strcpy(this->name, name);
+    this->age = age;
+  }
+
+  ~Person() {
+    delete[] this->name;
+    delete[] a;
+  }
+};
+
+int main() { Person p1("dsf", 1); }
+
+```
+

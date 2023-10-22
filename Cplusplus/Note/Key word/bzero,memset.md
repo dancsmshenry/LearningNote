@@ -3,7 +3,7 @@
 - bzero() 能够将内存块（字符串）的前n个字节清零
 - 在"string.h"头文件中
 - 原型为： void bzero(void *s, int n);，没有返回值
-- 是posix标准中的函数，windows下用不了...
+- 是posix标准中的函数
 - bzero(void *s, int n) 与 memset((void * )s, 0,size_tn)是等价的，都是用来将内存块的前 n 个字节清零，但是 s 参数为指针，又很奇怪的位于 string.h 文件中，也可以用来清零字符串
 
 

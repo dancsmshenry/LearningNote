@@ -122,53 +122,53 @@
 
 # move
 
-- 单纯的move只是一个强制类型转换罢了，所以无事发生
+单纯的move只是一个强制类型转换罢了，所以无事发生
 
-- 数据和所有权的移动是在某个参数为右值引用的函数中完成的（最常见的就是类似于a=move(b)会匹配到移动构造函数上）
+数据和所有权的移动是在某个参数为右值引用的函数中完成的（最常见的就是类似于a=move(b)会匹配到移动构造函数上）
 
-  - move仅仅是类型擦除，实际上发生移动是move通过强制类型转换，触发了类对象的 operator = (T&& a)函数或Object(Object&& o)，才会有数据和所有权的转移
-  
-- 从语义上来说，对一个左值使用move，就意味着你不再需要这个变量上的值了，即你要将它的值移走（这也导致了很多人会误认为就是move将值移走的）
+move仅仅是类型擦除，实际上发生移动是move通过强制类型转换，触发了类对象的 operator = (T&& a)函数或Object(Object&& o)，才会有数据和所有权的转移
 
-- 总结：**std::move的变更所有权其实是通过移动构造函数或者移动赋值函数实现的**
+从语义上来说，对一个左值使用move，就意味着你不再需要这个变量上的值了，即你要将它的值移走（这也导致了很多人会误认为就是move将值移走的）
 
-- ```cpp
-  // clang中的实现
-  /**
-    *  @brief  Convert a value to an rvalue.
-    *  @param  __t  A thing of arbitrary type.
-    *  @return The parameter cast to an rvalue-reference to allow moving it.
-  */
-  template<typename _Tp>
-  _GLIBCXX_NODISCARD
-  constexpr typename std::remove_reference<_Tp>::type&& move(_Tp&& __t) noexcept {
-      return static_cast<typename std::remove_reference<_Tp>::type&&>(__t);
-  }
-  
-  // STRUCT TEMPLATE remove_reference
-  template <class _Ty>
-  struct remove_reference {
-      using type                 = _Ty;
-      using _Const_thru_ref_type = const _Ty;
-  };
-  
-  template <class _Ty>
-  struct remove_reference<_Ty&> {
-      using type                 = _Ty;
-      using _Const_thru_ref_type = const _Ty&;
-  };
-  
-  template <class _Ty>
-  struct remove_reference<_Ty&&> {
-      using type                 = _Ty;
-      using _Const_thru_ref_type = const _Ty&&;
-  };
-  ```
-  
-- 举例
-  - `bb` 的类型是 `Foo&`，`move` 之后变为 `Foo&&`，会调用移动赋值函数
-  - `cc` 的类型是 `const Foo`，`move` 之后变为 `const Foo&&`，会调用拷贝赋值函数
-  - `bb` 的类型是 `const Foo&`，`move` 之后变为 `const Foo&&`，会调用拷贝赋值函数
+总结：**std::move的变更所有权其实是通过移动构造函数或者移动赋值函数实现的**
+
+```c++
+// clang中的实现
+/**
+  *  @brief  Convert a value to an rvalue.
+  *  @param  __t  A thing of arbitrary type.
+  *  @return The parameter cast to an rvalue-reference to allow moving it.
+*/
+template<typename _Tp>
+_GLIBCXX_NODISCARD
+constexpr typename std::remove_reference<_Tp>::type&& move(_Tp&& __t) noexcept {
+    return static_cast<typename std::remove_reference<_Tp>::type&&>(__t);
+}
+
+// STRUCT TEMPLATE remove_reference
+template <class _Ty>
+struct remove_reference {
+    using type                 = _Ty;
+    using _Const_thru_ref_type = const _Ty;
+};
+
+template <class _Ty>
+struct remove_reference<_Ty&> {
+    using type                 = _Ty;
+    using _Const_thru_ref_type = const _Ty&;
+};
+
+template <class _Ty>
+struct remove_reference<_Ty&&> {
+    using type                 = _Ty;
+    using _Const_thru_ref_type = const _Ty&&;
+};
+```
+
+举例：
+- `bb` 的类型是 `Foo&`，`move` 之后变为 `Foo&&`，会调用移动赋值函数
+- `cc` 的类型是 `const Foo`，`move` 之后变为 `const Foo&&`，会调用拷贝赋值函数
+- `bb` 的类型是 `const Foo&`，`move` 之后变为 `const Foo&&`，会调用拷贝赋值函数
 
 
 

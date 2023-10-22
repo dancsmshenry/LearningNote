@@ -147,26 +147,28 @@ int main() {
 
 
 
+### 循环引用
+
 使用不当导致死锁，从而出现内存泄漏
 
 - 解决办法：使用weak_ptr防止死锁
 
 ```cpp
+#include <memory>
+
 // 一段内存泄露的代码
 struct Son;
-struct Father　{
-    shared_ptr<Son> son_;
-};
+struct Father　{ std::shared_ptr<Son> son_; };
 struct Son {
-    shared_ptr<Father> father_;
+  std::shared_ptr<Father> father_;
 };
 int main() {
-    auto father = make_shared<Father>();
-    auto son = make_shared<Son>();
-    father->son_ = son;
-    son->father_ = father;
-  
-    return 0;
+  auto father = std::make_shared<Father>();
+  auto son = std::make_shared<Son>();
+  father->son_ = son;
+  son->father_ = father;
+
+  return 0;
 }
 ```
 

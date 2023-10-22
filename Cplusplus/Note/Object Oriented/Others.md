@@ -481,3 +481,39 @@ public:
 
 而这里如果把 int 替换为了 string，那么即使不重写拷贝构造函数，也不会有问题（此时把 delete 操作给删除了）
 
+<br/>
+
+<br/>
+
+```c++
+#include <iostream>
+using namespace std;
+class Animal {
+public:
+    virtual void speak() {
+        cout << "Animal is speaking" << endl;
+    }
+};
+
+class Bird: public Animal {
+public:
+    virtual void speak() {
+        cout << "Bird is speaking" << endl;
+    }
+};
+
+void DoBussiness(Animal& animal) {
+    animal.speak(); // 这里是多态
+}
+
+int main() {
+    Animal a1;
+    Bird b1;
+    Animal *p = &a1;
+    p->speak();
+    p = &b1;
+    p->speak();
+    
+}
+```
+
