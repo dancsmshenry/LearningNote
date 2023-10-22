@@ -1,4 +1,4 @@
-# 0、通用的 CMakeLists 模板
+# 通用的 CMakeLists 模板
 
 目前在 linux 下使用的 cmake 版本为 3.16，而在 windows 下使用的版本为 3.20
 
@@ -6,7 +6,7 @@
 # 指定 cmake 所需的最小版本
 cmake_minimum_required(VERSION 3.16)
 
-# 指定 cpp 编译的版本
+# 指定 c++ 编译的版本
 set(CMAKE_CXX_STANDARD 17)
 
 # 是否一定要支持上述指定的 cpp 标准
@@ -53,7 +53,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dog)
 
 <br/>
 
-# 1、cmake 的命令行使用方法
+# cmake 的命令行使用方法
 
 通过 -B 生成对应的 makefile 或者 ninja 文件，其中路径被设置为 build（如果不设置那么就会在当前路径生成）
 
@@ -115,7 +115,7 @@ cmake -G"Unix Makefiles"
 
 <br/>
 
-# 2、cmake 的基本语法
+# cmake 的基本语法
 
 ## list
 
@@ -201,12 +201,12 @@ message(WARNING "test in warning")
 
 <br/>
 
-# 3、cmake 的基本配置
+# cmake 的基本配置
 
 ```cmake
 # 指定最低所需的 cmake 版本，当用户使用的 cmake 小于这个版本的时候，就会报错
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR) # 在2.6以后的版本会被接受但是忽略
-cmake_minimum_required(VERSION 3.15...3.20) # 指定使用 cmake 的版本范围
+cmake_minimum_required(VERSION 3.15...3.20)      # 指定使用 cmake 的版本范围
 
 # 用于控制编译模式，分为 debug，release，minsizerel，relwithdebinfo 几种模式
 set(CMAKE_BUILD_TYPE Release)
@@ -227,15 +227,20 @@ project(LearningC
 # 一些常用的宏
 # CMAKE_CURRENT_SOURCE_DIR 表示当前源码目录的位置，例如 ~/hellocmake
 # CMAKE_CURRENT_BINARY_DIR 表示当前输出目录的位置，例如 ~/hellocmake/build
-# PROJECT_SOURCE_DIR 表示最近一次调用 project 的 CMakeLists.txt 所在的源码目录（我理解为就是根目录的路径）
+# PROJECT_SOURCE_DIR 	   表示最近一次调用 project 的 CMakeLists.txt 所在的源码目录（我理解为就是根目录的路径）
 # CMAKE_CURRENT_SOURCE_DIR 表示当前 CMakeLists.txt 所在的源码目录
-# CMAKE_SOURCE_DIR 表示最为外层 CMakeLists.txt 的源码根目录
-# CMAKE_BINARY_DIR 指的是存放二进制文件的文件夹
+# CMAKE_SOURCE_DIR 		   表示最为外层 CMakeLists.txt 的源码根目录
+# CMAKE_BINARY_DIR 		   指的是存放二进制文件的文件夹
 
 # 设置 cpp 的编译选项
-set(CMAKE_CXX_STANDARD 17) # 选择 cpp 的编译版本；因此不要用 -std=17 指定版本，因为这样跨平台就会出问题；不过这里配置的一般是当前主项目的编译版本，其中子项目，例如编译成的相关静态库则需要用 set_target_properties 来表示
-set(CMAKE_CXX_STANDARD_REQUIRED ON) # bool 类型，表示是否一定要支持上述指定的 cpp 标准，off 表示 CMake 检测到编译器不支持 C++17 时不报错，而是默默调低到 C++14 给你用；on 则发现不支持报错，更安全
-set(CMAKE_CXX_EXTENSIONS ON) # 设为 ON 表示启用 GCC 特有的一些扩展功能；OFF 则关闭 GCC 的扩展功能，只使用标准的 C++；要兼容其他编译器（如 MSVC）的项目，都会设为 OFF 防止不小心用了 GCC 才有的特性；此外，最好是在 project 指令前设置 CMAKE_CXX_STANDARD 这一系列变量，这样 CMake 可以在 project 函数里对编译器进行一些检测，看看他能不能支持 C++17 的特性
+# 选择 cpp 的编译版本；因此不要用 -std=17 指定版本，因为这样跨平台就会出问题；不过这里配置的一般是当前主项目的编译版本，其中子项目，例如编译成的相关静态库则需要用 set_target_properties 来表示
+set(CMAKE_CXX_STANDARD 17)
+
+# bool 类型，表示是否一定要支持上述指定的 cpp 标准，off 表示 CMake 检测到编译器不支持 C++17 时不报错，而是默默调低到 C++14 给你用；on 则发现不支持报错，更安全
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 设为 ON 表示启用 GCC 特有的一些扩展功能；OFF 则关闭 GCC 的扩展功能，只使用标准的 C++；要兼容其他编译器（如 MSVC）的项目，都会设为 OFF 防止不小心用了 GCC 才有的特性；此外，最好是在 project 指令前设置 CMAKE_CXX_STANDARD 这一系列变量，这样 CMake 可以在 project 函数里对编译器进行一些检测，看看他能不能支持 C++17 的特性
+set(CMAKE_CXX_EXTENSIONS ON)
 ```
 
 <br/>
@@ -244,7 +249,7 @@ set(CMAKE_CXX_EXTENSIONS ON) # 设为 ON 表示启用 GCC 特有的一些扩展�
 
 <br/>
 
-# 4、如何在项目中添加新的.cc文件
+# 如何在项目中添加新的 .cc 文件
 
 方法一
 
@@ -297,15 +302,17 @@ target_sources(main PUBLIC ${sources})
 
 <br/>
 
-方法五
+方法五（推荐）
 
 ```cmake
-# 使用 aux_source_directory 自动搜集需要文件的后缀名（我个人比较认同的使用方式）
+# 使用 aux_source_directory 自动搜集需要文件的后缀名
 add_executable(main)
 aux_source_directory(. sources)
 aux_source_directory(mylib sources)
 target_sources(main PUBLIC ${sources})
 ```
+
+不过不能递归的添加文件夹（例如 mylib 文件夹中还有文件夹 dog，那么就不能添加进来）
 
 <br/>
 
@@ -314,7 +321,8 @@ target_sources(main PUBLIC ${sources})
 方法六
 
 ```cmake
-# 使用 GLOB_RECURSE 自动包含所有子文件夹下的文件（但是缺点就是可能会将build里面的文件一同加进来，所以我觉得这种比较差，就不用了...）
+# 使用 GLOB_RECURSE 自动包含所有子文件夹下的文件
+# 缺点是会将 build 里面的文件一同加进来
 add_executable(main)
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS *.cc *.h)
 target_sources(main PUBLIC ${sources})
@@ -328,16 +336,18 @@ target_sources(main PUBLIC ${sources})
 
 
 
-# 5、如何将代码编译成库
-
-把文件编译成一个静态库
+# 如何将代码编译成库
 
 ```cmake
-# 第一个是库的名字，第二个表示要将当前库编译成静态、动态还是对象库，最后是要编译的文件
+# 第一个是库的名字
+# 第二个表示要将当前库编译成静态、动态还是对象库
+# 第三个是要编译的文件
 add_library(mylib STATIC mylib.cc)
 add_library(mylib SHARED mylib.cc)
-add_library(mylib OBJECT mylib.cc) # 对象库类似于静态库，但不生成 .a 文件，只由 CMake 记住该库生成了哪些对象文件
-# 对象库不生成 .a 文件，只由 CMake 记住该库生成了哪些对象文件，因此就有人推荐用对象库代替静态库，避免跨平台的麻烦
+add_library(mylib OBJECT mylib.cc) 
+
+# 对象库类似于静态库，但不生成 .a 文件，只由 CMake 记住该库生成了哪些对象文件
+# 因此推荐用对象库代替静态库，避免跨平台的麻烦
 
 add_executable(main main.cc)
 
@@ -346,7 +356,9 @@ target_link_libraries(main PUBLIC mylib)
 
 <br/>
 
-一个比较坑的问题，动态库无法连接静态库，解决办法就是设置 `set(CMAKE_POSITION_INDEPENDENT_CODE ON)`
+问题：动态库无法连接静态库
+
+解决办法：设置 `set(CMAKE_POSITION_INDEPENDENT_CODE ON)`
 
 ```cmake
 # 设置全体库为 PIC
@@ -367,7 +379,7 @@ target_link_libraries(main PUBLIC mylib)
 
 <br/>
 
-# 6、如何引用第三方库
+# 如何引用第三方库
 
 <br/>
 
@@ -375,7 +387,7 @@ target_link_libraries(main PUBLIC mylib)
 
 <br/>
 
-# 7、如何设置头文件的搜索路径
+# 如何设置头文件的搜索路径
 
 `include_directories`用于将给定的目录添加到编译器，便于搜索包含文件的目录
 
@@ -482,7 +494,7 @@ target_include_directories(dog PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/public
 
 <br/>
 
-# 8、如何添加并构建子模块
+# 如何添加并构建子模块
 
 ```cmake
 add_subdirectory(dog)
@@ -500,9 +512,25 @@ add_subdirectory(dog)
 
 <br/>
 
-# 9、如何配置编译对象的属性
+# 如何添加编译对象的属性
 
-`set_target_properties(dog PROPERTIES POSITION_INDEPENDENT_CODE ON)`
+```cmake
+set_target_properties(dog PROPERTIES POSITION_INDEPENDENT_CODE ON)
+```
+
+用于给编译对象添加属性，然后用 get_target_propertry 获取属性
+
+```cmake
+add_library(test_lib SHARED ${ALL_SRCS})
+# 为目标文件 test_lib 创造一个 _STATUS_ 属性，属性值为 shared
+set_target_properties(test_lib PROPERTIES _STATUS_ shared)
+ 
+# 获取 test_lib 的 _STATUS_ 属性并保存到 var
+get_target_property(var test_lib _STATUS_)
+message("===============================")
+message("= test_lib的_STATUS_属性: ${var}")
+message("===============================")
+```
 
 <br/>
 
@@ -510,7 +538,36 @@ add_subdirectory(dog)
 
 <br/>
 
-# 10、如何安装库
+# 如何添加宏定义
+
+```cmake
+# 添加宏定义 DEFINITIONS1 
+target_compile_definitions(main PUBLIC DEFINITIONS1)
+
+# 添加宏定义 DEFINITIONS2
+target_compile_definitions(main INTERFACE DEFINITIONS2=5)
+
+# 添加宏定义 DEFINITIONS3
+target_compile_definitions(main PRIVATE DEFINITIONS3=10)
+```
+
+public 表示当前的代码（动态库或静态库）被其他可执行文件使用时，宏传递过去
+
+而 private 则表示不可以传递
+
+例如在 dog 库中定义了一个 private 的宏，则表示该宏只在当前库代码使用，出了这个库就不可以被使用了
+
+因此，这种 public 和 private 只能单向传递，不可能双向传递（A 库定义宏，B 库使用A 库时可以用这个宏，但是 B 库定义的宏， A库不可以用）
+
+而 inferface 则表示接口，当前库不用该宏定义，给使用这个库的代码使用该宏定义
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 如何安装库
 
 install 指令
 
@@ -539,7 +596,7 @@ install(TARGETS myrun
 
 <br/>
 
-# 11、关于 .cmake 文件
+# 关于 .cmake 文件
 
 背景：为了防止 cmakelists.txt 文件过长，因此将其分为几个模块，同时也方便平台的组件共用该 cmake 文件，cmake 模块文件一般是后缀名为 .cmake
 
@@ -551,7 +608,7 @@ install(TARGETS myrun
 
 <br/>
 
-# 12、如何在 windows 下使用 cmake
+# 如何在 windows 下使用 cmake
 
 先去官网上下载 msi 安装包，然后安装
 
@@ -594,26 +651,47 @@ CMake Error at CMakeLists.txt:11 (project):
 
 # 其他
 
-记录一个之前遇到的小bug：
+`set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` 这条语句有时不起作用
 
-`set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` 这句话不起作用，感觉是版本的原因
+可能需要修改为`set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")`
 
-需要修改为`set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")`，这样才能生成 json 文件，以便 clang 实现代码跳转
+这样才能生成 json 文件，以便 clang 实现代码跳转
+
+<br/>
 
 cmake中的 public，interface 和 private 大体思路上都是一样的，表示传递的依赖性：
 
-public表示自己可以使用指定的头文件或是链接的库
+public 表示自己可以使用指定的头文件或是链接的库
 
-interface表示自己不可以使用指定的头文件或是链接的库，但是当别的编译单元 target 指定当前单元时，可以使用 interface 标记的头文件和链接的库
+interface 表示自己不可以使用指定的头文件或是链接的库，但是当别的编译单元 target 指定当前单元时，可以使用 interface 标记的头文件和链接的库
 
-private表示自己可以使用指定的头文件或是链接的库，但是别的编译单元使用当前单元时，就无法使用指定的头文件和链接的库
+private 表示自己可以使用指定的头文件或是链接的库，但是别的编译单元使用当前单元时，就无法使用指定的头文件和链接的库
+
+<br/>
 
 Cmake 的编译指令中，不可以有多余的空格
 
 `cmake -B build -DECU1=ON` ，而不可以是`cmake -B build -DECU1 = ON`
 
+<br/>
+
 删除 cmakecache ，能够删掉此前的编译参数缓存（例如此前可能是指定了用 clang++ 编译，后续想要换成 g++ 编译）
 
+<br/>
+
+理解了，生成的 makefile 好像是与平台无关的，而它实际会调用 build/cmakefiles 中的 makefile 及文件
+
+因此没有在最外面的 makefile 中看到 gcc 或者 clang的相关命令
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 参考
+
+https://www.bookstack.cn/read/CMake-Cookbook/README.md
 
 https://blog.csdn.net/sinat_37231928/article/details/121684722
 
