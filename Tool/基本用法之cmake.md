@@ -1,6 +1,6 @@
 # 0、通用的 CMakeLists 模板
 
-目前在 linux 下使用的 cmake 版本为 3.16，而 windows 下使用的版本为 3.20
+目前在 linux 下使用的 cmake 版本为 3.16，而在 windows 下使用的版本为 3.20
 
 ```cmake
 # 指定 cmake 所需的最小版本
@@ -607,6 +607,13 @@ public表示自己可以使用指定的头文件或是链接的库
 interface表示自己不可以使用指定的头文件或是链接的库，但是当别的编译单元 target 指定当前单元时，可以使用 interface 标记的头文件和链接的库
 
 private表示自己可以使用指定的头文件或是链接的库，但是别的编译单元使用当前单元时，就无法使用指定的头文件和链接的库
+
+Cmake 的编译指令中，不可以有多余的空格
+
+`cmake -B build -DECU1=ON` ，而不可以是`cmake -B build -DECU1 = ON`
+
+删除 cmakecache ，能够删掉此前的编译参数缓存（例如此前可能是指定了用 clang++ 编译，后续想要换成 g++ 编译）
+
 
 https://blog.csdn.net/sinat_37231928/article/details/121684722
 

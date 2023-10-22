@@ -9,7 +9,7 @@ chmod +x run.sh
 
 <br/>
 
-# 关于文件夹的操作
+# 文件夹的操作
 
 ```shell
 # 重命名文件夹
@@ -23,7 +23,8 @@ mkdir foldername
 mkdir -p foldername/foldername # 可以递归的创建文件夹
 
 # 复制文件夹
-cp -r /usr/bin/toml11* /home/hengrui.shen/test/ # 左边是源文件，右边是目标文件夹（从源文件夹移动到目标文件夹）
+# 左边是源文件，右边是目标文件夹（从源文件夹移动到目标文件夹）
+cp -r /usr/bin/toml11* /test/ 
 
 # 进入文件夹
 cd foldername
@@ -34,9 +35,6 @@ ls -a # 能够同时查看隐藏文件
 
 # 查看当前文件夹中文件的所有详细信息
 l
-
-# 将某个文件夹复制到具体的路径下
-cp -r folder path
 ```
 
 <br/>
@@ -45,7 +43,7 @@ cp -r folder path
 
 <br/>
 
-# 关于文件的操作
+# 文件的操作
 
 ```shell
 # 打开文件
@@ -63,8 +61,8 @@ tar -zxvf filename # 解压.tar.gz文件
 # 下载文件
 wget xxxx
 
-# 将某个文件复制到具体的路径下
-cp file path
+# 将文件复制到某个路径下
+cp filename path
 ```
 
 <br/>
@@ -93,6 +91,9 @@ kill -9 pid
 
 # 动态显示内存中的进程信息
 top
+
+# 查看指定用户的进程
+top -u [用户名]
 ```
 
 <br/>
@@ -125,8 +126,6 @@ apt-get install openjdk-11-jdk
 
 ```shell
 pwd # 会显示当前所在的路径
-
-top -u [用户名] # 查看指定用户的进程
 
 cd .. # 返回前一个文件夹
 
@@ -226,6 +225,6 @@ sudo apt-get install libboost-all-dev
 
 ## 安装wsl后可能导致windows的gcc出现红线
 
-可能是修改了gcc的路径
+有可能是修改了gcc的路径
 
 去`c_cpp_properties.json`路径下查找`"compilerPath": "D:\\Cpp\\TDM-GCC-64\\bin\\gcc"`即可

@@ -136,6 +136,14 @@
 
 <br/>
 
+g++ -c test.cc 将文件编译为 .cc 文件
+
+<br/>
+
+<br/>
+
+<br/>
+
 # 参考
 
 - https://www.runoob.com/w3cnote/gcc-parameter-detail.html
