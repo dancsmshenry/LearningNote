@@ -22,3 +22,4 @@ This is a depository which records the note of operating system and some persona
 - 基本的工厂模式：例如简单工厂模式，抽象工厂模式
 
 
+

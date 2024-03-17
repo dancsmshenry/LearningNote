@@ -30,7 +30,7 @@ https://huajiakeji.com/utilities/2018-09/1525.html
 
 去gitee或github中把下面的邮箱的选项叉掉即可
 
-<img src="F:\Code\LearningNote\Tool\image\1.png" style="zoom: 200%;" />
+<img src="image\1.png" style="zoom: 200%;" />
 
 <br/>
 
@@ -86,3 +86,33 @@ rustc --version	//	查看rust的版本
 有时候我们使用latex时，之前出现了错误我们已经修改好了，但是再次编译的时候出现如下这种错误，这个主要使用因为上次使用latex编译时生成的.aux文件影响了这次的latex编译，我们在文件目录中将   正在编译的文件名.aux  这个文件直接删除即可
 
 也就是将该 aux 文件或是之前编译的错误删除即可
+
+<br/>
+
+<br/>
+
+<br/>
+
+# docker 的安装
+
+```shell
+curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+```
+
+<br/>
+
+<br/>
+
+<br/>
+
+# 一个莫名其妙的注册表
+
+```shell
+Windows Registry Editor Version 5.00
+ 
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinSock2\Parameters\AppId_Catalog\0408F7A3]
+"AppFullPath"="C:\\Windows\\System32\\wsl.exe"
+"PermittedLspCategories"=dword:80000000
+```
+
+好像是用来处理 wsl2 的

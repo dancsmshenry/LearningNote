@@ -261,3 +261,5 @@ https://www.baidu.com/s?ie=UTF-8&wd=The%20authenticity%20of%20host%20%27github.c
 https://blog.csdn.net/m0_56257585/article/details/125322437
 
 vscode 终端消息太多，导致显示消息量有限：https://blog.csdn.net/weixin_42429288/article/details/109359724
+
+auto repository detection 关闭 vscode 对 git 仓库的检查
