@@ -228,3 +228,19 @@ sudo apt-get install libboost-all-dev
 有可能是修改了gcc的路径
 
 去`c_cpp_properties.json`路径下查找`"compilerPath": "D:\\Cpp\\TDM-GCC-64\\bin\\gcc"`即可
+
+
+
+> 日常工作上板的时候，发现有诸多不便，因此需要加强学习有关 linux 相关的指令
+
+
+
+# Scp
+
+```shell
+scp file_name nvidia@172.16.0.19:/home/username # 将本地文件传输到指定 ip 的指定路径
+
+scp nvidia@172.16.0.19:/home/username/file_name file_name # 将指定 ip 的指定路径文件传输到本地
+
+# todo：学习 rsync 的使用
+```

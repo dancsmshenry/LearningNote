@@ -96,25 +96,25 @@ https://blog.csdn.net/CHYabc123456hh/article/details/121449313
 
 deque大体图
 
-- ![](../image/deque大体图.png)
+- ![](image/deque大体图.png)
 
 
 
 迭代器
 
 - 有四个指针，分别指向连续空间的开始地址，结束地址，空间中当前元素的地址以及连续空间地址在map中的位置（该节点在map中的位置）
-- ![](../image/deque迭代器示意图.png)
-- ![](../image/deque迭代器源码.png)
+- ![](image/deque迭代器示意图.png)
+- ![](image/deque迭代器源码.png)
 
 
 
 deque中中控器、缓冲区、迭代器的相互关系
 
-- ![](../image/deque中中控器、缓冲区、迭代器的相互关系.png)
+- ![](image/deque中中控器、缓冲区、迭代器的相互关系.png)
 
 
 
 deque本身的数据结构
 
-- ![](../image/deque数据结构.png)
+- ![](image/deque数据结构.png)
 - 现在的deque最少10个指针？？（大小为80）

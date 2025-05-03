@@ -48,10 +48,11 @@ hexo d # 上传生成的静态界面
 hexo上公式渲染错误：
 
 - ```shell
-  npm uninstall hexo-renderer-marked --save
-  npm install hexo-renderer-kramed --save
+  npm uninstall hexo-renderer-marked --save;npm install hexo-renderer-kramed --save
+  
+  npm uninstall hexo-renderer-kramed --save;npm install hexo-renderer-marked --save
   ```
-
+  
 - 更换 Hexo 的 markdown 渲染引擎，hexo-renderer-kramed 引擎是在默认的渲染引擎 hexo-renderer-marked 的基础上修改了一些 bug ，两者比较接近，也比较轻量级
 
 - 上述方法不行

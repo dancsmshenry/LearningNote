@@ -67,8 +67,8 @@
 # 实现
 
 - 在现在的编译器中，list的大小也是24（3*8，即三个指针）,list_node不变
-  - ![](../image/list_1.png)
-  - ![](../image/list_2.png)
+  - ![](image/list_1.png)
+  - ![](image/list_2.png)
 - 本质上还是双向链表
 
 
@@ -76,26 +76,26 @@
 ## list节点
 
 - 三个指针（一个指向前面节点的指针，一个指向后面节点的指针和一个指向数据的指针）
-- ![](../image/list的节点.png)
+- ![](image/list的节点.png)
 
 
 
 ## list迭代器
 
 - 一个指针（指向listnode节点）
-- ![](../image/list迭代器.png)
+- ![](image/list迭代器.png)
 
 
 
 ## list
 
 - 一个指针（指向链表的第一个节点）
-- <img src="../image/list.png" style="zoom:150%;" />
+- <img src="image/list.png" style="zoom:150%;" />
 
 - 是结点组成的环形链表
-  - ![](../image/list环形链表.png)
+  - ![](image/list环形链表.png)
 - 空链表的情况
-  - ![](../image/空链表.png)
+  - ![](image/空链表.png)
 
 
 

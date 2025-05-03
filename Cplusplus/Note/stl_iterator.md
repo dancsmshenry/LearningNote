@@ -6,7 +6,7 @@
 - **BidirectionalIterator**：双向迭代器。支持向前向后逐个遍历元素，可以对元素读取
 - **RandomAccessIterator**：随机访问迭代器。支持O(1)时间复杂度对元素的随机位置访问，支持对元素的读取
 
-- ![](../image/迭代器的种类.jpg)
+- ![](image/迭代器的种类.jpg)
 
 
 
@@ -26,71 +26,71 @@
       {
         typedef _List_iterator<_Tp>		_Self;
         typedef _List_node<_Tp>			_Node;
-  
+    
         typedef ptrdiff_t				difference_type;
         typedef std::bidirectional_iterator_tag	iterator_category;
         typedef _Tp				value_type;
         typedef _Tp*				pointer;
         typedef _Tp&				reference;
-  
+    
         _List_iterator() _GLIBCXX_NOEXCEPT
         : _M_node() { }
-  
+    
         explicit
         _List_iterator(__detail::_List_node_base* __x) _GLIBCXX_NOEXCEPT
         : _M_node(__x) { }
-  
+    
         _Self
         _M_const_cast() const _GLIBCXX_NOEXCEPT
         { return *this; }
-  
+    
         // Must downcast from _List_node_base to _List_node to get to value.
         reference
         operator*() const _GLIBCXX_NOEXCEPT
         { return *static_cast<_Node*>(_M_node)->_M_valptr(); }
-  
+    
         pointer
         operator->() const _GLIBCXX_NOEXCEPT
         { return static_cast<_Node*>(_M_node)->_M_valptr(); }
-  
+    
         _Self&
         operator++() _GLIBCXX_NOEXCEPT
         {
-  	_M_node = _M_node->_M_next;
-  	return *this;
+    	_M_node = _M_node->_M_next;
+    	return *this;
         }
-  
+    
         _Self
         operator++(int) _GLIBCXX_NOEXCEPT
         {
-  	_Self __tmp = *this;
-  	_M_node = _M_node->_M_next;
-  	return __tmp;
+    	_Self __tmp = *this;
+    	_M_node = _M_node->_M_next;
+    	return __tmp;
         }
-  
+    
         _Self&
         operator--() _GLIBCXX_NOEXCEPT
         {
-  	_M_node = _M_node->_M_prev;
-  	return *this;
+    	_M_node = _M_node->_M_prev;
+    	return *this;
         }
-  
+    
         _Self
         operator--(int) _GLIBCXX_NOEXCEPT
         {
-  	_Self __tmp = *this;
-  	_M_node = _M_node->_M_prev;
-  	return __tmp;
+    	_Self __tmp = *this;
+    	_M_node = _M_node->_M_prev;
+    	return __tmp;
         }
-  
+    
         friend bool
         operator==(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
         { return __x._M_node == __y._M_node; }
-  
+    
         friend bool
         operator!=(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
         { return __x._M_node != __y._M_node; }
-  
+    
         // The only member points to the %list element.
         __detail::_List_node_base* _M_node; // 这是唯一的数据，指向node的一个指针
       };

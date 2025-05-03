@@ -27,7 +27,7 @@
 
 - 栈，先进后出
 
-- ![](../image/stack数据结构.png)
+- ![](image/stack数据结构.png)
 
 
 

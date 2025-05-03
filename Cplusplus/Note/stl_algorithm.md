@@ -1,7 +1,7 @@
 # set_symmetric_difference
 
-- ![](../image/set_symmetric_difference_01.png)
-- ![](../image/set_symmetric_difference_02.png)
+- ![](image/set_symmetric_difference_01.png)
+- ![](image/set_symmetric_difference_02.png)
 
 
 
@@ -15,8 +15,8 @@
   - 也是用双指针，如果当前指向s2的元素大于s1，那么就将s1的元素放入，同时调整s1的位置
   - 如果相同，同时移动指针
   - 如果s1大于s2的元素，就要移动s2的指针（因为可能后面有元素和s1的元素相等）
-- ![](../image/set_difference_01.png)
-- ![](../image/set_difference_02.png)
+- ![](image/set_difference_01.png)
+- ![](image/set_difference_02.png)
 
 
 
@@ -28,8 +28,8 @@
 
 - 双指针实现并集
 
-- ![](../image/set_union_01.png)
-- ![](../image/set_union_02.png)
+- ![](image/set_union_01.png)
+- ![](image/set_union_02.png)
 
 
 
@@ -42,8 +42,8 @@
 - 求两个set的交集（因为set是rbtree实现的，所以数据内部是已经排好序了的，就可以用**双指针寻找数据**）
   - 当二者相同的时候就将数据记录到result中（一旦有一个指针指向last了，就退出）
 - 所以事件复杂度一般是o(m+n)，最佳的话能够到达min(m,n)
-- ![](../image/set_intersection_01.png)
-- ![](../image/set_intersection_02.png)
+- ![](image/set_intersection_01.png)
+- ![](image/set_intersection_02.png)
 
 
 

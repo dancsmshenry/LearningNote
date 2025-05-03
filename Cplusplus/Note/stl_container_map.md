@@ -8,7 +8,7 @@ stl的红黑树
 
 ## 实现
 
-![](../image/map的数据结构.png)
+![](image/map的数据结构.png)
 
 
 
@@ -24,7 +24,7 @@ stl的红黑树
 
 
 - 关于map的迭代器
-- <img src="../image/map的迭代器.png" style="zoom:200%;" />
+- <img src="image/map的迭代器.png" style="zoom:200%;" />
 
 
 
@@ -148,7 +148,7 @@ int main() {
 
 - 什么时候扩容：当向容器添加元素的时候，会判断当前容器的元素个数，如果大于等于阈值---即当 前数组的长度乘以加载因子的值的时候，就要自动扩容啦
 
-- ![](../image/拉链法实现hashtable.png)
+- ![](image/拉链法实现hashtable.png)
 
 - unordered_map是基于**hash_table**实现，一般是由一个大vector，vector元素节点可挂接链表来解决冲突来实现。hash_table最大的优点，就是把数据的存储和查找消耗的时间大大降低，几乎可以看成是常数时间；而代价仅仅是消耗比较多的内存。然而在当前可利用内存越来越多的情况下，用空间换时间的做法是值得的
 
@@ -164,14 +164,14 @@ int main() {
 
 - hash_table的迭代器
 
-  - ![](../image/hashtable的迭代器.png)
+  - ![](image/hashtable的迭代器.png)
   - hashtable的迭代器没有后退操作，hashtable也没有定义所谓的逆向迭代器
 
 - hashtable的数据结构
 
-  - ![](../image/hashtable的数据结构.png)
+  - ![](image/hashtable的数据结构.png)
 
-- ![](../image/hashtable的节点数.png)
+- ![](image/hashtable的节点数.png)
 
 
 
@@ -255,7 +255,7 @@ unordered_map
 
 # multimap
 
-- <img src="../image/multimap.png" style="zoom:150%;" />
+- <img src="image/multimap.png" style="zoom:150%;" />
 
 
 

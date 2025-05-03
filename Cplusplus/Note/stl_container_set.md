@@ -1,9 +1,9 @@
 # 前置知识
 
 - stl中的红黑树
-- <img src="../image/rb-tree的数据结构_01.png" style="zoom:150%;" />
-- ![](../image/rb-tree的数据结构_02.png)
-- ![](../image/rb-tree的数据结构_03.png)
+- <img src="image/rb-tree的数据结构_01.png" style="zoom:150%;" />
+- ![](image/rb-tree的数据结构_02.png)
+- ![](image/rb-tree的数据结构_03.png)
 
 
 
@@ -71,9 +71,9 @@
 
 - 注意这里的value_type是Key，即传入的参数类型
 
-- ![](../image/set的数据结构_01.png)
+- ![](image/set的数据结构_01.png)
 
-- ![](../image/set的数据结构_02.png)
+- ![](image/set的数据结构_02.png)
 
 - 可以看出set底层就是一颗rb-tree
 
@@ -132,5 +132,5 @@
 
 # multiset
 
-- <img src="../image/multiset.png" style="zoom:150%;" />
+- <img src="image/multiset.png" style="zoom:150%;" />
 - multiset使用的insert是insert_equal，即如果遇到相同的，插入便是
