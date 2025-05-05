@@ -1,68 +1,70 @@
-# 背景
+# BackRound
 
-- 在C++中，不存在大小是零的类。即便是空类，也要占据一个字节，否则无法比较两个空类对象是否是同一个对象（在C/C++中，默认使用地址来判断两个变量是否是同一个）
+- 在 C++ 中，不存在大小是零的类。即便是空类，也要占据一个字节，否则无法比较两个空类对象是否是同一个对象（在 C/C++ 中，默认使用地址来判断两个变量是否是同一个）
 - **为保证同一类型的不同对象地址始终有别**，要求任何对象或成员子对象的大小至少为 1，即使该类型是空的类类型（即没有非静态数据成员的 class 或 struct）
 
+<br/>
 
-
-
+<br/>
 
 # EBCO
 
-- ```cpp
-  #include <iostream>
-  #include <cassert>
-  
-  class BaseEmpty { 
-  public:
-    BaseEmpty() { std::cout<<"Base address:    "<< this << std::endl;}
-  };
-  
-  class DerivedEmpty: public BaseEmpty { 
-  public:
-    DerivedEmpty() { 
-      std::cout<<"Derived address: "<< this << std::endl;
-    }
-  };
-  
-  class DerivedDeeperEmpty: public DerivedEmpty {
-  public:
-    DerivedDeeperEmpty() { 
-      std::cout<<"deeper address:  "<< this << std::endl;
-    }
-  };
-  
-  class DerivedSameEmpty : public BaseEmpty, DerivedEmpty { 
-  public:
-    DerivedSameEmpty() { 
-      std::cout<<"DerivedSameEmpty address: "<< this << std::endl;
-    }
-  };
-  
-  class BaseAnotherEmpty { };
-  class DerivedDiffEmpty : public BaseEmpty, BaseAnotherEmpty { };
-  
-  int main(int argc, char const *argv[]) {
-  
-    BaseEmpty empty_1{};
-    BaseEmpty empty_2{};
-    std::cout << sizeof(DerivedDeeperEmpty) << std::endl;
-    //	空类继承空类
-    //	大小为1
-    // 在空类被用作基类时，如果不给它分配内存并不会导致它被存储到与同类型对象（包括子类对象）相同的地址上，那么就可以不给它分配内存
-    
-    auto derivedSame = DerivedSameEmpty{};
-    std::cout<<"size: "<<sizeof(derivedSame)<<std::endl;
-    //	空类继承具有父子关系的空类
-    //	大小为2
-    // 因为在这里，BaseEmpty和DerivedEmpty分别属于两个不同的对象，即继承的时候是先分别创建这两个对象，所以它们两个对象的地址不同，所以就需要2个字节，就不能有EBCO
-    
-    sizeof(DerivedDiffEmpty{});
-    //	空类继承没有父子关系的空类
-    //	大小为1
-    // 这里的大小是1，因为两个空类没有父子关系，即使是在同一个地址上，也可以区别出来
+```cpp
+#include <iostream>
+#include <cassert>
+
+class BaseEmpty { 
+public:
+  BaseEmpty() { std::cout<<"Base address:    "<< this << std::endl;}
+};
+
+class DerivedEmpty: public BaseEmpty { 
+public:
+  DerivedEmpty() { 
+    std::cout<<"Derived address: "<< this << std::endl;
   }
-  ```
+};
+
+class DerivedDeeperEmpty: public DerivedEmpty {
+public:
+  DerivedDeeperEmpty() { 
+    std::cout<<"deeper address:  "<< this << std::endl;
+  }
+};
+
+class DerivedSameEmpty : public BaseEmpty, DerivedEmpty { 
+public:
+  DerivedSameEmpty() { 
+    std::cout<<"DerivedSameEmpty address: "<< this << std::endl;
+  }
+};
+
+class BaseAnotherEmpty { };
+class DerivedDiffEmpty : public BaseEmpty, BaseAnotherEmpty { };
+
+int main(int argc, char const *argv[]) {
+
+  BaseEmpty empty_1{};
+  BaseEmpty empty_2{};
+  std::cout << sizeof(DerivedDeeperEmpty) << std::endl;
+  //	空类继承空类
+  //	大小为1
+  // 在空类被用作基类时，如果不给它分配内存并不会导致它被存储到与同类型对象（包括子类对象）相同的地址上，那么就可以不给它分配内存
+  
+  auto derivedSame = DerivedSameEmpty{};
+  std::cout<<"size: "<<sizeof(derivedSame)<<std::endl;
+  //	空类继承具有父子关系的空类
+  //	大小为2
+  // 因为在这里，BaseEmpty和DerivedEmpty分别属于两个不同的对象，即继承的时候是先分别创建这两个对象，所以它们两个对象的地址不同，所以就需要2个字节，就不能有EBCO
+  
+  sizeof(DerivedDiffEmpty{});
+  //	空类继承没有父子关系的空类
+  //	大小为1
+  // 这里的大小是1，因为两个空类没有父子关系，即使是在同一个地址上，也可以区别出来
+}
+```
+
+
 
 - 在空类被用作基类时，如果不给它分配内存并不会导致它被存储到与同类型对象（包括子类对象）相同的地址上，那么就可以不给它分配内存
 
